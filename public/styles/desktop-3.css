@@ -1,0 +1,1273 @@
+
+html {
+	font-size:62.5%;
+}
+* {
+	margin: 0;
+	padding: 0;
+}
+ul, li {
+	list-style: none;
+}
+input {
+	border: none;
+}
+body {
+  width: 144rem;
+}.desktop-3-NUo {
+  box-sizing: border-box;
+  padding-bottom: 0.0159rem;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+}
+.desktop-3-NUo .auto-group-yjsf-sRZ {
+  margin-bottom: 8rem;
+  box-sizing: border-box;
+  padding-bottom: 3.0783rem;
+  width: 100%;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  background-color: #eeeeee;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .auto-group-yjsf-sRZ .frame-27-zFH {
+  margin-bottom: 3.1rem;
+  box-sizing: border-box;
+  padding: 2.15rem 10.4rem 2.15rem 10.2rem;
+  width: 100%;
+  height: 9.5rem;
+  box-shadow: 0 0.4rem 0.4rem rgba(0, 0, 0, 0.25);
+  background-color: #ffffff;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .auto-group-yjsf-sRZ .frame-27-zFH .frame-25-hfV {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.desktop-3-NUo .auto-group-yjsf-sRZ .frame-27-zFH .frame-25-hfV .group-134-TPm {
+  margin-right: 56rem;
+  width: 13rem;
+  height: 5.2rem;
+  position: relative;
+  object-fit: contain;
+  vertical-align: top;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .auto-group-yjsf-sRZ .frame-27-zFH .frame-25-hfV .frame-24-ajH {
+  margin: 0.6rem 0rem 0.6rem 0rem;
+  height: calc(100% - 1.2rem);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .auto-group-yjsf-sRZ .frame-27-zFH .frame-25-hfV .frame-24-ajH .frame-19-UTH {
+  margin: 0.8rem 5rem 0.7rem 0rem;
+  height: calc(100% - 1.5rem);
+  display: flex;
+  column-gap: 3rem;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .auto-group-yjsf-sRZ .frame-27-zFH .frame-25-hfV .frame-24-ajH .frame-19-UTH .home-P4T {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.2175;
+  color: #000000;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .auto-group-yjsf-sRZ .frame-27-zFH .frame-25-hfV .frame-24-ajH .frame-19-UTH .about-us-hL3 {
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 1.2175;
+  color: #000000;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .auto-group-yjsf-sRZ .frame-27-zFH .frame-25-hfV .frame-24-ajH .frame-19-UTH .blog-EKy {
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 1.2175;
+  color: #000000;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .auto-group-yjsf-sRZ .frame-27-zFH .frame-25-hfV .frame-24-ajH .frame-19-UTH .contact-aPq {
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 1.218999958;
+  color: #000000;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .auto-group-yjsf-sRZ .frame-27-zFH .frame-25-hfV .frame-24-ajH .group-135-6sy {
+  width: 12rem;
+  height: 100%;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.2175;
+  color: #ffffff;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000000;
+  border-radius: 0.5rem;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .auto-group-yjsf-sRZ .frame-35-XTV {
+  margin: 0 12.1rem;
+  width: calc(100% - 24.2rem);
+  height: 59.6217rem;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .auto-group-yjsf-sRZ .frame-35-XTV .frame-125-eHD {
+  margin: 9.861rem 8rem 9.861rem 0rem;
+  width: 61.8rem;
+  height: calc(100% - 19.7217rem);
+  position: relative;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .auto-group-yjsf-sRZ .frame-35-XTV .frame-125-eHD .frame-120-kLF {
+  width: 42.9rem;
+  height: 23.8rem;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.desktop-3-NUo .auto-group-yjsf-sRZ .frame-35-XTV .frame-125-eHD .frame-120-kLF .haulway-FXu {
+  width: 42.9rem;
+  height: 23.8rem;
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 14rem;
+  font-weight: 400;
+  line-height: 1.7;
+  color: #000000;
+  font-family: MonteCarlo, 'Source Sans Pro';
+  white-space: nowrap;
+}
+.desktop-3-NUo .auto-group-yjsf-sRZ .frame-35-XTV .frame-125-eHD .frame-120-kLF .rectangle-157-YG7 {
+  width: 31.4rem;
+  height: 1.3rem;
+  position: absolute;
+  left: 5.8rem;
+  top: 18.1rem;
+  object-fit: contain;
+  vertical-align: top;
+  border-radius: 0.4133rem;
+}
+.desktop-3-NUo .auto-group-yjsf-sRZ .frame-35-XTV .frame-125-eHD .frame-120-kLF .introducing-TP5 {
+  width: 14.7rem;
+  height: 3rem;
+  position: absolute;
+  left: 0;
+  top: 2.0608rem;
+  font-size: 2.4rem;
+  font-weight: 600;
+  line-height: 1.2175;
+  color: #000000;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+}
+.desktop-3-NUo .auto-group-yjsf-sRZ .frame-35-XTV .frame-125-eHD .frame-123-AYP {
+  width: 61.8rem;
+  height: 19.1rem;
+  position: absolute;
+  left: 0;
+  top: 20.8rem;
+}
+.desktop-3-NUo .auto-group-yjsf-sRZ .frame-35-XTV .frame-125-eHD .frame-123-AYP .frame-122-WMM {
+  margin-bottom: 3rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.desktop-3-NUo .auto-group-yjsf-sRZ .frame-35-XTV .frame-125-eHD .frame-123-AYP .frame-122-WMM .your-ultimate-fashion-e-commerce-hub-fEF {
+  margin-bottom: 0.8rem;
+  font-size: 2.8rem;
+  font-weight: 600;
+  line-height: 1.2189999989;
+  color: #000000;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .auto-group-yjsf-sRZ .frame-35-XTV .frame-125-eHD .frame-123-AYP .frame-122-WMM .elevate-your-fashion-influence-engage-with-your-audience-and-maximize-your-revenue-aMD {
+  max-width: 55.3rem;
+  font-size: 2.2rem;
+  font-weight: 500;
+  line-height: 1.2175;
+  color: #000000;
+  font-family: Montserrat, 'Source Sans Pro';
+  flex-shrink: 0;
+}
+.desktop-3-NUo .auto-group-yjsf-sRZ .frame-35-XTV .frame-125-eHD .frame-123-AYP .group-136-4XH {
+  width: 18.5rem;
+  height: 6.5rem;
+  text-align: center;
+  font-size: 2.6rem;
+  font-weight: 600;
+  line-height: 1.2175;
+  color: #ffffff;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000000;
+  border-radius: 1rem;
+}
+.desktop-3-NUo .auto-group-yjsf-sRZ .frame-35-XTV .union-Ky1 {
+  width: 50rem;
+  height: 59.6217rem;
+  object-fit: contain;
+  vertical-align: top;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm {
+  width: 100%;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT {
+  margin-bottom: 10rem;
+  width: 100%;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-qrx7-LNK {
+  box-sizing: border-box;
+  padding: 0rem 9.1rem 8rem 9.2rem;
+  width: 100%;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-qrx7-LNK .frame-112-GFy {
+  margin-bottom: 8rem;
+  width: 100%;
+  height: 77.2rem;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-qrx7-LNK .frame-112-GFy .frame-104-oWo {
+  margin-right: 3.8rem;
+  width: 51rem;
+  height: 100%;
+  position: relative;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-qrx7-LNK .frame-112-GFy .frame-104-oWo .rectangle-9qZ {
+  width: 33rem;
+  height: 77.2rem;
+  position: relative;
+  left: 0;
+  top: 0;
+  background-size: 379.391% 133.561%;
+  background-position: -46.3738rem -7.7463rem;
+  background-image: url('../assets/rectangle-ZsM.png');
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-qrx7-LNK .frame-112-GFy .frame-104-oWo .rectangle-3R9 {
+  width: 30rem;
+  height: 62.558rem;
+  position: relative;
+  left: 21rem;
+  top: 14.642rem;
+  background-size: 378.788% 142.045%;
+  background-position: -40.9091rem -9.0046rem;
+  background-image: url('../assets/rectangle-BKd.png');
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-qrx7-LNK .frame-112-GFy .frame-111-jYs {
+  margin: 22.25rem 0;
+  width: 70.9rem;
+  height: calc(100% - 44.5rem);
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-qrx7-LNK .frame-112-GFy .frame-111-jYs .frame-110-sf5 {
+  margin-bottom: 2.9rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-qrx7-LNK .frame-112-GFy .frame-111-jYs .frame-110-sf5 .frame-105-SCP {
+  margin-bottom: 1rem;
+  width: 62.8rem;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-qrx7-LNK .frame-112-GFy .frame-111-jYs .frame-110-sf5 .frame-105-SCP .dont-miss-out-on-the-latest-trends-apP {
+  margin-bottom: 1rem;
+  font-size: 3.2rem;
+  font-weight: 600;
+  line-height: 1.2175;
+  color: #000000;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-qrx7-LNK .frame-112-GFy .frame-111-jYs .frame-110-sf5 .frame-105-SCP .rectangle-20-Wi3 {
+  width: 100%;
+  height: 0.3rem;
+  background-color: #222222;
+  border-radius: 8rem 0 8rem 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-qrx7-LNK .frame-112-GFy .frame-111-jYs .frame-110-sf5 .welcome-to-our-ultimate-fashion-and-beauty-destination-dive-into-our-curated-collection-that-brings-together-the-best-of-both-fashion-and-beauty-with-our-lookbook-and-get-ready-with-me-FQj {
+  max-width: 70.9rem;
+  font-size: 2.8rem;
+  font-weight: 500;
+  line-height: 1.2175;
+  color: #000000;
+  font-family: Montserrat, 'Source Sans Pro';
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-qrx7-LNK .frame-112-GFy .frame-111-jYs .frame-111-Vps {
+  margin-right: 43.4rem;
+  width: calc(100% - 43.4rem);
+  height: 6.5rem;
+  display: flex;
+  align-items: center;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-qrx7-LNK .frame-112-GFy .frame-111-jYs .frame-111-Vps .group-139-Dks {
+  margin-right: 3rem;
+  width: 18.5rem;
+  height: 100%;
+  text-align: center;
+  font-size: 2.6rem;
+  font-weight: 600;
+  line-height: 1.2175;
+  color: #ffffff;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000000;
+  border-radius: 4rem;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-qrx7-LNK .frame-112-GFy .frame-111-jYs .frame-111-Vps .group-140-guM {
+  margin: 0.25rem 0;
+  box-sizing: border-box;
+  padding: 1.989rem 2.125rem 2.193rem 2.057rem;
+  height: calc(100% - 0.5rem);
+  background-color: #000000;
+  border-radius: 3rem;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-qrx7-LNK .frame-112-GFy .frame-111-jYs .frame-111-Vps .group-140-guM .arrow-2-oyy {
+  width: 1.8183rem;
+  height: 1.8183rem;
+  object-fit: contain;
+  vertical-align: top;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-qrx7-LNK .frame-102-YAs {
+  margin: 0rem 0.43rem 0rem 0.33rem;
+  width: calc(100% - 0.7601rem);
+  height: 51.5628rem;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-qrx7-LNK .frame-102-YAs .frame-99-rhM {
+  margin: 10.5314rem 0;
+  width: 73rem;
+  height: calc(100% - 21.0628rem);
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-qrx7-LNK .frame-102-YAs .frame-99-rhM .frame-58-CFR {
+  margin-bottom: 3rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-qrx7-LNK .frame-102-YAs .frame-99-rhM .frame-58-CFR .fashion-showcase-and-innovation-9gT {
+  margin-bottom: 1rem;
+  font-size: 3.2rem;
+  font-weight: 600;
+  line-height: 1.2175;
+  color: #000000;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-qrx7-LNK .frame-102-YAs .frame-99-rhM .frame-58-CFR .rectangle-20-5a7 {
+  width: 100%;
+  height: 0.5rem;
+  background-color: #222222;
+  border-radius: 8rem 0 8rem 0;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-qrx7-LNK .frame-102-YAs .frame-99-rhM .frame-65-DRR {
+  display: flex;
+  flex-direction: column;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-qrx7-LNK .frame-102-YAs .frame-99-rhM .frame-65-DRR .step-into-the-feature-of-fashion-with-haulways-ar-powered-virtual-try-ons-showcase-your-designs-in-an-immersive-interactive-way-that-captivates-your-audience-ArT {
+  margin-bottom: 1.9rem;
+  max-width: 67rem;
+  font-size: 2.8rem;
+  font-weight: 500;
+  line-height: 1.2175;
+  color: #000000;
+  font-family: Montserrat, 'Source Sans Pro';
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-qrx7-LNK .frame-102-YAs .frame-99-rhM .frame-65-DRR .group-136-pg7 {
+  width: 18.5rem;
+  height: 6.5rem;
+  text-align: center;
+  font-size: 2.6rem;
+  font-weight: 600;
+  line-height: 1.2175;
+  color: #ffffff;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000000;
+  border-radius: 1rem;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-qrx7-LNK .frame-102-YAs .union-J5V {
+  width: 51.9399rem;
+  height: 51.5628rem;
+  object-fit: contain;
+  vertical-align: top;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .frame-114-dtT {
+  box-sizing: border-box;
+  padding: 4.4rem 9.6rem 4.4rem 9.6rem;
+  width: 100%;
+  height: 72rem;
+  background-color: #f2f2f2;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .frame-114-dtT .frame-98-ky5 {
+  width: 100%;
+  height: 58.331rem;
+  display: flex;
+  align-items: center;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .frame-114-dtT .frame-98-ky5 .union-Vvf {
+  margin-right: 4rem;
+  width: 50rem;
+  height: 58.331rem;
+  object-fit: contain;
+  vertical-align: top;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .frame-114-dtT .frame-98-ky5 .frame-63-qzX {
+  margin: 14.5155rem 0;
+  width: 70.8rem;
+  height: calc(100% - 29.031rem);
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .frame-114-dtT .frame-98-ky5 .frame-63-qzX .frame-60-yqq {
+  margin-bottom: 1rem;
+  width: 62.8rem;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .frame-114-dtT .frame-98-ky5 .frame-63-qzX .frame-60-yqq .join-our-influencer-program-ja7 {
+  margin-bottom: 1rem;
+  text-align: right;
+  font-size: 3.2rem;
+  font-weight: 600;
+  line-height: 1.2175;
+  color: #000000;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .frame-114-dtT .frame-98-ky5 .frame-63-qzX .frame-60-yqq .rectangle-20-ewy {
+  width: 100%;
+  height: 0.3rem;
+  background-color: #222222;
+  border-radius: 8rem 0 8rem 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .frame-114-dtT .frame-98-ky5 .frame-63-qzX .frame-62-noH {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .frame-114-dtT .frame-98-ky5 .frame-63-qzX .frame-62-noH .boost-your-income-and-influence-by-partnering-with-us-promote-products-earn-commissions-and-access-valuable-insights-into-your-engagement-impact-ZJF {
+  margin-bottom: 3rem;
+  max-width: 70.8rem;
+  font-size: 2.8rem;
+  font-weight: 500;
+  line-height: 1.2189999989;
+  color: #000000;
+  font-family: Montserrat, 'Source Sans Pro';
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .frame-114-dtT .frame-98-ky5 .frame-63-qzX .frame-62-noH .frame-61-RbM {
+  margin-right: 43.3rem;
+  width: calc(100% - 43.3rem);
+  height: 6.5rem;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .frame-114-dtT .frame-98-ky5 .frame-63-qzX .frame-62-noH .frame-61-RbM .group-139-y75 {
+  margin-right: 3rem;
+  width: 18.5rem;
+  height: 100%;
+  text-align: center;
+  font-size: 2.6rem;
+  font-weight: 600;
+  line-height: 1.2175;
+  color: #ffffff;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000000;
+  border-radius: 4rem;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .frame-114-dtT .frame-98-ky5 .frame-63-qzX .frame-62-noH .frame-61-RbM .group-140-3Mq {
+  margin: 0.25rem 0;
+  box-sizing: border-box;
+  padding: 1.989rem 2.125rem 2.193rem 2.057rem;
+  height: calc(100% - 0.5rem);
+  background-color: #000000;
+  border-radius: 3rem;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .frame-114-dtT .frame-98-ky5 .frame-63-qzX .frame-62-noH .frame-61-RbM .group-140-3Mq .arrow-2-mHq {
+  width: 1.8183rem;
+  height: 1.8183rem;
+  object-fit: contain;
+  vertical-align: top;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d {
+  box-sizing: border-box;
+  padding: 8rem 3.1rem;
+  width: 100%;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-55-1CB {
+  margin-bottom: 8rem;
+  box-sizing: border-box;
+  padding: 5.9rem 4.6rem 5.9rem 4.5rem;
+  width: 100%;
+  height: 33rem;
+  background-color: #222222;
+  border-radius: 1rem;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-55-1CB .frame-54-w5q {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-55-1CB .frame-54-w5q .frame-48-tWs {
+  margin-right: 4.5rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-55-1CB .frame-54-w5q .frame-48-tWs .why-choose-haulway-T4B {
+  margin-right: 2.2rem;
+  max-width: 24.4rem;
+  font-size: 4.8rem;
+  font-weight: 600;
+  line-height: 1.2190000216;
+  color: #ffffff;
+  font-family: Montserrat, 'Source Sans Pro';
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-55-1CB .frame-54-w5q .frame-48-tWs .rectangle-163-a8o {
+  width: 0.2rem;
+  height: 21.2rem;
+  background-color: #ffffff;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-55-1CB .frame-54-w5q .frame-53-78j {
+  margin: 2.168rem 0rem 2.168rem 0rem;
+  height: calc(100% - 4.3364rem);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-55-1CB .frame-54-w5q .frame-53-78j .frame-50-Sgo {
+  width: 28.1rem;
+  height: 100%;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-55-1CB .frame-54-w5q .frame-53-78j .frame-50-Sgo .union-zyD {
+  margin-bottom: 1rem;
+  width: 14rem;
+  height: 6.3636rem;
+  object-fit: contain;
+  vertical-align: top;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-55-1CB .frame-54-w5q .frame-53-78j .frame-50-Sgo .frame-49-wtT {
+  width: 100%;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-55-1CB .frame-54-w5q .frame-53-78j .frame-50-Sgo .frame-49-wtT .accentuate-your-influence-Jyu {
+  margin-bottom: 0.5rem;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.218999958;
+  color: #ffffff;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-55-1CB .frame-54-w5q .frame-53-78j .frame-50-Sgo .frame-49-wtT .directly-connect-with-your-followers-and-engage-in-real-time-interactions-EMm {
+  max-width: 28.1rem;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 500;
+  line-height: 1.2189999686;
+  color: #ffffff;
+  font-family: Montserrat, 'Source Sans Pro';
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-55-1CB .frame-54-w5q .frame-53-78j .auto-group-dwkb-Ku1 {
+  box-sizing: border-box;
+  padding: 0.332rem 0rem 0.332rem 2.7rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-55-1CB .frame-54-w5q .frame-53-78j .auto-group-dwkb-Ku1 .frame-51-fCB {
+  margin-right: 2.7rem;
+  width: 28.4rem;
+  height: 100%;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-55-1CB .frame-54-w5q .frame-53-78j .auto-group-dwkb-Ku1 .frame-51-fCB .exclude-QQf {
+  margin-bottom: 1.1rem;
+  width: 8rem;
+  height: 5.6rem;
+  object-fit: contain;
+  vertical-align: top;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-55-1CB .frame-54-w5q .frame-53-78j .auto-group-dwkb-Ku1 .frame-51-fCB .frame-41-wfV {
+  width: 100%;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-55-1CB .frame-54-w5q .frame-53-78j .auto-group-dwkb-Ku1 .frame-51-fCB .frame-41-wfV .stunning-fashion-showcase-74B {
+  margin-bottom: 0.5rem;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.218999958;
+  color: #ffffff;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-55-1CB .frame-54-w5q .frame-53-78j .auto-group-dwkb-Ku1 .frame-51-fCB .frame-41-wfV .display-your-creations-with-ar-enhanced-virtual-try-ons-Dsu {
+  max-width: 25.3rem;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 500;
+  line-height: 1.2175;
+  color: #ffffff;
+  font-family: Montserrat, 'Source Sans Pro';
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-55-1CB .frame-54-w5q .frame-53-78j .auto-group-dwkb-Ku1 .frame-52-8EB {
+  width: 35.5rem;
+  height: 100%;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-55-1CB .frame-54-w5q .frame-53-78j .auto-group-dwkb-Ku1 .frame-52-8EB .union-Uoq {
+  margin-bottom: 1.1rem;
+  width: 8rem;
+  height: 5.6rem;
+  object-fit: contain;
+  vertical-align: top;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-55-1CB .frame-54-w5q .frame-53-78j .auto-group-dwkb-Ku1 .frame-52-8EB .frame-42-EHD {
+  width: 100%;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-55-1CB .frame-54-w5q .frame-53-78j .auto-group-dwkb-Ku1 .frame-52-8EB .frame-42-EHD .seamless-e-commerce-integration-zGP {
+  margin-bottom: 0.4rem;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.2175;
+  color: #ffffff;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-55-1CB .frame-54-w5q .frame-53-78j .auto-group-dwkb-Ku1 .frame-52-8EB .frame-42-EHD .streamline-purchases-and-manage-inventory-effortlessly-767 {
+  max-width: 24.4rem;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 500;
+  line-height: 1.2175;
+  color: #ffffff;
+  font-family: Montserrat, 'Source Sans Pro';
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-100-P3d {
+  margin: 0rem 12.938rem 0rem 9.738rem;
+  width: calc(100% - 22.6756rem);
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-100-P3d .frame-88-unf {
+  margin: 0rem 11.012rem 6rem 14.212rem;
+  width: calc(100% - 25.2244rem);
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-100-P3d .frame-88-unf .what-do-you-gain-from-partnering-with-haulway-qgK {
+  margin-bottom: 1rem;
+  text-align: center;
+  font-size: 3.2rem;
+  font-weight: 600;
+  line-height: 1.2175;
+  color: #000000;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-100-P3d .frame-88-unf .rectangle-20-9wu {
+  width: 100%;
+  height: 0.3rem;
+  background-color: #222222;
+  border-radius: 8rem 0 8rem 0;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-100-P3d .frame-89-Vks {
+  width: 100%;
+  height: 57.5rem;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-100-P3d .frame-89-Vks .group-142-43H {
+  margin-right: 4rem;
+  width: 47.6244rem;
+  height: 100%;
+  position: relative;
+  border-radius: 0.923rem;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-100-P3d .frame-89-Vks .group-142-43H .rectangle-170-CQP {
+  width: 23.0738rem;
+  height: 43.1019rem;
+  position: absolute;
+  left: 0;
+  top: 0;
+  object-fit: contain;
+  vertical-align: top;
+  border-radius: 0.923rem;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-100-P3d .frame-89-Vks .group-142-43H .rectangle-173-8Yw {
+  width: 23.0738rem;
+  height: 43.1019rem;
+  position: absolute;
+  left: 11.6292rem;
+  top: 4.6148rem;
+  object-fit: contain;
+  vertical-align: top;
+  border-radius: 0.923rem;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-100-P3d .frame-89-Vks .group-142-43H .rectangle-174-f35 {
+  width: 23.0738rem;
+  height: 43.1019rem;
+  position: absolute;
+  left: 24.5506rem;
+  top: 14.3981rem;
+  object-fit: contain;
+  vertical-align: top;
+  border-radius: 0.923rem;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-100-P3d .frame-89-Vks .frame-86-mro {
+  margin: 12.55rem 0rem 12.45rem 0rem;
+  height: calc(100% - 25rem);
+  row-gap: 2.9rem;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-100-P3d .frame-89-Vks .frame-86-mro .optimize-your-e-commerce-operations-gym {
+  font-size: 2.4rem;
+  font-weight: 600;
+  line-height: 1.2175;
+  color: #000000;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-100-P3d .frame-89-Vks .frame-86-mro .amplify-your-influence-and-engagement-RAf {
+  font-size: 2.4rem;
+  font-weight: 600;
+  line-height: 1.2175;
+  color: #000000;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-100-P3d .frame-89-Vks .frame-86-mro .innovate-with-ar-and-interactive-features-96f {
+  font-size: 2.4rem;
+  font-weight: 600;
+  line-height: 1.2175;
+  color: #000000;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-100-P3d .frame-89-Vks .frame-86-mro .collaborate-on-features-and-growth-strategies-Gh5 {
+  font-size: 2.4rem;
+  font-weight: 600;
+  line-height: 1.2175;
+  color: #000000;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-100-P3d .frame-89-Vks .frame-86-mro .join-a-thriving-fashion-and-influencer-community-Q2b {
+  font-size: 2.4rem;
+  font-weight: 600;
+  line-height: 1.2175;
+  color: #000000;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .auto-group-4wfh-53d .frame-100-P3d .frame-89-Vks .frame-86-mro .earn-commissions-through-the-influencer-program-8DV {
+  font-size: 2.4rem;
+  font-weight: 600;
+  line-height: 1.2175;
+  color: #000000;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .frame-84-eBq {
+  margin-bottom: 8rem;
+  box-sizing: border-box;
+  padding: 6.8rem 11.787rem 6.95rem 11.7rem;
+  width: 100%;
+  height: 72rem;
+  background-color: #f2f2f2;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .frame-84-eBq .frame-83-mXM {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .frame-84-eBq .frame-83-mXM .frame-75-WUw {
+  margin: 14.475rem 12rem 14.475rem 0rem;
+  width: 67.9rem;
+  height: calc(100% - 28.9498rem);
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .frame-84-eBq .frame-83-mXM .frame-75-WUw .frame-74-S7h {
+  margin-bottom: 2.9rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .frame-84-eBq .frame-83-mXM .frame-75-WUw .frame-74-S7h .frame-60-nST {
+  margin-bottom: 1rem;
+  width: 62.8rem;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .frame-84-eBq .frame-83-mXM .frame-75-WUw .frame-74-S7h .frame-60-nST .strategic-partnership-for-success-v2s {
+  margin-bottom: 1rem;
+  text-align: right;
+  font-size: 3.2rem;
+  font-weight: 600;
+  line-height: 1.2175;
+  color: #000000;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .frame-84-eBq .frame-83-mXM .frame-75-WUw .frame-74-S7h .frame-60-nST .rectangle-20-qfd {
+  width: 100%;
+  height: 0.3rem;
+  background-color: #222222;
+  border-radius: 8rem 0 8rem 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .frame-84-eBq .frame-83-mXM .frame-75-WUw .frame-74-S7h .collaborate-with-us-to-revolutionize-the-fashion-and-e-commerce-landscape-benefit-from-early-access-customized-solutions-and-an-extended-reach-n55 {
+  max-width: 67.9rem;
+  font-size: 2.8rem;
+  font-weight: 500;
+  line-height: 1.2175;
+  color: #000000;
+  font-family: Montserrat, 'Source Sans Pro';
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .frame-84-eBq .frame-83-mXM .frame-75-WUw .frame-73-FUT {
+  margin-right: 34rem;
+  width: calc(100% - 34rem);
+  height: 6.5rem;
+  display: flex;
+  align-items: center;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .frame-84-eBq .frame-83-mXM .frame-75-WUw .frame-73-FUT .group-143-P4s {
+  margin-right: 3rem;
+  width: 24.9rem;
+  height: 100%;
+  text-align: center;
+  font-size: 2.6rem;
+  font-weight: 600;
+  line-height: 1.2175;
+  color: #ffffff;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000000;
+  border-radius: 4rem;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .frame-84-eBq .frame-83-mXM .frame-75-WUw .frame-73-FUT .group-140-G8f {
+  margin: 0.25rem 0;
+  box-sizing: border-box;
+  padding: 1.989rem 2.125rem 2.193rem 2.057rem;
+  height: calc(100% - 0.5rem);
+  background-color: #000000;
+  border-radius: 3rem;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .frame-84-eBq .frame-83-mXM .frame-75-WUw .frame-73-FUT .group-140-G8f .arrow-2-BWX {
+  width: 1.8183rem;
+  height: 1.8183rem;
+  object-fit: contain;
+  vertical-align: top;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .frame-84-eBq .frame-83-mXM .union-uhR {
+  width: 40.6135rem;
+  height: 58.2498rem;
+  object-fit: contain;
+  vertical-align: top;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .group-144-Ezb {
+  margin: 0rem 11.6rem 0rem 12.1rem;
+  width: calc(100% - 23.7rem);
+  height: 49.4212rem;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .group-144-Ezb .union-mDq {
+  margin-right: 4rem;
+  width: 45rem;
+  height: 49.4212rem;
+  object-fit: contain;
+  vertical-align: top;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .group-144-Ezb .frame-82-uqq {
+  margin: 11.7rem 0rem 14.687rem 0rem;
+  width: 71.3rem;
+  height: calc(100% - 26.3866rem);
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .group-144-Ezb .frame-82-uqq .frame-81-SKy {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .group-144-Ezb .frame-82-uqq .frame-81-SKy .frame-103-C4F {
+  margin-bottom: 1rem;
+  width: 24.9rem;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .group-144-Ezb .frame-82-uqq .frame-81-SKy .frame-103-C4F .lets-talk-Ydu {
+  margin-bottom: 1rem;
+  font-size: 3.2rem;
+  font-weight: 600;
+  line-height: 1.2175;
+  color: #000000;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .group-144-Ezb .frame-82-uqq .frame-81-SKy .frame-103-C4F .rectangle-20-5dq {
+  width: 100%;
+  height: 0.3rem;
+  background-color: #222222;
+  border-radius: 8rem 0 8rem 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .group-144-Ezb .frame-82-uqq .frame-81-SKy .ready-to-take-the-next-step-lets-have-a-chat-and-explore-the-possibilities-together-23H {
+  max-width: 70.8rem;
+  font-size: 2.8rem;
+  font-weight: 500;
+  line-height: 1.2189999989;
+  color: #000000;
+  font-family: Montserrat, 'Source Sans Pro';
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .group-144-Ezb .frame-82-uqq .frame-13-7Kd {
+  width: 100%;
+  height: 8.0346rem;
+  display: flex;
+  align-items: center;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .group-144-Ezb .frame-82-uqq .frame-13-7Kd .group-133-TuH {
+  margin-right: 3rem;
+  box-sizing: border-box;
+  padding: 2.4rem 2rem 2.435rem 2rem;
+  width: 46.4rem;
+  height: 100%;
+  font-size: 2.6rem;
+  font-weight: 500;
+  line-height: 1.2175;
+  color: #222222;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  border: solid 0.3rem #000000;
+  border-radius: 1rem;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-115-QzT .group-144-Ezb .frame-82-uqq .frame-13-7Kd .group-132-umH {
+  margin-bottom: 0.0346rem;
+  width: 21.9rem;
+  height: calc(100% - 0.0346rem);
+  text-align: center;
+  font-size: 2.6rem;
+  font-weight: 600;
+  line-height: 1.2175;
+  color: #ffffff;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000000;
+  border-radius: 1rem;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-108-N95 {
+  box-sizing: border-box;
+  padding: 7.316rem 8.2rem 7.784rem 4.7rem;
+  width: 100%;
+  height: 28.2rem;
+  background-color: #222222;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-108-N95 .frame-97-tdD {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  column-gap: 14rem;
+  align-items: flex-start;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-108-N95 .frame-97-tdD .frame-94-ESB {
+  width: 21rem;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-108-N95 .frame-97-tdD .frame-94-ESB .follow-us-nib {
+  margin-bottom: 2rem;
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1.2175;
+  color: #ffffff;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-108-N95 .frame-97-tdD .frame-94-ESB .frame-91-7ks {
+  width: 100%;
+  display: flex;
+  column-gap: 3rem;
+  align-items: center;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-108-N95 .frame-97-tdD .frame-94-ESB .frame-91-7ks .group-146-Tpj {
+  width: 3rem;
+  height: 3rem;
+  position: relative;
+  object-fit: contain;
+  vertical-align: top;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-108-N95 .frame-97-tdD .frame-94-ESB .frame-91-7ks .group-145-cSj {
+  width: 3rem;
+  height: 3rem;
+  object-fit: contain;
+  vertical-align: top;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-108-N95 .frame-97-tdD .frame-94-ESB .frame-91-7ks .vector-MfD {
+  width: 3rem;
+  height: 3rem;
+  object-fit: contain;
+  vertical-align: top;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-108-N95 .frame-97-tdD .frame-94-ESB .frame-91-7ks .group-147-JqM {
+  width: 3rem;
+  height: 3rem;
+  object-fit: contain;
+  vertical-align: top;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-108-N95 .frame-97-tdD .frame-92-euD {
+  height: 100%;
+  row-gap: 3rem;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-108-N95 .frame-97-tdD .frame-92-euD .quick-links-on7 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1.2189999494;
+  color: #ffffff;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-108-N95 .frame-97-tdD .frame-92-euD .about-us-jfm {
+  font-size: 1.8rem;
+  font-weight: 600;
+  line-height: 1.2189999686;
+  color: #a2a2a2;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-108-N95 .frame-97-tdD .frame-92-euD .contact-us-HBV {
+  font-size: 1.8rem;
+  font-weight: 600;
+  line-height: 1.2175;
+  color: #a2a2a2;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-108-N95 .frame-97-tdD .frame-93-pSK {
+  height: 100%;
+  row-gap: 3rem;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-108-N95 .frame-97-tdD .frame-93-pSK .explore-B1y {
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1.2175;
+  color: #ffffff;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-108-N95 .frame-97-tdD .frame-93-pSK .privacy-policy-vVM {
+  font-size: 1.8rem;
+  font-weight: 600;
+  line-height: 1.2189999686;
+  color: #a2a2a2;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-108-N95 .frame-97-tdD .frame-93-pSK .contact-us-57M {
+  font-size: 1.8rem;
+  font-weight: 600;
+  line-height: 1.2175;
+  color: #a2a2a2;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-108-N95 .frame-97-tdD .frame-96-p4w {
+  width: 41.8rem;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-108-N95 .frame-97-tdD .frame-96-p4w .subscribe-N6T {
+  margin-bottom: 2rem;
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1.2175;
+  color: #ffffff;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-108-N95 .frame-97-tdD .frame-96-p4w .frame-95-Jko {
+  width: 100%;
+  height: 6rem;
+  display: flex;
+  align-items: center;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-108-N95 .frame-97-tdD .frame-96-p4w .frame-95-Jko .group-195-Fvw {
+  margin-right: 2rem;
+  box-sizing: border-box;
+  padding: 1.9rem 3rem;
+  width: 34.8rem;
+  height: 100%;
+  font-size: 1.8rem;
+  font-weight: 600;
+  line-height: 1.2189999686;
+  color: #818181;
+  font-family: Montserrat, 'Source Sans Pro';
+  white-space: nowrap;
+  background-color: #ffffff;
+  border-radius: 3rem;
+  flex-shrink: 0;
+}
+.desktop-3-NUo .frame-116-Fbm .frame-108-N95 .frame-97-tdD .frame-96-p4w .frame-95-Jko .group-194-XdZ {
+  width: 5rem;
+  height: 5rem;
+  object-fit: contain;
+  vertical-align: top;
+  flex-shrink: 0;
+}
