@@ -4,6 +4,7 @@
 /*===== VARIABLES CSS =====*/
 :root {
   --header-height: 3rem;
+  --logo-filter: none;
 
   /*========== Colors ==========*/
   --first-color: hsl(0, 4%, 5%);
@@ -71,6 +72,7 @@ body.dark-theme{
   --body-color: hsl(0, 4%, 11%);
   --container-color: hsl(0, 3%, 12%);
   --section-color: hsl(0, 3%, 12%);
+  --logo-filter: invert(100%);
 }
 
 /*========== Button Dark/Light ==========*/
@@ -199,6 +201,8 @@ img{
   object-fit: contain;
   vertical-align: top;
   flex-shrink: 0;
+  filter: var(--logo-filter);
+  -webkit-filter: var(--logo-filter);
 }
 
 .nav__logo:hover{
