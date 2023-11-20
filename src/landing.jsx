@@ -44,7 +44,7 @@ const Landing = () => {
       notify("Error saving email: " + error.message, { type: "error" });
       console.error("Error saving email:", error);
     } else {
-      notify("Email saved successfully", { type: "success" });
+      notify("Response Noted. Stay tuned for Updates", { type: "success" });
       console.log("Email saved successfully:", data);
       // Redirect to the list view after saving
       // props.history.push('/emails');
@@ -319,7 +319,7 @@ const Landing = () => {
                 <a href="#" className="footer__social">
                   <i className="bx bxl-facebook" />
                 </a>
-                <a href="#" className="footer__social">
+                <a href="https://instagram.com/haulwayglobal?igshid=NGVhN2U2NjQ0Yg==" className="footer__social">
                   <i className="bx bxl-instagram" />
                 </a>
                 <a href="#" className="footer__social">
@@ -620,7 +620,7 @@ const Landing = () => {
               <a href="#" className="footer__social">
                 <i className="bx bxl-facebook" />
               </a>
-              <a href="#" className="footer__social">
+              <a href="https://instagram.com/haulwayglobal?igshid=NGVhN2U2NjQ0Yg==" className="footer__social">
                 <i className="bx bxl-instagram" />
               </a>
               <a href="#" className="footer__social">
