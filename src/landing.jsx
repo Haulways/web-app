@@ -241,7 +241,7 @@ const Landing = () => {
                 </div>
               </li>
               <li className="nav__item">
-                <a href="https://www.blog.haulway.online" className="nav__link">
+                <a href="https://blog.haulway.online" className="nav__link">
                   Blog
                 </a>
               </li>
@@ -395,7 +395,7 @@ const Landing = () => {
           </div>
         </section>
         {/*========== ABOUT ==========*/}
-        <section className="about section" id="about" ref={about_ref}>
+        <section className="about section" id="about">
           <div className="about__container  bd-grid bd-container">
             <div className="about__data">
               <span className="section-subtitle about__initial">Fashion</span>
@@ -421,7 +421,7 @@ const Landing = () => {
           </div>
         </section>
         {/*========== ABOUT ==========*/}
-        <section className="about bg_gray section" id="about" ref={about_ref}>
+        <section className="about bg_gray section" id="about">
           <div className="about__container  bd-grid bd-container">
             <div className="about__data">
               {/* <span class="section-subtitle about__initial">About us</span> */}
