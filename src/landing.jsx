@@ -315,13 +315,10 @@ const Landing = () => {
               <br />
               <strong className="home__description">Connect With Us</strong>
               <div>
-                <a href="#" className="footer__social">
-                  <i className="bx bxl-facebook" />
-                </a>
-                <a href="#" className="footer__social">
+                <a href="https://instagram.com/haulwayglobal?igshid=NGVhN2U2NjQ0Yg==" className="footer__social">
                   <i className="bx bxl-instagram" />
                 </a>
-                <a href="#" className="footer__social">
+                <a href="https://x.com/haulwayglobal?t=obIxDbhj43cWvjcpDUsWPg&s=09" className="footer__social">
                   <i className="bx bxl-twitter" />
                 </a>
               </div>
@@ -625,13 +622,10 @@ const Landing = () => {
             {/* <span class="footer__description">Telecom</span>
               <span class="footer__description">Services</span> */}
             <div>
-              <a href="#" className="footer__social">
-                <i className="bx bxl-facebook" />
-              </a>
-              <a href="#" className="footer__social">
+              <a href="https://instagram.com/haulwayglobal?igshid=NGVhN2U2NjQ0Yg==" className="footer__social">
                 <i className="bx bxl-instagram" />
               </a>
-              <a href="#" className="footer__social">
+              <a href="https://x.com/haulwayglobal?t=obIxDbhj43cWvjcpDUsWPg&s=09" className="footer__social">
                 <i className="bx bxl-twitter" />
               </a>
             </div>
