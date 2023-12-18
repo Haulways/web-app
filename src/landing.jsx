@@ -30,8 +30,7 @@ const Landing = () => {
   const clearText = async () => {
     document.getElementById("email_input1").value = "";
     document.getElementById("email_input2").value = "";
-    setEmail('');
-
+    setEmail("");
   };
 
   const handleSave = async () => {
@@ -44,7 +43,7 @@ const Landing = () => {
       notify("Error saving email: " + error.message, { type: "error" });
       console.error("Error saving email:", error);
     } else {
-      notify("Response Noted. Stay tuned for Updates", { type: "success" });
+      notify("Email saved successfully", { type: "success" });
       console.log("Email saved successfully:", data);
       // Redirect to the list view after saving
       // props.history.push('/emails');
@@ -52,14 +51,14 @@ const Landing = () => {
     clearText();
   };
 
-  // useEffect(() => {
-  //   // Set the email state when the form values change
-  //   console.log(email);
-  // }, [email]);
+  useEffect(() => {
+    // Set the email state when the form values change
+    console.log(email);
+  }, [email]);
 
-  // useEffect(() => {
-  //   console.log(import.meta.env.VITE_BASE_URL);
-  // }, []);
+  useEffect(() => {
+    console.log(import.meta.env.VITE_BASE_URL);
+  }, []);
   useEffect(() => {
     const typed = new Typed(el.current, {
       strings: [
@@ -241,7 +240,7 @@ const Landing = () => {
                 </div>
               </li>
               <li className="nav__item">
-                <a href="https://blog.haulway.online" className="nav__link">
+                <a href="https://www.blog.haulway.online" className="nav__link">
                   Blog
                 </a>
               </li>
@@ -287,7 +286,7 @@ const Landing = () => {
                       <span class="cursor home__title" data-owner="main"></span>
                   </h1> */}
               <h3 className="home__subtitle">
-                Your Ultimate Fashion &amp; <br /> Social-Commerce Hub
+                Bridging the Gap Between &amp; <br /> Content and Commerce
               </h3>
               <span style={{ display: "inline-flex" }}>
                 <p
@@ -316,13 +315,13 @@ const Landing = () => {
               <br />
               <strong className="home__description">Connect With Us</strong>
               <div>
-                {/* <a href="#" className="footer__social">
+                <a href="#" className="footer__social">
                   <i className="bx bxl-facebook" />
-                </a> */}
-                <a href="https://instagram.com/haulwayglobal?igshid=NGVhN2U2NjQ0Yg==" className="footer__social">
+                </a>
+                <a href="#" className="footer__social">
                   <i className="bx bxl-instagram" />
                 </a>
-                <a href="https://x.com/haulwayglobal?t=obIxDbhj43cWvjcpDUsWPg&s=09" className="footer__social">
+                <a href="#" className="footer__social">
                   <i className="bx bxl-twitter" />
                 </a>
               </div>
@@ -354,20 +353,20 @@ const Landing = () => {
             <div className="about__data">
               <span className="section-subtitle about__initial">About Us</span>
               <h2 className="section-title about__initial">
-                Haulway is rewriting social-commerce
+                Discover a new era of digital engagement
               </h2>
               <p className="about__description">
-                with a focus on immersive and genuine shopping experiences.
-                Guided by an exceptional team, our mission is to break free from
-                technological confines and offer an enjoyable online shopping
-                experience. We bridge the gap between online shopping and
-                reality, emphasizing quality and fun. Welcome to Haulway
+                where the lines between content and commerce seamlessly
+                converge. Our platform redefines the influencer experience,
+                transforming the way users interact, shop, and create. Dive into
+                a world where social media isn't just about likes, but a direct
+                gateway to a personalized shopping journey. Welcome to Haulway
               </p>
               {/* <a href="#menu" class="button get-started bd_radius">Get Started</a> */}
             </div>
             <div className="about__img__section ">
               <img
-                src="assets/mocks.png"
+                src="assets/mocks1.png"
                 alt
                 className="about__img home__img mySlides1 w3-animate-fading"
               />
@@ -395,17 +394,18 @@ const Landing = () => {
           </div>
         </section>
         {/*========== ABOUT ==========*/}
-        <section className="about section" id="about">
+        <section className="about section" id="about" ref={about_ref}>
           <div className="about__container  bd-grid bd-container">
             <div className="about__data">
-              <span className="section-subtitle about__initial">Fashion</span>
+              <span className="section-subtitle about__initial">The Ultimate Fashion</span>
               <h2 className="section-title about__initial">
-                Fashion Showcase And Innovation
+                Social Commerce Platform
               </h2>
               <p className="about__description">
-                Step into the feature of fashion with Haulway’s AR-powered
-                virtual try-ons. Showcase your designs in an immersive,
-                interactive way that captivates your audience...
+                We integrate a direct shopping feature within the social media
+                experience allowing users to effortlessly purchase items
+                directly from influencer videos. It's not just content; it's
+                commerce in motion.
               </p>
               <a href="#menu" className="button get-started">
                 Learn more
@@ -421,21 +421,23 @@ const Landing = () => {
           </div>
         </section>
         {/*========== ABOUT ==========*/}
-        <section className="about bg_gray section" id="about">
+        <section className="about bg_gray section" id="about" ref={about_ref}>
           <div className="about__container  bd-grid bd-container">
             <div className="about__data">
               {/* <span class="section-subtitle about__initial">About us</span> */}
               <h2 className="section-title about__initial">
-                Join Our Influencer Program
+                Influencer Promotion Centre
               </h2>
               <p className="about__description">
-                "Boost your income and influence by partnering with us. Promote
-                products, earn commissions, and access valuable insights into
-                your engagement impact."
+                Our Influencer Promotion Centre is a platform for influencers,
+                offering a space to sell custom vendor specific User-Generated Content (UGC), 
+                negotiate and establish clear, fair affiliate marketing contracts. 
+                It's about empowering creators of all sizes, 
+                ensuring fair compensation for their collaborations.
               </p>
-              <a href="#menu" className="button get-started bd_radius">
+              {/* <a href="#menu" className="button get-started bd_radius">
                 Join now
-              </a>
+              </a> */}
             </div>
             <img
               src="assets/people6.png"
@@ -454,26 +456,25 @@ const Landing = () => {
             <div className="services__content">
               <img src="assets/serv1.png" alt className="services__img" />
               <i className="bx bxl-message" />
-              <h3 className="services__title">Accentuate your Influence</h3>
+              <h3 className="services__title">Enhanced Shopping Feature</h3>
               <p className="services__description">
-                Directly connect with your followers and engage in real-time
-                interactions..
+                Purchases happen directly from influencer videos, creating an engaging, personalized shopping journey.
               </p>
             </div>
             <div className="services__content">
               <img src="assets/serv2.png" alt className="services__img" />
-              <h3 className="services__title">Stunning fashion showcase</h3>
+              <h3 className="services__title">Access to Creators for UGC Marketing</h3>
               <p className="services__description">
-                Display your creations with AR-enhanced virtual try-ons..
+                Connect with a wide range of content creators for personalized UGC marketing and leverage influencer reach to showcase products to a broader audience.
               </p>
             </div>
             <div className="services__content">
               <img src="assets/serv3.png" alt className="services__img" />
               <h3 className="services__title">
-                Seamless E-commerce Integration
+                Tailored Marketing Tools
               </h3>
               <p className="services__description">
-                Streamline purchases and manage inventory effortlessly.
+                With Customizable marketing options suitable for various business scales alongside access to analytics for informed decision-making and strategy refinement.
               </p>
             </div>
           </div>
@@ -529,24 +530,31 @@ const Landing = () => {
             <div className="about__data">
               {/* <span class="section-subtitle about__initial">About us</span> */}
               <h2 className="section-title about__initial">
-                Strategic Partnership for Success
+                We're Revolutionizing Digital Commerce
               </h2>
               <p className="about__description">
-                "Collaborate with us to revolutionize the fashion and e-commerce
-                landscape. Benefit from early access, customized solutions, and
-                an extended reach."
+                Haulway isn't just a platform; it's a movement reshaping the digital landscape. 
+                Be part of a community where content creators, influencers, and shoppers coexist harmoniously. 
+                Together, we're creating a sustainable and equitable ecosystem for digital commerce. Want to feel connected to products 
+                as you witness them in action, worn or used by those you trust?
+
               </p>
-              <a href="#menu" className="button get-started bd_radius">
-                Let's partner up
-              </a>
+              <button
+                type="button"
+                className="button get-started"
+                onClick={() => {
+                  scrollTo(contact_us);
+                }}
+              >
+                Join us Today
+              </button>
             </div>
             <img
               src="assets/people2.png"
               alt
               className="about__img home__img reverse__order"
             />
-            {/* <div class="home__img__container about__img">
-          </div> */}
+
           </div>
         </section>
         {/* ===== APP ======= */}
@@ -617,13 +625,13 @@ const Landing = () => {
             {/* <span class="footer__description">Telecom</span>
               <span class="footer__description">Services</span> */}
             <div>
-              {/* <a href="#" className="footer__social">
+              <a href="#" className="footer__social">
                 <i className="bx bxl-facebook" />
-              </a> */}
-              <a href="https://instagram.com/haulwayglobal?igshid=NGVhN2U2NjQ0Yg==" className="footer__social">
+              </a>
+              <a href="#" className="footer__social">
                 <i className="bx bxl-instagram" />
               </a>
-              <a href="https://x.com/haulwayglobal?t=obIxDbhj43cWvjcpDUsWPg&s=09" className="footer__social">
+              <a href="#" className="footer__social">
                 <i className="bx bxl-twitter" />
               </a>
             </div>
