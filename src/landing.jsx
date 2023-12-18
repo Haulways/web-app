@@ -408,11 +408,22 @@ const Landing = () => {
                 Learn more
               </a> */}
             </div>
-            <img
+            <video 
+              className="about__img reverse__order about__img home__img" 
+              width='600' 
+              autoplay loop muted playsinline
+            >
+              <source 
+                src="https://res.cloudinary.com/diqqhb3rh/video/upload/q_auto:low,f_auto/v1702891716/zsxnpjfppw6y9w8pmsh2.mp4" 
+                type="video/mp4"
+              />
+
+            </video>
+            {/* <img
               src="assets/people7.png"
               alt
               className="about__img reverse__order about__img home__img"
-            />
+            /> */}
             {/* <div class="home__img__container reverse__order">
           </div> */}
           </div>
