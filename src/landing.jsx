@@ -609,7 +609,7 @@ const Landing = () => {
               </button>
             </div>
             <img
-              src="assets/people2.png"
+              src="assets/mocks3.png"
               alt
               className="about__img home__img reverse__order"
             />
