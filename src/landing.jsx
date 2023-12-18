@@ -324,7 +324,7 @@ const Landing = () => {
               </div>
             </div>
             <img
-              src="assets/mocks5.png"
+              src="assets/home.png"
               alt
               className="home__img mySlides w3-animate-fading"
             />
@@ -409,7 +409,7 @@ const Landing = () => {
               </a> */}
             </div>
             <video 
-              // className="about__img reverse__order about__img home__img" 
+              className="about__img reverse__order about__img home__img" 
               width='600' 
               height='240'
               autoplay 
@@ -418,7 +418,7 @@ const Landing = () => {
               playsinline
             >
               <source 
-                src="https://res.cloudinary.com/diqqhb3rh/video/upload/q_auto:low,f_auto/v1702891716/zsxnpjfppw6y9w8pmsh2.mp4" 
+                src="assets/mockvid.mp4" 
                 type="video/mp4"
               />
 
