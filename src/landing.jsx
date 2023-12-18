@@ -286,7 +286,7 @@ const Landing = () => {
                       <span class="cursor home__title" data-owner="main"></span>
                   </h1> */}
               <h3 className="home__subtitle">
-                Bridging the Gap Between &amp; <br /> Content and Commerce
+                Bridging the Gap Between <br /> Content &amp; Commerce
               </h3>
               <span style={{ display: "inline-flex" }}>
                 <p
@@ -324,7 +324,7 @@ const Landing = () => {
               </div>
             </div>
             <img
-              src="assets/home.png"
+              src="assets/mocks6.png"
               alt
               className="home__img mySlides w3-animate-fading"
             />
@@ -430,6 +430,52 @@ const Landing = () => {
             />
             {/* <div class="home__img__container reverse__order">
           </div> */}
+          </div>
+        </section>
+        {/*========== ABOUT ==========*/}
+        <section className="about section" id="about" ref={about_ref}>
+          <div className="about__container  bd-grid bd-container">
+            <div className="about__data">
+              <span className="section-subtitle about__initial">Skill Centre</span>
+              <h2 className="section-title about__initial">
+                Our Skill Center offers
+              </h2>
+              <p className="about__description">
+                tutorials, resources, and workshops, 
+                empowering creators with the tools to 
+                enhance content quality and engagement strategies. 
+                It's a leveling ground for creators, ensuring 
+                everyone has access to professional insights.
+              </p>
+              {/* <a href="#menu" class="button get-started bd_radius">Get Started</a> */}
+            </div>
+            <div className="about__img__section ">
+              <img
+                src="assets/people7.png"
+                alt
+                className="about__img home__img mySlides1 w3-animate-fading"
+              />
+              <img
+                src="assets/mocks1.png"
+                alt
+                className="about__img home__img mySlides1 w3-animate-fading"
+                style={{ display: "none" }}
+              />
+              <img
+                src="assets/mocks2.png"
+                alt
+                className="about__img home__img mySlides1 w3-animate-fading"
+                style={{ display: "none" }}
+              />
+              <img
+                src="assets/mocks3.png"
+                alt
+                className="about__img home__img mySlides1 w3-animate-fading"
+                style={{ display: "none" }}
+              />
+            </div>
+            {/* <div class="home__img__container about__img">
+              </div> */}
           </div>
         </section>
         {/*========== ABOUT ==========*/}
