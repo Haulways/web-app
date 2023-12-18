@@ -409,9 +409,13 @@ const Landing = () => {
               </a> */}
             </div>
             <video 
-              className="about__img reverse__order about__img home__img" 
+              // className="about__img reverse__order about__img home__img" 
               width='600' 
-              autoplay loop muted playsinline
+              height='240'
+              autoplay 
+              loop 
+              muted 
+              playsinline
             >
               <source 
                 src="https://res.cloudinary.com/diqqhb3rh/video/upload/q_auto:low,f_auto/v1702891716/zsxnpjfppw6y9w8pmsh2.mp4" 
