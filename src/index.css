@@ -369,7 +369,7 @@ img{
 .home__img{
   /* margin-top: 60px; */
   /* width: 400px; */
-  max-width: 80%;
+  max-width: 90%;
   justify-self: center;
   border-radius: 20px;
   -webkit-border-radius: 20px;
@@ -703,7 +703,7 @@ img{
   .home__img{
     margin-bottom: 100px;
     margin-top: 10px;
-    max-width: 70%;
+    max-width: 90%;
   }
   .l-main {
     margin-top: 11rem;
@@ -828,7 +828,7 @@ img{
 
   .home__img{
     /* width: 300px; */
-    max-width: 70%;
+    max-width: 90%;
   }
 
   .about__container,
