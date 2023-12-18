@@ -240,7 +240,7 @@ const Landing = () => {
                 </div>
               </li>
               <li className="nav__item">
-                <a href="https://www.blog.haulway.online" className="nav__link">
+                <a href="https://blog.haulway.online" className="nav__link">
                   Blog
                 </a>
               </li>
@@ -407,9 +407,9 @@ const Landing = () => {
                 directly from influencer videos. It's not just content; it's
                 commerce in motion.
               </p>
-              <a href="#menu" className="button get-started">
+              {/* <a href="#menu" className="button get-started">
                 Learn more
-              </a>
+              </a> */}
             </div>
             <img
               src="assets/people7.png"
