@@ -408,7 +408,7 @@ const Landing = () => {
                 Learn more
               </a> */}
             </div>
-            <video 
+            {/* <video 
               className="about__img reverse__order about__img home__img" 
               width='600' 
               height='240'
@@ -423,7 +423,7 @@ const Landing = () => {
                 type="video/mp4"
               />
 
-            </video>
+            </video> */}
             <img
               src="assets/mocks5.png"
               alt
