@@ -324,7 +324,7 @@ const Landing = () => {
               </div>
             </div>
             <img
-              src="assets/home.png"
+              src="assets/mocks5.png"
               alt
               className="home__img mySlides w3-animate-fading"
             />
@@ -363,7 +363,7 @@ const Landing = () => {
             </div>
             <div className="about__img__section ">
               <img
-                src="assets/mocks1.png"
+                src="assets/mocks4.png"
                 alt
                 className="about__img home__img mySlides1 w3-animate-fading"
               />
