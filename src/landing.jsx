@@ -4,6 +4,9 @@ import React, { useRef, useEffect, useState } from "react";
 import Typed from "typed.js";
 import { createClient } from "@supabase/supabase-js";
 import { useNotify } from "react-admin";
+import { Splide, SplideSlide } from "@splidejs/react-splide";
+import "@splidejs/react-splide/css";
+import video from "./vid/mockvid.mp4";
 // Replace 'YOUR_SUPABASE_URL' and 'YOUR_SUPABASE_KEY' with your Supabase URL and key
 const supabase = createClient(
   import.meta.env.VITE_BASE_URL,
@@ -286,7 +289,7 @@ const Landing = () => {
                       <span class="cursor home__title" data-owner="main"></span>
                   </h1> */}
               <h3 className="home__subtitle">
-                Bridging the Gap Between <br /> Content &amp; Commerce
+                The Ultimate Fashion <br /> Social Commerce Platform
               </h3>
               <span style={{ display: "inline-flex" }}>
                 <p
@@ -315,33 +318,49 @@ const Landing = () => {
               <br />
               <strong className="home__description">Connect With Us</strong>
               <div>
-                <a href="https://instagram.com/haulwayglobal?igshid=NGVhN2U2NjQ0Yg==" className="footer__social">
+                <a
+                  href="https://instagram.com/haulwayglobal?igshid=NGVhN2U2NjQ0Yg=="
+                  className="footer__social"
+                >
                   <i className="bx bxl-instagram" />
                 </a>
-                <a href="https://x.com/haulwayglobal?t=obIxDbhj43cWvjcpDUsWPg&s=09" className="footer__social">
+                <a
+                  href="https://x.com/haulwayglobal?t=obIxDbhj43cWvjcpDUsWPg&s=09"
+                  className="footer__social"
+                >
                   <i className="bx bxl-twitter" />
                 </a>
               </div>
             </div>
-            <img
-              src="assets/mocks6.png"
-              alt
-              className="home__img mySlides w3-animate-fading"
-            />
-            <img
-              src="assets/home1.png"
-              alt
-              className="home__img mySlides w3-animate-fading"
-              style={{ display: "none" }}
-            />
-            <img
-              src="assets/home2.png"
-              alt
-              className="home__img mySlides w3-animate-fading"
-              style={{ display: "none" }}
-            />
-            {/* <div class="home__img__container">
-              </div> */}
+            <div className="home__slides">
+              <Splide
+                options={{ rewind: true, autoplay: true, arrows: false, paginatio: false }}
+                aria-label="Haulway"
+              >
+                <SplideSlide>
+                  <img
+                    src="assets/mocks6.png"
+                    alt
+                    className="home__img"
+                    style={{ maxWidth: "100%" }}
+                  />
+                </SplideSlide>
+                <SplideSlide>
+                  <img
+                    src="assets/mocks5.png"
+                    alt
+                    className="home__img "
+                    style={{ maxWidth: "50%" }}
+                  />
+                  <img
+                    src="assets/mocks3.png"
+                    alt
+                    className="home__img "
+                    style={{ maxWidth: "50%" }}
+                  />
+                </SplideSlide>
+              </Splide>
+            </div>
           </div>
         </section>
         {/*========== ABOUT ==========*/}
@@ -361,7 +380,41 @@ const Landing = () => {
               </p>
               {/* <a href="#menu" class="button get-started bd_radius">Get Started</a> */}
             </div>
-            <div className="about__img__section ">
+            <Splide
+              className="about__img__section "
+              options={{ rewind: true, autoplay: true, arrows: false, paginatio: false }}
+              aria-label="Haulway"
+            >
+              <SplideSlide>
+                <img
+                  src="assets/mocks1.png"
+                  alt
+                  className="home__img "
+                  style={{ maxWidth: "50%" }}
+                />
+                <img
+                  src="assets/mocks4.png"
+                  alt
+                  className="home__img "
+                  style={{ maxWidth: "50%" }}
+                />
+              </SplideSlide>
+              <SplideSlide>
+                <img
+                  src="assets/mocks5.png"
+                  alt
+                  className="home__img "
+                  style={{ maxWidth: "50%" }}
+                />
+                <img
+                  src="assets/mocks2.png"
+                  alt
+                  className="home__img "
+                  style={{ maxWidth: "50%" }}
+                />
+              </SplideSlide>
+            </Splide>
+            {/* <div className="about__img__section ">
               <img
                 src="assets/mocks4.png"
                 alt
@@ -385,7 +438,7 @@ const Landing = () => {
                 className="about__img home__img mySlides1 w3-animate-fading"
                 style={{ display: "none" }}
               />
-            </div>
+            </div> */}
             {/* <div class="home__img__container about__img">
               </div> */}
           </div>
@@ -394,9 +447,11 @@ const Landing = () => {
         <section className="about section" id="about" ref={about_ref}>
           <div className="about__container  bd-grid bd-container">
             <div className="about__data">
-              <span className="section-subtitle about__initial">The Ultimate Fashion</span>
+              <span className="section-subtitle about__initial">
+                Bridging the Gap
+              </span>
               <h2 className="section-title about__initial">
-                Social Commerce Platform
+                Between Content &amp; Commerce
               </h2>
               <p className="about__description">
                 We integrate a direct shopping feature within the social media
@@ -408,27 +463,20 @@ const Landing = () => {
                 Learn more
               </a> */}
             </div>
-            {/* <video 
-              className="about__img reverse__order about__img home__img" 
-              width='600' 
-              height='240'
-              autoplay 
-              loop 
-              muted 
-              playsinline
-              
+            <video
+              className="reverse__order home__img"
+              // width='500'
+              // height='240'
+              autoPlay
+              loop
+              muted
+              playsInline
+              style={{ maxWidth: "90%" }}
             >
-              <source 
-                src="assets/mockvid.mp4" 
-                type="video/mp4"
-              />
-
-            </video> */}
-            <img
-              src="assets/mocks5.png"
-              alt
-              className="about__img reverse__order about__img home__img"
-            />
+              <source src={video} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            
             {/* <div class="home__img__container reverse__order">
           </div> */}
           </div>
@@ -437,16 +485,17 @@ const Landing = () => {
         <section className="about section" id="about" ref={about_ref}>
           <div className="about__container  bd-grid bd-container">
             <div className="about__data">
-              <span className="section-subtitle about__initial">Skill Centre</span>
+              <span className="section-subtitle about__initial">
+                Skill Centre
+              </span>
               <h2 className="section-title about__initial">
                 Our Skill Center offers
               </h2>
               <p className="about__description">
-                tutorials, resources, and workshops, 
-                empowering creators with the tools to 
-                enhance content quality and engagement strategies. 
-                It's a leveling ground for creators, ensuring 
-                everyone has access to professional insights.
+                tutorials, resources, and workshops, empowering creators with
+                the tools to enhance content quality and engagement strategies.
+                It's a leveling ground for creators, ensuring everyone has
+                access to professional insights.
               </p>
               {/* <a href="#menu" class="button get-started bd_radius">Get Started</a> */}
             </div>
@@ -489,10 +538,10 @@ const Landing = () => {
               </h2>
               <p className="about__description">
                 Our Influencer Promotion Centre is a platform for influencers,
-                offering a space to sell custom vendor specific User-Generated Content (UGC), 
-                negotiate and establish clear, fair affiliate marketing contracts. 
-                It's about empowering creators of all sizes, 
-                ensuring fair compensation for their collaborations.
+                offering a space to sell custom vendor specific User-Generated
+                Content (UGC), negotiate and establish clear, fair affiliate
+                marketing contracts. It's about empowering creators of all
+                sizes, ensuring fair compensation for their collaborations.
               </p>
               {/* <a href="#menu" className="button get-started bd_radius">
                 Join now
@@ -517,23 +566,28 @@ const Landing = () => {
               <i className="bx bxl-message" />
               <h3 className="services__title">Enhanced Shopping Feature</h3>
               <p className="services__description">
-                Purchases happen directly from influencer videos, creating an engaging, personalized shopping journey.
+                Purchases happen directly from influencer videos, creating an
+                engaging, personalized shopping journey.
               </p>
             </div>
             <div className="services__content">
               <img src="assets/serv2.png" alt className="services__img" />
-              <h3 className="services__title">Access to Creators for UGC Marketing</h3>
+              <h3 className="services__title">
+                Access to Creators for UGC Marketing
+              </h3>
               <p className="services__description">
-                Connect with a wide range of content creators for personalized UGC marketing and leverage influencer reach to showcase products to a broader audience.
+                Connect with a wide range of content creators for personalized
+                UGC marketing and leverage influencer reach to showcase products
+                to a broader audience.
               </p>
             </div>
             <div className="services__content">
               <img src="assets/serv3.png" alt className="services__img" />
-              <h3 className="services__title">
-                Tailored Marketing Tools
-              </h3>
+              <h3 className="services__title">Tailored Marketing Tools</h3>
               <p className="services__description">
-                With Customizable marketing options suitable for various business scales alongside access to analytics for informed decision-making and strategy refinement.
+                With Customizable marketing options suitable for various
+                business scales alongside access to analytics for informed
+                decision-making and strategy refinement.
               </p>
             </div>
           </div>
@@ -592,11 +646,12 @@ const Landing = () => {
                 We're Revolutionizing Digital Commerce
               </h2>
               <p className="about__description">
-                Haulway isn't just a platform; it's a movement reshaping the digital landscape. 
-                Be part of a community where content creators, influencers, and shoppers coexist harmoniously. 
-                Together, we're creating a sustainable and equitable ecosystem for digital commerce. Want to feel connected to products 
-                as you witness them in action, worn or used by those you trust?
-
+                Haulway isn't just a platform; it's a movement reshaping the
+                digital landscape. Be part of a community where content
+                creators, influencers, and shoppers coexist harmoniously.
+                Together, we're creating a sustainable and equitable ecosystem
+                for digital commerce. Want to feel connected to products as you
+                witness them in action, worn or used by those you trust?
               </p>
               <button
                 type="button"
@@ -609,11 +664,10 @@ const Landing = () => {
               </button>
             </div>
             <img
-              src="assets/mocks3.png"
+              src="assets/people1.png"
               alt
               className="about__img home__img reverse__order"
             />
-
           </div>
         </section>
         {/* ===== APP ======= */}
@@ -667,7 +721,7 @@ const Landing = () => {
               </div>
             </div>
             <img
-              src="assets/people1.png"
+              src="assets/people2.png"
               alt
               className="about__img home__img"
             />
@@ -684,10 +738,16 @@ const Landing = () => {
             {/* <span class="footer__description">Telecom</span>
               <span class="footer__description">Services</span> */}
             <div>
-              <a href="https://instagram.com/haulwayglobal?igshid=NGVhN2U2NjQ0Yg==" className="footer__social">
+              <a
+                href="https://instagram.com/haulwayglobal?igshid=NGVhN2U2NjQ0Yg=="
+                className="footer__social"
+              >
                 <i className="bx bxl-instagram" />
               </a>
-              <a href="https://x.com/haulwayglobal?t=obIxDbhj43cWvjcpDUsWPg&s=09" className="footer__social">
+              <a
+                href="https://x.com/haulwayglobal?t=obIxDbhj43cWvjcpDUsWPg&s=09"
+                className="footer__social"
+              >
                 <i className="bx bxl-twitter" />
               </a>
             </div>

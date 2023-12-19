@@ -703,7 +703,7 @@ img{
   .home__img{
     margin-bottom: 100px;
     margin-top: 10px;
-    max-width: 90%;
+    max-width: 70%;
   }
   .l-main {
     margin-top: 11rem;
@@ -828,7 +828,11 @@ img{
 
   .home__img{
     /* width: 300px; */
-    max-width: 90%;
+    max-width: 60%;
+  }
+
+  .home__slides {
+    margin-top: 100px;
   }
 
   .about__container,
