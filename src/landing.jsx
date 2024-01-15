@@ -882,20 +882,7 @@ const Landing = () => {
 
                           </Grid>
                         </SplideSlide>
-                        <SplideSlide>
-                          <img
-                            src="assets/mocks5.png"
-                            alt
-                            className="home__img "
-                            style={{ maxWidth: "50%" }}
-                          />
-                          <img
-                            src="assets/mocks2.png"
-                            alt
-                            className="home__img "
-                            style={{ maxWidth: "50%" }}
-                          />
-                        </SplideSlide>
+                        
                       </Splide></div>
 
 
@@ -911,7 +898,9 @@ const Landing = () => {
                   </div>
               },
               {
-                label: "Creators", child: <div className="services section" style={{ paddingTop: '5px' }}>
+                label: "Creators", 
+                child: 
+                <div className="services section" style={{ paddingTop: '5px' }}>
                   <div className="services__container  bd-grid bd-container gap-2rem">
                     <div className="services__content">
                       {/* <img src="assets/serv1.png" alt className="services__img" /> */}
