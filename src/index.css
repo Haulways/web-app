@@ -168,6 +168,8 @@ img{
   margin-bottom: var(--mb-3);
   /* text-decoration: underline; */
   font-weight: bold;
+  font-family: 'Lemon', serif;
+
 }
 
 .section-subtitle{
@@ -502,9 +504,10 @@ img{
   text-align: center;
   padding: 30px 25px;
   border-radius: .5rem;
-  box-shadow: 0 2px 4px rgba(3,74,40,.15);
+  box-shadow: 0 2px 20px hsla(0, 0%, 0%, 0.06);
   background-color: var(--container-color);
   transition: all .3s ease-in-out !important;
+
 }
 
 .services__img{
@@ -830,7 +833,8 @@ img{
     /* box-shadow: 0 2px 4px rgba(3,74,40,.15); */
     background-color: var(--container-color);
     border-radius: 0.5rem;
-    box-shadow: rgba(3, 74, 40, 0.15) 0px 2px 4px;
+    /* box-shadow: rgba(3, 74, 40, 0.15) 0px 2px 4px; */
+    box-shadow: 0 2px 20px hsla(0, 0%, 0%, 0.06);
   }
 
   .services__container,

@@ -829,7 +829,7 @@ const Landing = () => {
                       </div>
                     </div>
                     <div className="services__container  bd-grid bd-container gap-2rem">
-                      <div className="about__data mt-5rem" style={{ width: 'calc(100% - 2rem)' }}>
+                      <div className="about__data mt-5rem" style={{ width: 'calc(100%)' }}>
                         {/* <span class="section-subtitle about__initial">About us</span> */}
                         {/* <h2 class="section-title about__initial">Join Our Influencer Program</h2> */}
                         <p className="about__description">
@@ -841,7 +841,7 @@ const Landing = () => {
                         </a>
                       </div>
 
-                      <div className="about__img__section " style={{ width: 'calc(100% - 2rem)' }}><Splide
+                      <div className="about__img__section " style={{ width: 'calc(100%)' }}><Splide
 
 
                         options={{ rewind: true, autoplay: false, arrows: false, pagination: false }}
@@ -872,7 +872,8 @@ const Landing = () => {
                             alignContent={'center'}
                             // gridAutoFlow={'column'}
                             display={'grid'}
-                            margin={'10px 2px'}
+                            margin={0}
+                            my={2}
 
                           >
                             <ImageTile img_width={'320px'} img_height={'70px'} tran_color={'var(--container-color)'} title={'Enhanced Visibility'} subtitle={'Reach a broader audience and elevate your brand visibility through targeted content.'} />
@@ -882,7 +883,21 @@ const Landing = () => {
 
                           </Grid>
                         </SplideSlide>
-                        
+                        <SplideSlide>
+                          <img
+                            src="assets/mocks5.png"
+                            alt
+                            className="home__img "
+                            style={{ maxWidth: "50%" }}
+                          />
+                          <img
+                            src="assets/mocks2.png"
+                            alt
+                            className="home__img "
+                            style={{ maxWidth: "50%" }}
+                          />
+                        </SplideSlide>
+
                       </Splide></div>
 
 
@@ -898,104 +913,104 @@ const Landing = () => {
                   </div>
               },
               {
-                label: "Creators", 
-                child: 
-                <div className="services section" style={{ paddingTop: '5px' }}>
-                  <div className="services__container  bd-grid bd-container gap-2rem">
-                    <div className="services__content">
-                      {/* <img src="assets/serv1.png" alt className="services__img" /> */}
-                      <Stack direction={'row'} justifyContent='center' alignItems={'center'}>
-                        <Stack
-                          className="card services__img"
-                          borderRadius='100%'
-                          width={`70px`}
-                          height={`70px`}
-                          margin={1}
-                          bgcolor={'rgba(0, 240, 77, 0.05)'}
-                          justifyContent={"center"}
-                          alignItems={"center"}
-                          padding={'8px'}
-                        >
-                          <BubbleChart sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
+                label: "Creators",
+                child:
+                  <div className="services section" style={{ paddingTop: '5px' }}>
+                    <div className="services__container  bd-grid bd-container gap-2rem">
+                      <div className="services__content">
+                        {/* <img src="assets/serv1.png" alt className="services__img" /> */}
+                        <Stack direction={'row'} justifyContent='center' alignItems={'center'}>
+                          <Stack
+                            className="card services__img"
+                            borderRadius='100%'
+                            width={`70px`}
+                            height={`70px`}
+                            margin={1}
+                            bgcolor={'rgba(0, 240, 77, 0.05)'}
+                            justifyContent={"center"}
+                            alignItems={"center"}
+                            padding={'8px'}
+                          >
+                            <BubbleChart sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
+                          </Stack>
                         </Stack>
-                      </Stack>
 
-                      <i className="bx bxl-message" />
-                      <h3 className="services__title">UGC Sales</h3>
-                      <p className="services__description">
-                        Monetize your creativity by selling custom User-Generated Content (UGC) directly to your engaged audience on Haulway.
-                      </p>
-                    </div>
-                    <div className="services__content">
-                      {/* <img src="assets/serv2.png" alt className="services__img" /> */}
-                      <Stack direction={'row'} justifyContent='center' alignItems={'center'}>
-                        <Stack
-                          className="card services__img"
-                          borderRadius='100%'
-                          width={`70px`}
-                          height={`70px`}
-                          margin={1}
-                          bgcolor={'rgba(0, 240, 77, 0.05)'}
-                          justifyContent={"center"}
-                          alignItems={"center"}
-                          padding={'8px'}
-                        >
-                          <BubbleChart sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
+                        <i className="bx bxl-message" />
+                        <h3 className="services__title">UGC Sales</h3>
+                        <p className="services__description">
+                          Monetize your creativity by selling custom User-Generated Content (UGC) directly to your engaged audience on Haulway.
+                        </p>
+                      </div>
+                      <div className="services__content">
+                        {/* <img src="assets/serv2.png" alt className="services__img" /> */}
+                        <Stack direction={'row'} justifyContent='center' alignItems={'center'}>
+                          <Stack
+                            className="card services__img"
+                            borderRadius='100%'
+                            width={`70px`}
+                            height={`70px`}
+                            margin={1}
+                            bgcolor={'rgba(0, 240, 77, 0.05)'}
+                            justifyContent={"center"}
+                            alignItems={"center"}
+                            padding={'8px'}
+                          >
+                            <BubbleChart sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
+                          </Stack>
                         </Stack>
-                      </Stack>
-                      <i className="bx bxl-message" />
-                      <h3 className="services__title">
-                        Fair Compensation
-                      </h3>
-                      <p className="services__description">
-                        Negotiate fair affiliate marketing contracts and ensure you receive fair compensation for your collaborations.
-                      </p>
-                    </div>
-                    <div className="services__content">
-                      {/* <img src="assets/serv3.png" alt className="services__img" /> */}
-                      <Stack direction={'row'} justifyContent='center' alignItems={'center'}>
-                        <Stack
-                          className="card services__img"
-                          borderRadius='100%'
-                          width={`70px`}
-                          height={`70px`}
-                          margin={1}
-                          bgcolor={'rgba(0, 240, 77, 0.05)'}
-                          justifyContent={"center"}
-                          alignItems={"center"}
-                          padding={'8px'}
-                        >
-                          <BubbleChart sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
+                        <i className="bx bxl-message" />
+                        <h3 className="services__title">
+                          Fair Compensation
+                        </h3>
+                        <p className="services__description">
+                          Negotiate fair affiliate marketing contracts and ensure you receive fair compensation for your collaborations.
+                        </p>
+                      </div>
+                      <div className="services__content">
+                        {/* <img src="assets/serv3.png" alt className="services__img" /> */}
+                        <Stack direction={'row'} justifyContent='center' alignItems={'center'}>
+                          <Stack
+                            className="card services__img"
+                            borderRadius='100%'
+                            width={`70px`}
+                            height={`70px`}
+                            margin={1}
+                            bgcolor={'rgba(0, 240, 77, 0.05)'}
+                            justifyContent={"center"}
+                            alignItems={"center"}
+                            padding={'8px'}
+                          >
+                            <BubbleChart sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
+                          </Stack>
                         </Stack>
-                      </Stack>
-                      <i className="bx bxl-message" />
-                      <h3 className="services__title">Skill Center</h3>
-                      <p className="services__description">
-                        Access a robust Skill Center offering tutorials, resources, and workshops to enhance your content creation skills.
-                      </p>
+                        <i className="bx bxl-message" />
+                        <h3 className="services__title">Skill Center</h3>
+                        <p className="services__description">
+                          Access a robust Skill Center offering tutorials, resources, and workshops to enhance your content creation skills.
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="services__container  bd-grid bd-container gap-2rem">
-                    <div className="about__data mt-5rem" style={{ width: 'calc(100% - 2rem)' }}>
-                      {/* <span class="section-subtitle about__initial">About us</span> */}
-                      {/* <h2 class="section-title about__initial">Join Our Influencer Program</h2> */}
-                      <p className="about__description no__mb">
-                        Monetize your skills and content effortlessly on Haulway. Sell your custom content, negotiate clear affiliate contracts, and access tutorials in our Skill Center. Join a community-driven platform fostering creative growth and transparent monetization. Showcase talents, connect with creators, and maximize your earning potential.
-                      </p>
+                    <div className="services__container  bd-grid bd-container gap-2rem">
+                      <div className="about__data mt-5rem" style={{ width: 'calc(100% - 2rem)' }}>
+                        {/* <span class="section-subtitle about__initial">About us</span> */}
+                        {/* <h2 class="section-title about__initial">Join Our Influencer Program</h2> */}
+                        <p className="about__description no__mb">
+                          Monetize your skills and content effortlessly on Haulway. Sell your custom content, negotiate clear affiliate contracts, and access tutorials in our Skill Center. Join a community-driven platform fostering creative growth and transparent monetization. Showcase talents, connect with creators, and maximize your earning potential.
+                        </p>
 
-                      <a href="#menu" className="button get-started bd_radius">
-                        Join now
-                      </a>
-                    </div>
+                        <a href="#menu" className="button get-started bd_radius">
+                          Join now
+                        </a>
+                      </div>
 
-                    <div className="about__img__section " style={{ width: 'calc(100% - 2rem)' }}><Splide
+                      <div className="about__img__section " style={{ width: 'calc(100%)' }}><Splide
 
 
-                      options={{ rewind: true, autoplay: false, arrows: false, pagination: false }}
-                      aria-label="Haulway"
-                    >
-                      <SplideSlide>
-                        {/* <img
+                        options={{ rewind: true, autoplay: false, arrows: false, pagination: false }}
+                        aria-label="Haulway"
+                      >
+                        <SplideSlide>
+                          {/* <img
             src="assets/mocks1.png"
             alt
             className="home__img "
@@ -1007,55 +1022,55 @@ const Landing = () => {
             className="home__img "
             style={{ maxWidth: "50%" }}
           /> */}
-                        <Grid
-                          gridTemplateColumns={'max-content'}
-                          // gridTemplateRows={'1fr 1fr'}              
-                          gap={1}
-                          width={'100%'}
-                          // className="home__img"
-                          direction={'row'}
-                          justifyContent={'center'}
-                          alignContent={'center'}
-                          // gridAutoFlow={'column'}
-                          display={'grid'}
-                          margin={0}
-                          my={2}
+                          <Grid
+                            gridTemplateColumns={'max-content'}
+                            // gridTemplateRows={'1fr 1fr'}              
+                            gap={1}
+                            width={'100%'}
+                            // className="home__img"
+                            direction={'row'}
+                            justifyContent={'center'}
+                            alignContent={'center'}
+                            // gridAutoFlow={'column'}
+                            display={'grid'}
+                            margin={0}
+                            my={2}
 
-                        >
-                          <ImageTile img_width={'320px'} img_height={'70px'} tran_color={'var(--container-color)'} title={'Monetization Opportunities'} subtitle={'Diversify your revenue streams by selling exclusive content and negotiating fair contracts.'} />
-                          <ImageTile img_width={'320px'} img_height={'70px'} tran_color={'var(--container-color)'} title={'Increased Visibility'} subtitle={'Showcase your skills and content to a wider audience, expanding your reach and influence.'} />
-                          <ImageTile img_width={'320px'} img_height={'70px'} tran_color={'var(--container-color)'} title={'Community Support'} subtitle={'Join a collaborative community for networking, sharing insights, and mutual growth.'} />
-                          <ImageTile img_width={'320px'} img_height={'70px'} tran_color={'var(--container-color)'} title={'Skill Enhancement'} subtitle={'Elevate your content creation game with insights from industry professionals.'} />
+                          >
+                            <ImageTile img_width={'320px'} img_height={'70px'} tran_color={'var(--container-color)'} title={'Monetization Opportunities'} subtitle={'Diversify your revenue streams by selling exclusive content and negotiating fair contracts.'} />
+                            <ImageTile img_width={'320px'} img_height={'70px'} tran_color={'var(--container-color)'} title={'Increased Visibility'} subtitle={'Showcase your skills and content to a wider audience, expanding your reach and influence.'} />
+                            <ImageTile img_width={'320px'} img_height={'70px'} tran_color={'var(--container-color)'} title={'Community Support'} subtitle={'Join a collaborative community for networking, sharing insights, and mutual growth.'} />
+                            <ImageTile img_width={'320px'} img_height={'70px'} tran_color={'var(--container-color)'} title={'Skill Enhancement'} subtitle={'Elevate your content creation game with insights from industry professionals.'} />
 
-                        </Grid>
-                      </SplideSlide>
-                      <SplideSlide>
-                        <img
-                          src="assets/mocks5.png"
-                          alt
-                          className="home__img "
-                          style={{ maxWidth: "50%" }}
-                        />
-                        <img
-                          src="assets/mocks2.png"
-                          alt
-                          className="home__img "
-                          style={{ maxWidth: "50%" }}
-                        />
-                      </SplideSlide>
-                    </Splide></div>
+                          </Grid>
+                        </SplideSlide>
+                        <SplideSlide>
+                          <img
+                            src="assets/mocks5.png"
+                            alt
+                            className="home__img "
+                            style={{ maxWidth: "50%" }}
+                          />
+                          <img
+                            src="assets/mocks2.png"
+                            alt
+                            className="home__img "
+                            style={{ maxWidth: "50%" }}
+                          />
+                        </SplideSlide>
+                      </Splide></div>
 
 
-                  </div>
-                  {/* <img
+                    </div>
+                    {/* <img
                   src="assets/people8.png"
                   alt
                   className=""
                 /> */}
-                  {/* <div class="home__img__container about__img">
+                    {/* <div class="home__img__container about__img">
   </div> */}
 
-                </div>
+                  </div>
               },
               {
                 label: "Tutors", child: <div className="services section" style={{ paddingTop: '5px' }}>
@@ -1138,15 +1153,15 @@ const Landing = () => {
                       {/* <span class="section-subtitle about__initial">About us</span> */}
                       {/* <h2 class="section-title about__initial">Join Our Influencer Program</h2> */}
                       <p className="about__description no__mb">
-                      Monetize your expertise on Haulway. Deliver tutorials, resources, and workshops to a diverse community. Promote your tutoring services, engage with a growing audience, and turn your knowledge into a sustainable revenue stream. Connect with learners on a vibrant educational platform.
+                        Monetize your expertise on Haulway. Deliver tutorials, resources, and workshops to a diverse community. Promote your tutoring services, engage with a growing audience, and turn your knowledge into a sustainable revenue stream. Connect with learners on a vibrant educational platform.
                       </p>
-                      
+
                       <a href="#menu" className="button get-started bd_radius">
                         Join now
                       </a>
                     </div>
 
-                    <div className="about__img__section " style={{ width: 'calc(100% - 2rem)' }}><Splide
+                    <div className="about__img__section " style={{ width: 'calc(100%)' }}><Splide
 
 
                       options={{ rewind: true, autoplay: false, arrows: false, pagination: false }}
