@@ -365,6 +365,7 @@ const Landing = () => {
                     // gridAutoFlow={'column'}
                     display={'grid'}
                     margin={0}
+                    my={2}
 
                   >
                     <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--section-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'Social Commerce'} subtitle={'Elevate your Shopping Experience with Social Interactions.'} />
