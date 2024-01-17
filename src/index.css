@@ -309,7 +309,8 @@ img{
 
 .scrolltop__icon{
   font-size: 1.8rem;
-  color: #FBFEFD;
+  /* color: #FBFEFD; */
+  color: var(--body-color)
 }
 
 /* Show scrolltop */

@@ -7,14 +7,19 @@ import { ArrowOutwardOutlined, BubbleChart, Search, Security } from "@mui/icons-
 
 const ImageCard = (props) => {
     const { img_width, img_height, tran_color, cont_color, title, subtitle, notch, icon } = props;
+    const isLarge = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+    const isMedium = useMediaQuery((theme) => theme.breakpoints.down("md"));
+    const isSmall = useMediaQuery((theme) => theme.breakpoints.down("sm"));
     const _width = img_width ? (img_width) : (400);
     const _height = img_height ? (img_height) : (200);
     const _tran_color = tran_color ? (tran_color) : ('var(--section-color)');
-    const _cont_color = cont_color ? (cont_color) : ('var(--container-color)');
+    const _cont_color = cont_color && !isSmall ? (cont_color) : ('var(--container-color)');
     const _title = title ? (title) : ('Feature');
     const _subtitle = subtitle ? (subtitle) : ('Earn commissions through the influencer program.');
     const _notch = notch ? (notch) : ('true');
     const _icon = icon ? (icon) : (BubbleChart);
+    
+
 
 
     return <Stack
@@ -26,8 +31,8 @@ const ImageCard = (props) => {
         position={'relative'}
         justifyContent={"center"}
         alignItems={'center'}
-        // boxShadow={'0 2px 20px hsla(0, 0%, 0%, 0.06)'}
-        // borderRadius={'6px 6px 6px 45px'}
+    // boxShadow={'0 2px 20px hsla(0, 0%, 0%, 0.06)'}
+    // borderRadius={'6px 6px 6px 45px'}
 
 
     >
@@ -41,46 +46,46 @@ const ImageCard = (props) => {
             left={'1px'}
             bottom='1px'
             bgcolor={_cont_color}
-            
+
             boxShadow={'0 2px 20px hsla(0, 0%, 0%, 0.06)'}
-            
+
             margin={0}
-            // boxShadow={`${tran_color && tran_color === 'var(--section-color)'  ? ('none') : ('0 2px 20px hsla(0, 0%, 0%, 0.06)')}`}
+        // boxShadow={`${tran_color && tran_color === 'var(--section-color)'  ? ('none') : ('0 2px 20px hsla(0, 0%, 0%, 0.06)')}`}
 
         >
             <Stack
-                    className="card"
-                    borderRadius='100%'
-                    width={`calc(25% - 6px)`}
-                    height={`calc(25%)`}
-                    margin={1}
-                    left={'5px'}
-                    top='7px'
-                    position={'absolute'}
-                    bgcolor={'rgba(25, 118, 210, 0.05)'}
-                    justifyContent={"center"}
-                    alignItems={"center"}
-                    // padding={'8px'}
+                className="card"
+                borderRadius='100%'
+                width={`calc(25% - 6px)`}
+                height={`calc(25%)`}
+                margin={1}
+                left={'5px'}
+                top='7px'
+                position={'absolute'}
+                bgcolor={'rgba(25, 118, 210, 0.05)'}
+                justifyContent={"center"}
+                alignItems={"center"}
+            // padding={'8px'}
 
 
 
 
 
-                >
-                    <_icon sx={{ color: '#1976d2', fontSize: "1rem" }} />
-                    
-                    
+            >
+                <_icon sx={{ color: '#1976d2', fontSize: "1rem" }} />
 
-                </Stack>
-                <Stack
-                    top='60px'
-                    position={'absolute'}
-                    px={2}
-                    mx={0}
-                    >
-                <p style={{fontSize: 'var(--small-font-size)', fontWeight: 'bold', color: 'var(--title-color)'}} className="card_subtitle">{_title}</p>
-                <p style={{fontSize: 'var(--smallest-font-size)', color: 'var(--text-color)'}} className="card_subtitle">{_subtitle}</p>
-                </Stack>
+
+
+            </Stack>
+            <Stack
+                top='60px'
+                position={'absolute'}
+                px={2}
+                mx={0}
+            >
+                <p style={{ fontSize: 'var(--small-font-size)', fontWeight: 'bold', color: 'var(--title-color)' }} className="card_subtitle">{_title}</p>
+                <p style={{ fontSize: 'var(--smallest-font-size)', color: 'var(--text-color)' }} className="card_subtitle">{_subtitle}</p>
+            </Stack>
         </Stack>
         {
             _notch && _notch === 'true' ? (<Box
@@ -97,10 +102,10 @@ const ImageCard = (props) => {
                 alignItems={"center"}
                 bgcolor={_tran_color}
                 margin={0}
-    
-    
-    
-    
+
+
+
+
             >
                 <Box
                     className="card"
@@ -116,11 +121,11 @@ const ImageCard = (props) => {
                     height={`calc(100%)`}
                     justifyContent={"center"}
                     alignItems={"center"}
-    
-    
-    
-    
-    
+
+
+
+
+
                 >
                     <Stack
                         className="card"
@@ -135,20 +140,20 @@ const ImageCard = (props) => {
                         justifyContent={"center"}
                         alignItems={"center"}
                         padding={'11px'}
-    
-    
-    
-    
-    
+
+
+
+
+
                     >
                         <ArrowOutwardOutlined sx={{ color: 'white', fontSize: "1rem" }} />
-    
+
                     </Stack>
                 </Box>
-    
+
             </Box>) : (null)
         }
-        
+
 
 
     </Stack >

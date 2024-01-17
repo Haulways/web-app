@@ -221,7 +221,7 @@ const Landing = () => {
   return (
     <div>
       {/*========== SCROLL TOP ==========*/}
-      <a href="#" className="scrolltop" id="scroll-top">
+      <a href="#" className="scrolltop special-button" id="scroll-top">
         <i className="bx bx-chevron-up scrolltop__icon" />
       </a>
       {/*========== HEADER ==========*/}
@@ -629,10 +629,10 @@ const Landing = () => {
                   my={2}
 
                 >
-                  <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} notch={'false'} title={'Learn'} subtitle={"Elevate your skills with Our Skill Centre for powerful content and engagement."} icon={Lightbulb}/>
-                  <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} notch={'false'} title={'Earn'} subtitle={"Monetize your expertise by tutoring with us, connecting with a global audience."} icon={MonetizationOn} />
-                  <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} notch={'false'} title={'Promote'} subtitle={"Boost your brand: Contribute to Our Skill Centre for massive exposure."} icon={Campaign}/>
-                  <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} notch={'false'} title={'Grow'} subtitle={"Propel your growth with pro insights for unstoppable progress."} icon={TrendingUp}/>
+                  <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'Learn'} subtitle={"Elevate your skills with Our Skill Centre for powerful content and engagement."} icon={Lightbulb}/>
+                  <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'Earn'} subtitle={"Monetize your expertise by tutoring with us, connecting with a global audience."} icon={MonetizationOn} />
+                  <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'Promote'} subtitle={"Boost your brand: Contribute to Our Skill Centre for massive exposure."} icon={Campaign}/>
+                  <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'Grow'} subtitle={"Propel your growth with pro insights for unstoppable progress."} icon={TrendingUp}/>
 
                 </Grid>
               </SplideSlide>

@@ -7,10 +7,13 @@ import { ArrowOutwardOutlined, BubbleChart, Search, Security } from "@mui/icons-
 
 const ImageTile = (props) => {
     const { img_width, img_height, tran_color, cont_color, title, subtitle, notch } = props;
+    const isLarge = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+    const isMedium = useMediaQuery((theme) => theme.breakpoints.down("md"));
+    const isSmall = useMediaQuery((theme) => theme.breakpoints.down("sm"));
     const _width = img_width ? (img_width) : ('100%');
     const _height = img_height ? (img_height) : ('80px');
     const _tran_color = tran_color ? (tran_color) : ('var(--section-color)');
-    const _cont_color = cont_color ? (cont_color) : ('var(--container-color)');
+    const _cont_color = cont_color && !isSmall ? (cont_color) : ('var(--container-color)');
     const _title = title ? (title) : ('Feature');
     const _subtitle = subtitle ? (subtitle) : ('Earn commissions through the influencer program.');
     const _notch = notch ? (notch) : ('false');
