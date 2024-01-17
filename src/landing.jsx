@@ -662,7 +662,7 @@ const Landing = () => {
           <CenteredTab
             children={[
               {
-                label: "Vendors",
+                label: "Brands & Vendors",
                 child:
                   <div className="services section" style={{ paddingTop: '5px' }}>
                     <div className="services__container  bd-grid bd-container gap-2rem">
