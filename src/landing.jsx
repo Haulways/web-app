@@ -614,18 +614,6 @@ const Landing = () => {
               aria-label="Haulway"
             >
               <SplideSlide>
-                {/* <img
-                  src="assets/mocks1.png"
-                  alt
-                  className="home__img "
-                  style={{ maxWidth: "50%" }}
-                />
-                <img
-                  src="assets/mocks4.png"
-                  alt
-                  className="home__img "
-                  style={{ maxWidth: "50%" }}
-                /> */}
                 <Grid
                   gridTemplateColumns={'max-content max-content'}
                   // gridTemplateRows={'1fr 1fr'}              
@@ -692,7 +680,7 @@ const Landing = () => {
                             alignItems={"center"}
                             padding={'8px'}
                           >
-                            <BubbleChart sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
+                            <Security sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
                           </Stack>
                         </Stack>
 
@@ -716,7 +704,7 @@ const Landing = () => {
                             alignItems={"center"}
                             padding={'8px'}
                           >
-                            <BubbleChart sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
+                            <Security sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
                           </Stack>
                         </Stack>
                         <i className="bx bxl-message" />
@@ -741,7 +729,7 @@ const Landing = () => {
                             alignItems={"center"}
                             padding={'8px'}
                           >
-                            <BubbleChart sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
+                            <Security sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
                           </Stack>
                         </Stack>
                         <i className="bx bxl-message" />
@@ -837,7 +825,7 @@ const Landing = () => {
                             alignItems={"center"}
                             padding={'8px'}
                           >
-                            <BubbleChart sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
+                            <Security sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
                           </Stack>
                         </Stack>
 
@@ -861,7 +849,7 @@ const Landing = () => {
                             alignItems={"center"}
                             padding={'8px'}
                           >
-                            <BubbleChart sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
+                            <Security sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
                           </Stack>
                         </Stack>
                         <i className="bx bxl-message" />
@@ -886,7 +874,7 @@ const Landing = () => {
                             alignItems={"center"}
                             padding={'8px'}
                           >
-                            <BubbleChart sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
+                            <Security sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
                           </Stack>
                         </Stack>
                         <i className="bx bxl-message" />
@@ -978,7 +966,7 @@ const Landing = () => {
                           alignItems={"center"}
                           padding={'8px'}
                         >
-                          <BubbleChart sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
+                          <Security sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
                         </Stack>
                       </Stack>
 
@@ -1002,7 +990,7 @@ const Landing = () => {
                           alignItems={"center"}
                           padding={'8px'}
                         >
-                          <BubbleChart sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
+                          <Security sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
                         </Stack>
                       </Stack>
                       <i className="bx bxl-message" />
@@ -1027,7 +1015,7 @@ const Landing = () => {
                           alignItems={"center"}
                           padding={'8px'}
                         >
-                          <BubbleChart sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
+                          <Security sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
                         </Stack>
                       </Stack>
                       <i className="bx bxl-message" />
