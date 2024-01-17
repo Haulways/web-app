@@ -168,7 +168,7 @@ img{
 }
 
 .services__title{
-  font-size: var(--h3-font-size);
+  font-size: var(--h5-font-size);
   color: var(--title-color);
   margin-bottom: var(--mb-3);
   /* text-decoration: underline; */
@@ -523,7 +523,7 @@ img{
 }
 
 .services__title{
-  font-size: var(--h3-font-size);
+  font-size: var(--h5-font-size);
   color: var(--title-color);
   margin-bottom: var(--mb-1);
 }

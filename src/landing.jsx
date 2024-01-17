@@ -8,7 +8,7 @@ import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/react-splide/css";
 import video from "./vid/mockvid.mp4";
 import ImageCard from "./components/cards/imageCard";
-import { ArrowOutwardOutlined, Search, BubbleChart, Security } from "@mui/icons-material";
+import { ArrowOutwardOutlined, Search, BubbleChart, Campaign, MonetizationOn, Lightbulb, Security, Grading, Bolt, TrendingUp } from "@mui/icons-material";
 import {
   // LongTextInput,
   Chip, Stack, Box, Grid, useMediaQuery, InputAdornment,
@@ -629,10 +629,10 @@ const Landing = () => {
                   my={2}
 
                 >
-                  <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} notch={'false'} title={'Learn'} subtitle={"Elevate your skills with Our Skill Centre for powerful content and engagement."} />
-                  <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} notch={'false'} title={'Earn'} subtitle={"Monetize your expertise by tutoring with us, connecting with a global audience."} />
-                  <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} notch={'false'} title={'Promote'} subtitle={"Boost your brand: Contribute to Our Skill Centre for massive exposure."} />
-                  <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} notch={'false'} title={'Grow'} subtitle={"Propel your growth with pro insights for unstoppable progress."} />
+                  <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} notch={'false'} title={'Learn'} subtitle={"Elevate your skills with Our Skill Centre for powerful content and engagement."} icon={Lightbulb}/>
+                  <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} notch={'false'} title={'Earn'} subtitle={"Monetize your expertise by tutoring with us, connecting with a global audience."} icon={MonetizationOn} />
+                  <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} notch={'false'} title={'Promote'} subtitle={"Boost your brand: Contribute to Our Skill Centre for massive exposure."} icon={Campaign}/>
+                  <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} notch={'false'} title={'Grow'} subtitle={"Propel your growth with pro insights for unstoppable progress."} icon={TrendingUp}/>
 
                 </Grid>
               </SplideSlide>
@@ -680,7 +680,7 @@ const Landing = () => {
                             alignItems={"center"}
                             padding={'8px'}
                           >
-                            <Security sx={{ color: '#1976d2', fontSize: "1rem" }} />
+                            <MonetizationOn sx={{ color: '#1976d2', fontSize: "1.5rem" }} />
                           </Stack>
                         </Stack>
 
@@ -704,7 +704,7 @@ const Landing = () => {
                             alignItems={"center"}
                             padding={'8px'}
                           >
-                            <Security sx={{ color: '#1976d2', fontSize: "1rem" }} />
+                            <Grading sx={{ color: '#1976d2', fontSize: "1.5rem" }} />
                           </Stack>
                         </Stack>
                         <i className="bx bxl-message" />
@@ -729,7 +729,7 @@ const Landing = () => {
                             alignItems={"center"}
                             padding={'8px'}
                           >
-                            <Security sx={{ color: '#1976d2', fontSize: "1rem" }} />
+                            <Bolt sx={{ color: '#1976d2', fontSize: "1.5rem" }} />
                           </Stack>
                         </Stack>
                         <i className="bx bxl-message" />
@@ -825,7 +825,7 @@ const Landing = () => {
                             alignItems={"center"}
                             padding={'8px'}
                           >
-                            <Security sx={{ color: '#1976d2', fontSize: "1rem" }} />
+                            <MonetizationOn sx={{ color: '#1976d2', fontSize: "1.5rem" }} />
                           </Stack>
                         </Stack>
 
@@ -849,7 +849,7 @@ const Landing = () => {
                             alignItems={"center"}
                             padding={'8px'}
                           >
-                            <Security sx={{ color: '#1976d2', fontSize: "1rem" }} />
+                            <Grading sx={{ color: '#1976d2', fontSize: "1.5rem" }} />
                           </Stack>
                         </Stack>
                         <i className="bx bxl-message" />
@@ -874,7 +874,7 @@ const Landing = () => {
                             alignItems={"center"}
                             padding={'8px'}
                           >
-                            <Security sx={{ color: '#1976d2', fontSize: "1rem" }} />
+                            <Lightbulb sx={{ color: '#1976d2', fontSize: "1.5rem" }} />
                           </Stack>
                         </Stack>
                         <i className="bx bxl-message" />
@@ -968,7 +968,7 @@ const Landing = () => {
                           alignItems={"center"}
                           padding={'8px'}
                         >
-                          <Security sx={{ color: '#1976d2', fontSize: "1rem" }} />
+                          <Lightbulb sx={{ color: '#1976d2', fontSize: "1.5rem" }} />
                         </Stack>
                       </Stack>
 
@@ -992,7 +992,7 @@ const Landing = () => {
                           alignItems={"center"}
                           padding={'8px'}
                         >
-                          <Security sx={{ color: '#1976d2', fontSize: "1rem" }} />
+                          <MonetizationOn sx={{ color: '#1976d2', fontSize: "1.5rem" }} />
                         </Stack>
                       </Stack>
                       <i className="bx bxl-message" />
@@ -1017,7 +1017,7 @@ const Landing = () => {
                           alignItems={"center"}
                           padding={'8px'}
                         >
-                          <Security sx={{ color: '#1976d2', fontSize: "1rem" }} />
+                          <Campaign sx={{ color: '#1976d2', fontSize: "1.5rem" }} />
                         </Stack>
                       </Stack>
                       <i className="bx bxl-message" />

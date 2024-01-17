@@ -6,7 +6,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { ArrowOutwardOutlined, BubbleChart, Search, Security } from "@mui/icons-material";
 
 const ImageCard = (props) => {
-    const { img_width, img_height, tran_color, cont_color, title, subtitle, notch } = props;
+    const { img_width, img_height, tran_color, cont_color, title, subtitle, notch, icon } = props;
     const _width = img_width ? (img_width) : (400);
     const _height = img_height ? (img_height) : (200);
     const _tran_color = tran_color ? (tran_color) : ('var(--section-color)');
@@ -14,6 +14,7 @@ const ImageCard = (props) => {
     const _title = title ? (title) : ('Feature');
     const _subtitle = subtitle ? (subtitle) : ('Earn commissions through the influencer program.');
     const _notch = notch ? (notch) : ('true');
+    const _icon = icon ? (icon) : (BubbleChart);
 
 
     return <Stack
@@ -66,7 +67,7 @@ const ImageCard = (props) => {
 
 
                 >
-                    <BubbleChart sx={{ color: '#1976d2', fontSize: "1rem" }} />
+                    <_icon sx={{ color: '#1976d2', fontSize: "1rem" }} />
                     
                     
 
