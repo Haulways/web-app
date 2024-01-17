@@ -56,7 +56,7 @@ const ImageCard = (props) => {
                     left={'5px'}
                     top='7px'
                     position={'absolute'}
-                    bgcolor={'rgba(0, 240, 77, 0.05)'}
+                    bgcolor={'rgba(25, 118, 210, 0.05)'}
                     justifyContent={"center"}
                     alignItems={"center"}
                     // padding={'8px'}
@@ -66,7 +66,7 @@ const ImageCard = (props) => {
 
 
                 >
-                    <BubbleChart sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
+                    <BubbleChart sx={{ color: '#1976d2', fontSize: "1rem" }} />
                     
                     
 

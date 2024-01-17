@@ -675,12 +675,12 @@ const Landing = () => {
                             width={`70px`}
                             height={`70px`}
                             margin={1}
-                            bgcolor={'rgba(0, 240, 77, 0.05)'}
+                            bgcolor={'rgba(25, 118, 210, 0.05)'}
                             justifyContent={"center"}
                             alignItems={"center"}
                             padding={'8px'}
                           >
-                            <Security sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
+                            <Security sx={{ color: '#1976d2', fontSize: "1rem" }} />
                           </Stack>
                         </Stack>
 
@@ -699,12 +699,12 @@ const Landing = () => {
                             width={`70px`}
                             height={`70px`}
                             margin={1}
-                            bgcolor={'rgba(0, 240, 77, 0.05)'}
+                            bgcolor={'rgba(25, 118, 210, 0.05)'}
                             justifyContent={"center"}
                             alignItems={"center"}
                             padding={'8px'}
                           >
-                            <Security sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
+                            <Security sx={{ color: '#1976d2', fontSize: "1rem" }} />
                           </Stack>
                         </Stack>
                         <i className="bx bxl-message" />
@@ -724,12 +724,12 @@ const Landing = () => {
                             width={`70px`}
                             height={`70px`}
                             margin={1}
-                            bgcolor={'rgba(0, 240, 77, 0.05)'}
+                            bgcolor={'rgba(25, 118, 210, 0.05)'}
                             justifyContent={"center"}
                             alignItems={"center"}
                             padding={'8px'}
                           >
-                            <Security sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
+                            <Security sx={{ color: '#1976d2', fontSize: "1rem" }} />
                           </Stack>
                         </Stack>
                         <i className="bx bxl-message" />
@@ -820,12 +820,12 @@ const Landing = () => {
                             width={`70px`}
                             height={`70px`}
                             margin={1}
-                            bgcolor={'rgba(0, 240, 77, 0.05)'}
+                            bgcolor={'rgba(25, 118, 210, 0.05)'}
                             justifyContent={"center"}
                             alignItems={"center"}
                             padding={'8px'}
                           >
-                            <Security sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
+                            <Security sx={{ color: '#1976d2', fontSize: "1rem" }} />
                           </Stack>
                         </Stack>
 
@@ -844,12 +844,12 @@ const Landing = () => {
                             width={`70px`}
                             height={`70px`}
                             margin={1}
-                            bgcolor={'rgba(0, 240, 77, 0.05)'}
+                            bgcolor={'rgba(25, 118, 210, 0.05)'}
                             justifyContent={"center"}
                             alignItems={"center"}
                             padding={'8px'}
                           >
-                            <Security sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
+                            <Security sx={{ color: '#1976d2', fontSize: "1rem" }} />
                           </Stack>
                         </Stack>
                         <i className="bx bxl-message" />
@@ -869,12 +869,12 @@ const Landing = () => {
                             width={`70px`}
                             height={`70px`}
                             margin={1}
-                            bgcolor={'rgba(0, 240, 77, 0.05)'}
+                            bgcolor={'rgba(25, 118, 210, 0.05)'}
                             justifyContent={"center"}
                             alignItems={"center"}
                             padding={'8px'}
                           >
-                            <Security sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
+                            <Security sx={{ color: '#1976d2', fontSize: "1rem" }} />
                           </Stack>
                         </Stack>
                         <i className="bx bxl-message" />
@@ -950,7 +950,9 @@ const Landing = () => {
                   </div>
               },
               {
-                label: "Tutors", child: <div className="services section" style={{ paddingTop: '5px' }}>
+                label: "Tutors", 
+                child: 
+                <div className="services section" style={{ paddingTop: '5px' }}>
                   <div className="services__container  bd-grid bd-container gap-2rem">
                     <div className="services__content">
                       {/* <img src="assets/serv1.png" alt className="services__img" /> */}
@@ -961,12 +963,12 @@ const Landing = () => {
                           width={`70px`}
                           height={`70px`}
                           margin={1}
-                          bgcolor={'rgba(0, 240, 77, 0.05)'}
+                          bgcolor={'rgba(25, 118, 210, 0.05)'}
                           justifyContent={"center"}
                           alignItems={"center"}
                           padding={'8px'}
                         >
-                          <Security sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
+                          <Security sx={{ color: '#1976d2', fontSize: "1rem" }} />
                         </Stack>
                       </Stack>
 
@@ -985,12 +987,12 @@ const Landing = () => {
                           width={`70px`}
                           height={`70px`}
                           margin={1}
-                          bgcolor={'rgba(0, 240, 77, 0.05)'}
+                          bgcolor={'rgba(25, 118, 210, 0.05)'}
                           justifyContent={"center"}
                           alignItems={"center"}
                           padding={'8px'}
                         >
-                          <Security sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
+                          <Security sx={{ color: '#1976d2', fontSize: "1rem" }} />
                         </Stack>
                       </Stack>
                       <i className="bx bxl-message" />
@@ -1010,12 +1012,12 @@ const Landing = () => {
                           width={`70px`}
                           height={`70px`}
                           margin={1}
-                          bgcolor={'rgba(0, 240, 77, 0.05)'}
+                          bgcolor={'rgba(25, 118, 210, 0.05)'}
                           justifyContent={"center"}
                           alignItems={"center"}
                           padding={'8px'}
                         >
-                          <Security sx={{ color: 'rgb(0, 240, 77)', fontSize: "1rem" }} />
+                          <Security sx={{ color: '#1976d2', fontSize: "1rem" }} />
                         </Stack>
                       </Stack>
                       <i className="bx bxl-message" />

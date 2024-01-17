@@ -72,7 +72,7 @@
   margin: 10px;
   padding: 10px;
   zoom: 1.05;
-  box-shadow: 0 2px 20px hsla(167, 100%, 51%, 0.167);
+  box-shadow: 0 2px 20px hsla(222, 100%, 51%, 0.167);
 
 }
 
@@ -511,7 +511,7 @@ img{
   border-radius: .5rem;
   box-shadow: 0 2px 20px hsla(0, 0%, 0%, 0.06);
   background-color: var(--container-color);
-  transition: all .3s ease-in-out !important;
+  transition: all .5s ease-in-out !important;
 
 }
 
@@ -796,7 +796,7 @@ img{
     padding: 2px;
     padding-inline: 10px;
     zoom: 1.01;
-    box-shadow: 0 2px 20px hsla(167, 100%, 51%, 0.167);
+    box-shadow: 0 2px 20px hsla(222, 100%, 51%, 0.167);
   
   }
 }
