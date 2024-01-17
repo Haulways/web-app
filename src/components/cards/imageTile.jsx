@@ -45,7 +45,7 @@ const ImageTile = (props) => {
             alignItems={'center'}
             margin={0}
             px={2}
-            sx={{ transition: 'all .2s ease-in-out' }}
+            sx={{ transition: 'all .4s ease-in-out' }}
         // boxShadow={`${tran_color && tran_color === 'var(--section-color)'  ? ('none') : ('0 2px 20px hsla(0, 0%, 0%, 0.06)')}`}
 
         >

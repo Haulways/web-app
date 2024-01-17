@@ -50,6 +50,11 @@
   background: var(--body-color);
 }
 
+.special-button{
+  background-color: var(--title-color) !important;
+  color: var(--section-color) !important;
+  font-weight: bold !important;
+}
 
 
 .card{
@@ -708,7 +713,7 @@ img{
   }
 
   .about__img__section{
-    max-width: 80%;
+    max-width: 70%;
     order: -1;
   }
 
@@ -717,7 +722,7 @@ img{
     margin-bottom: 1.1rem !important;
   }
   .mt-5rem{
-    margin-top: 5.5rem;
+    margin-top: 3.5rem;
   }
 
 
@@ -789,6 +794,7 @@ img{
   .animate:hover, .services__content:hover{
     margin: 2px;
     padding: 2px;
+    padding-inline: 10px;
     zoom: 1.01;
     box-shadow: 0 2px 20px hsla(167, 100%, 51%, 0.167);
   

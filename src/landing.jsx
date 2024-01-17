@@ -272,7 +272,7 @@ const Landing = () => {
                 </a>
               </li>
               <li className="nav__item">
-                <a className="nav__link button signup">Sign Up</a>
+                <a className="nav__link button signup special-button">Sign Up</a>
               </li>
               <li>
                 <i className="bx bx-moon change-theme" id="theme-button" />
@@ -321,7 +321,7 @@ const Landing = () => {
               <br />
               <button
                 type="button"
-                className="button get-started"
+                className="button get-started special-button"
                 onClick={() => {
                   scrollTo(contact_us);
                 }}
@@ -370,7 +370,7 @@ const Landing = () => {
                   >
                     <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--section-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'Social Commerce'} subtitle={'Elevate your Shopping Experience with Social Interactions.'} />
                     <Box className='disappear' width={'40px'} height={'40px'} bgcolor={'transparent'}></Box>
-                    <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--section-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'Skill Centre'} subtitle={'Unlock your Creative Potential: Get access to tutorials and resources.'} />
+                    <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--section-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'Creator Centre'} subtitle={'Sell your bespoke content, turn your creative passion into substantial income.'} />
                     <Box className='disappear' width={'40px'} height={'40px'} bgcolor={'transparent'}></Box>
                     <Stack className='disappear' width={'60px'} height={'60px'} bgcolor={'transparent'} justifyContent={'center'} alignItems={'center'}>
                       <Stack
@@ -398,7 +398,7 @@ const Landing = () => {
                       </Stack>
                     </Stack>
                     <Box className='disappear' width={'40px'} height={'40px'} bgcolor={'transparent'}></Box>
-                    <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--section-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'Fair Contracts'} subtitle={'Elevate your collaborations with clear, fair affiliate marketing contracts.'} />
+                    <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--section-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'Skill Centre'} subtitle={'Unlock your Creative Potential: Get access to tutorials and resources.'} />
                     <Box className='disappear' width={'40px'} height={'40px'} bgcolor={'transparent'}></Box>
                     <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--section-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'UGC Sales'} subtitle={'Monetize your creativity with custom User-Generated Content (UGC) sales.'} />
 
@@ -455,26 +455,6 @@ const Landing = () => {
                   className="home__img "
                   style={{ maxWidth: "50%" }}
                 />
-                {/* <Grid
-                  gridTemplateColumns={'max-content max-content'}
-                  // gridTemplateRows={'1fr 1fr'}              
-                  gap={1}
-                  width={'100%'}
-                  // className="home__img"
-                  direction={'row'}
-                  justifyContent={'center'}
-                  alignContent={'center'}
-                  // gridAutoFlow={'column'}
-                  display={'grid'}
-                  margin={0}
-
-                >
-                  <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} />
-                  <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} />
-                  <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} />
-                  <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} />
-
-                </Grid> */}
               </SplideSlide>
               <SplideSlide>
                 <img
@@ -491,33 +471,7 @@ const Landing = () => {
                 />
               </SplideSlide>
             </Splide>
-            {/* <div className="about__img__section ">
-              <img
-                src="assets/mocks4.png"
-                alt
-                className="about__img home__img mySlides1 w3-animate-fading"
-              />
-              <img
-                src="assets/mocks1.png"
-                alt
-                className="about__img home__img mySlides1 w3-animate-fading"
-                style={{ display: "none" }}
-              />
-              <img
-                src="assets/mocks2.png"
-                alt
-                className="about__img home__img mySlides1 w3-animate-fading"
-                style={{ display: "none" }}
-              />
-              <img
-                src="assets/mocks3.png"
-                alt
-                className="about__img home__img mySlides1 w3-animate-fading"
-                style={{ display: "none" }}
-              />
-            </div> */}
-            {/* <div class="home__img__container about__img">
-              </div> */}
+            
           </div>
         </section>
         {/*========== ABOUT ==========*/}
@@ -633,13 +587,7 @@ const Landing = () => {
                 />
               </SplideSlide>
             </Splide>
-            {/* <img
-              src="assets/people6.png"
-              alt
-              className="about__img home__img"
-            /> */}
-            {/* <div class="home__img__container about__img">
-        </div> */}
+            
           </div>
         </section>
         {/*========== ABOUT ==========*/}
@@ -650,7 +598,7 @@ const Landing = () => {
                 Skill Centre
               </span>
               <h2 className="section-title about__initial">
-                Our Skill Center offers
+                Our Skill Centre offers
               </h2>
               <p className="about__description">
                 tutorials, resources, and workshops, empowering creators with
@@ -692,9 +640,9 @@ const Landing = () => {
                   my={2}
 
                 >
-                  <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} notch={'false'} title={'Learn'} subtitle={"Elevate your skills with Our Skill Center for powerful content and engagement."} />
+                  <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} notch={'false'} title={'Learn'} subtitle={"Elevate your skills with Our Skill Centre for powerful content and engagement."} />
                   <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} notch={'false'} title={'Earn'} subtitle={"Monetize your expertise by tutoring with us, connecting with a global audience."} />
-                  <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} notch={'false'} title={'Promote'} subtitle={"Boost your brand: Contribute to Our Skill Center for massive exposure."} />
+                  <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} notch={'false'} title={'Promote'} subtitle={"Boost your brand: Contribute to Our Skill Centre for massive exposure."} />
                   <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} notch={'false'} title={'Grow'} subtitle={"Propel your growth with pro insights for unstoppable progress."} />
 
                 </Grid>
@@ -715,33 +663,7 @@ const Landing = () => {
               </SplideSlide>
             </Splide></div>
 
-            {/* <div className="about__img__section ">
-              <img
-                src="assets/people7.png"
-                alt
-                className="about__img home__img mySlides1 w3-animate-fading"
-              />
-              <img
-                src="assets/mocks1.png"
-                alt
-                className="about__img home__img mySlides1 w3-animate-fading"
-                style={{ display: "none" }}
-              />
-              <img
-                src="assets/mocks2.png"
-                alt
-                className="about__img home__img mySlides1 w3-animate-fading"
-                style={{ display: "none" }}
-              />
-              <img
-                src="assets/mocks3.png"
-                alt
-                className="about__img home__img mySlides1 w3-animate-fading"
-                style={{ display: "none" }}
-              />
-            </div> */}
-            {/* <div class="home__img__container about__img">
-              </div> */}
+            
           </div>
         </section>
         {/*========== SERVICES ==========*/}
@@ -829,37 +751,26 @@ const Landing = () => {
                       </div>
                     </div>
                     <div className="services__container  bd-grid bd-container gap-2rem">
-                      <div className="about__data mt-5rem" style={{ width: 'calc(100%)' }}>
-                        {/* <span class="section-subtitle about__initial">About us</span> */}
-                        {/* <h2 class="section-title about__initial">Join Our Influencer Program</h2> */}
+                      <div className="about__data mt-5rem" style={{ width: 'calc(100% - 2rem)' }}>
+                      <span class="section-subtitle about__initial">As a Brand/Vendor</span>
+                        <h2 class="section-title about__initial">You can leverage Haulway to</h2>
                         <p className="about__description">
-                          Boost your online sales with Haulway. Showcase products directly, engage in real-time, and track performance. We provide a space for transparent collaborations, ensuring fair contract negotiations. Increase visibility, sales, and operational efficiency with our user-friendly interface and real-time analytics.
+                          boost your online sales. Showcase products directly, engage in real-time, and track performance. We provide a space for transparent collaborations, ensuring fair contract negotiations. Increase visibility, sales, and operational efficiency with our user-friendly interface and real-time analytics.
                         </p>
 
-                        <a href="#menu" className="button get-started bd_radius">
+                        {/* <a href="#menu" className="button get-started bd_radius special-button">
                           Join now
-                        </a>
+                        </a> */}
                       </div>
 
-                      <div className="about__img__section " style={{ width: 'calc(100%)' }}><Splide
+                      <div className="about__img__section " style={{ width: 'calc(100% - 2rem)' }}><Splide
 
 
                         options={{ rewind: true, autoplay: false, arrows: false, pagination: false }}
                         aria-label="Haulway"
                       >
                         <SplideSlide>
-                          {/* <img
-                  src="assets/mocks1.png"
-                  alt
-                  className="home__img "
-                  style={{ maxWidth: "50%" }}
-                />
-                <img
-                  src="assets/mocks4.png"
-                  alt
-                  className="home__img "
-                  style={{ maxWidth: "50%" }}
-                /> */}
+                          
 
                           <Grid
                             gridTemplateColumns={'max-content'}
@@ -902,13 +813,7 @@ const Landing = () => {
 
 
                     </div>
-                    {/* <img
-                        src="assets/people8.png"
-                        alt
-                        className=""
-                      /> */}
-                    {/* <div class="home__img__container about__img">
-        </div> */}
+                    
 
                   </div>
               },
@@ -984,44 +889,33 @@ const Landing = () => {
                           </Stack>
                         </Stack>
                         <i className="bx bxl-message" />
-                        <h3 className="services__title">Skill Center</h3>
+                        <h3 className="services__title">Skill Centre</h3>
                         <p className="services__description">
-                          Access a robust Skill Center offering tutorials, resources, and workshops to enhance your content creation skills.
+                          Access a robust Skill Centre offering tutorials, resources, and workshops to enhance your content creation skills.
                         </p>
                       </div>
                     </div>
                     <div className="services__container  bd-grid bd-container gap-2rem">
                       <div className="about__data mt-5rem" style={{ width: 'calc(100% - 2rem)' }}>
-                        {/* <span class="section-subtitle about__initial">About us</span> */}
-                        {/* <h2 class="section-title about__initial">Join Our Influencer Program</h2> */}
+                        <span class="section-subtitle about__initial">As a Creator/Influencer</span>
+                        <h2 class="section-title about__initial">You can leverage Haulway to</h2>
                         <p className="about__description no__mb">
-                          Monetize your skills and content effortlessly on Haulway. Sell your custom content, negotiate clear affiliate contracts, and access tutorials in our Skill Center. Join a community-driven platform fostering creative growth and transparent monetization. Showcase talents, connect with creators, and maximize your earning potential.
+                          monetize your skills and content effortlessly. Sell your custom content, negotiate clear affiliate contracts, and access tutorials in our Skill Centre. Join a community-driven platform fostering creative growth and transparent monetization. Showcase talents, connect with creators, and maximize your earning potential.
                         </p>
 
-                        <a href="#menu" className="button get-started bd_radius">
+                        {/* <a href="#menu" className="button get-started bd_radius special-button">
                           Join now
-                        </a>
+                        </a> */}
                       </div>
 
-                      <div className="about__img__section " style={{ width: 'calc(100%)' }}><Splide
+                      <div className="about__img__section " style={{ width: 'calc(100% - 2rem)' }}><Splide
 
 
                         options={{ rewind: true, autoplay: false, arrows: false, pagination: false }}
                         aria-label="Haulway"
                       >
                         <SplideSlide>
-                          {/* <img
-            src="assets/mocks1.png"
-            alt
-            className="home__img "
-            style={{ maxWidth: "50%" }}
-          />
-          <img
-            src="assets/mocks4.png"
-            alt
-            className="home__img "
-            style={{ maxWidth: "50%" }}
-          /> */}
+                          
                           <Grid
                             gridTemplateColumns={'max-content'}
                             // gridTemplateRows={'1fr 1fr'}              
@@ -1062,13 +956,7 @@ const Landing = () => {
 
 
                     </div>
-                    {/* <img
-                  src="assets/people8.png"
-                  alt
-                  className=""
-                /> */}
-                    {/* <div class="home__img__container about__img">
-  </div> */}
+                    
 
                   </div>
               },
@@ -1094,7 +982,7 @@ const Landing = () => {
                       </Stack>
 
                       <i className="bx bxl-message" />
-                      <h3 className="services__title">Skill Center</h3>
+                      <h3 className="services__title">Skill Centre</h3>
                       <p className="services__description">
                         Offer tutorials, resources, and workshops, and monetize your expertise on Haulway.
                       </p>
@@ -1150,36 +1038,25 @@ const Landing = () => {
                   </div>
                   <div className="services__container  bd-grid bd-container gap-2rem">
                     <div className="about__data mt-5rem" style={{ width: 'calc(100% - 2rem)' }}>
-                      {/* <span class="section-subtitle about__initial">About us</span> */}
-                      {/* <h2 class="section-title about__initial">Join Our Influencer Program</h2> */}
+                    <span class="section-subtitle about__initial">As a Tutor/Creator</span>
+                        <h2 class="section-title about__initial">You can leverage Haulway to</h2>
                       <p className="about__description no__mb">
-                        Monetize your expertise on Haulway. Deliver tutorials, resources, and workshops to a diverse community. Promote your tutoring services, engage with a growing audience, and turn your knowledge into a sustainable revenue stream. Connect with learners on a vibrant educational platform.
+                        monetize your expertise on. Deliver tutorials, resources, and workshops to a diverse community. Promote your tutoring services, engage with a growing audience, and turn your knowledge into a sustainable revenue stream. Connect with learners on a vibrant educational platform.
                       </p>
 
-                      <a href="#menu" className="button get-started bd_radius">
+                      {/* <a href="#menu" className="button get-started bd_radius special-button">
                         Join now
-                      </a>
+                      </a> */}
                     </div>
 
-                    <div className="about__img__section " style={{ width: 'calc(100%)' }}><Splide
+                    <div className="about__img__section " style={{ width: 'calc(100% - 2rem)' }}><Splide
 
 
                       options={{ rewind: true, autoplay: false, arrows: false, pagination: false }}
                       aria-label="Haulway"
                     >
                       <SplideSlide>
-                        {/* <img
-            src="assets/mocks1.png"
-            alt
-            className="home__img "
-            style={{ maxWidth: "50%" }}
-          />
-          <img
-            src="assets/mocks4.png"
-            alt
-            className="home__img "
-            style={{ maxWidth: "50%" }}
-          /> */}
+                        
                         <Grid
                           gridTemplateColumns={'max-content'}
                           // gridTemplateRows={'1fr 1fr'}              
@@ -1220,13 +1097,7 @@ const Landing = () => {
 
 
                   </div>
-                  {/* <img
-                  src="assets/people8.png"
-                  alt
-                  className=""
-                /> */}
-                  {/* <div class="home__img__container about__img">
-  </div> */}
+                  
 
                 </div>
               }
@@ -1256,7 +1127,7 @@ const Landing = () => {
               </p>
               <button
                 type="button"
-                className="button get-started"
+                className="button get-started special-button"
                 onClick={() => {
                   scrollTo(contact_us);
                 }}
@@ -1299,13 +1170,7 @@ const Landing = () => {
                 Excited yet?
               </span>
               <h2 className="section-title contact__initial">Let's talk</h2>
-              {/* <p className="contact__description">
-                {" "}
-                As we grow, we'll introduce you to our team and invite you to
-                join us on this exciting journey toward a brighter future. Are
-                you ready to take the next step? Let's have a chat and explore
-                the possibilities together.
-              </p> */}
+              
               <div className="app__stores">
                 <input
                   className="card frm_width"
@@ -1356,7 +1221,7 @@ const Landing = () => {
                 />
 
               </div>
-              <button type="button" className="button" onClick={handleSave}>
+              <button type="button" className="button special-button" onClick={handleSave}>
                 Send
               </button>
             </div>
@@ -1375,8 +1240,7 @@ const Landing = () => {
             <a href="#" className="footer__logo">
               Follow Us
             </a>
-            {/* <span class="footer__description">Telecom</span>
-              <span class="footer__description">Services</span> */}
+            
             <div>
               <a
                 href="https://instagram.com/haulwayglobal?igshid=NGVhN2U2NjQ0Yg=="
@@ -1422,20 +1286,7 @@ const Landing = () => {
               </li>
             </ul>
           </div>
-          <div className="footer__content">
-            <h3 className="footer__title">Subscribe</h3>
-            <div className="app__stores">
-              <input
-                type="email"
-                id="email_input1"
-                placeholder="Email Address"
-                name="email"
-                onChange={(e) => setEmail({ ...email, email: e.target.value })}
-              />
-              {/* <a href="#" class="button">Send</a> */}
-            </div>
-            <ul></ul>
-          </div>
+          
         </div>
         <p className="footer__copy">
           © 2023 Haulway Global. All right reserved
