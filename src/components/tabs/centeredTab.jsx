@@ -5,6 +5,9 @@ import {
 import React, { useRef, useEffect, useState } from "react";
 import { ArrowOutwardOutlined, Search, } from "@mui/icons-material";
 import PropTypes from 'prop-types';
+import { container } from "../framer_utils";
+
+import { motion } from "framer-motion"
 
 const CenteredTab = (props) => {
     const { children } = props
@@ -51,6 +54,11 @@ const CenteredTab = (props) => {
     };
 
     return (
+        <motion.div
+                        variants={container}
+                        initial="hidden"
+                        animate="visible"
+                      >
         <Stack justifyContent={'center'} alignItems={'center'} sx={{ width: '100%', bgcolor: 'transparent' }}>
             <Tabs value={value} onChange={handleChange} centered className="card"
                 sx={{
@@ -93,6 +101,7 @@ const CenteredTab = (props) => {
                 {_children[value]?.child}
             </CustomTabPanel>
         </Stack>
+        </motion.div>
     );
 }
 

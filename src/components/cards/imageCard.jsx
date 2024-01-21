@@ -8,7 +8,7 @@ import { motion } from "framer-motion"
 import { item } from "../framer_utils";
 
 const ImageCard = (props) => {
-    const { img_width, img_height, tran_color, cont_color, title, subtitle, notch, icon } = props;
+    const { img_width, img_height, tran_color, cont_color, title, subtitle, notch, icon, onClick } = props;
     const isLarge = useMediaQuery((theme) => theme.breakpoints.down("lg"));
     const isMedium = useMediaQuery((theme) => theme.breakpoints.down("md"));
     const isSmall = useMediaQuery((theme) => theme.breakpoints.down("sm"));
@@ -37,6 +37,7 @@ const ImageCard = (props) => {
             position={'relative'}
             justifyContent={"center"}
             alignItems={'center'}
+            onClick={onClick}
         // boxShadow={'0 2px 20px hsla(0, 0%, 0%, 0.06)'}
         // borderRadius={'6px 6px 6px 45px'}
 

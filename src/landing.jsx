@@ -21,8 +21,8 @@ const supabase = createClient(
   import.meta.env.VITE_BASE_URL,
   import.meta.env.VITE_ANON_KEY
 );
-import { motion } from "framer-motion"
-import { container } from "./components/framer_utils";
+import { motion, useInView } from "framer-motion"
+import { container, item } from "./components/framer_utils";
 
 
 const Landing = () => {
@@ -38,6 +38,17 @@ const Landing = () => {
   const services_ref = useRef(null);
   const partnership_ref = useRef(null);
   const contact_us = useRef(null);
+  const skill_place_ref = useRef(null);
+  const creator_center_ref = useRef(null);
+  const social_commerce_ref = useRef(null);
+  const soc_ref = useRef(null);
+  const crc_ref = useRef(null);
+  const skc_ref = useRef(null);
+  const socisInView = useInView(soc_ref, { once: true });
+  const crcisInView = useInView(crc_ref, { once: true });
+  const skcisInView = useInView(skc_ref, { once: true });
+
+
   // const inputF1 = useRef(null);
 
   const scrollTo = (ref) => {
@@ -376,9 +387,13 @@ const Landing = () => {
                     my={2}
 
                   >
-                      <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--section-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'Social Commerce'} subtitle={'Elevate your Shopping Experience with Social Interactions.'} />
+                      <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--section-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'Social Commerce'} subtitle={'Elevate your Shopping Experience with Social Interactions.'} onClick={() => {
+                        scrollTo(social_commerce_ref);
+                      }} />
                       <Box className='disappear' width={'40px'} height={'40px'} bgcolor={'transparent'}></Box>
-                      <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--section-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'Creator Centre'} subtitle={'Sell your bespoke content, turn your creative passion into substantial income.'} />
+                      <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--section-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'Creator Centre'} subtitle={'Sell your bespoke content, turn your creative passion into substantial income.'} onClick={() => {
+                        scrollTo(creator_center_ref);
+                      }} />
                       <Box className='disappear' width={'40px'} height={'40px'} bgcolor={'transparent'}></Box>
                       <Stack className='disappear' width={'60px'} height={'60px'} bgcolor={'transparent'} justifyContent={'center'} alignItems={'center'}>
                         <Stack
@@ -406,9 +421,13 @@ const Landing = () => {
                         </Stack>
                       </Stack>
                       <Box className='disappear' width={'40px'} height={'40px'} bgcolor={'transparent'}></Box>
-                      <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--section-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'Skill Centre'} subtitle={'Unlock your Creative Potential: Get access to tutorials and resources.'} />
+                      <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--section-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'Skill Centre'} subtitle={'Unlock your Creative Potential: Get access to tutorials and resources.'} onClick={() => {
+                        scrollTo(skill_place_ref);
+                      }} />
                       <Box className='disappear' width={'40px'} height={'40px'} bgcolor={'transparent'}></Box>
-                      <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--section-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'Fair Contracts'} subtitle={'Elevate your collaborations with clear, fair affiliate marketing contracts.'} />
+                      <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--section-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'Fair Contracts'} subtitle={'Elevate your collaborations with clear, fair affiliate marketing contracts.'} onClick={() => {
+                        scrollTo(creator_center_ref);
+                      }} />
                       {/* <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--section-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'UGC Sales'} subtitle={'Monetize your creativity with custom User-Generated Content (UGC) sales.'} /> */}
 
                     </Grid>
@@ -447,45 +466,52 @@ const Landing = () => {
               </p>
               {/* <a href="#menu" class="button get-started bd_radius">Get Started</a> */}
             </div>
-            <Splide
-              className="about__img__section "
-              options={{ rewind: true, autoplay: false, arrows: false, pagination: false }}
-              aria-label="Haulway"
-            >
-              <SplideSlide>
-                <img
-                  src="assets/mocks1.png"
-                  alt
-                  className="home__img "
-                  style={{ maxWidth: "50%" }}
-                />
-                <img
-                  src="assets/mocks4.png"
-                  alt
-                  className="home__img "
-                  style={{ maxWidth: "50%" }}
-                />
-              </SplideSlide>
-              <SplideSlide>
-                <img
-                  src="assets/mocks5.png"
-                  alt
-                  className="home__img "
-                  style={{ maxWidth: "50%" }}
-                />
-                <img
-                  src="assets/mocks2.png"
-                  alt
-                  className="home__img "
-                  style={{ maxWidth: "50%" }}
-                />
-              </SplideSlide>
-            </Splide>
+            <div className="about__img__section" ref={soc_ref}
+              style={{
+                transform: socisInView ? "none" : "translateX(-200px)",
+                opacity: socisInView ? 1 : 0,
+                transition: "all 0.9s cubic-bezier(0.17, 0.55, 0.55, 1) 0.5s"
+              }}> <Splide
+                // className=" "
+                options={{ rewind: true, autoplay: false, arrows: false, pagination: false }}
+                aria-label="Haulway"
+
+              >
+                <SplideSlide>
+                  <img
+                    src="assets/mocks1.png"
+                    alt
+                    className="home__img "
+                    style={{ maxWidth: "50%" }}
+                  />
+                  <img
+                    src="assets/mocks4.png"
+                    alt
+                    className="home__img "
+                    style={{ maxWidth: "50%" }}
+                  />
+                </SplideSlide>
+                <SplideSlide>
+                  <img
+                    src="assets/mocks5.png"
+                    alt
+                    className="home__img "
+                    style={{ maxWidth: "50%" }}
+                  />
+                  <img
+                    src="assets/mocks2.png"
+                    alt
+                    className="home__img "
+                    style={{ maxWidth: "50%" }}
+                  />
+                </SplideSlide>
+              </Splide></div>
+
 
           </div>
         </section>
         {/*========== ABOUT ==========*/}
-        <section className="about section" id="about" ref={about_ref}>
+        <section className="about section" id="about" ref={social_commerce_ref}>
           <div className="about__container  bd-grid bd-container">
             <div className="about__data">
               <span className="section-subtitle about__initial">
@@ -523,7 +549,7 @@ const Landing = () => {
           </div>
         </section>
         {/*========== ABOUT ==========*/}
-        <section className="about section" id="about" ref={about_ref}>
+        <section className="about section" id="about" ref={creator_center_ref}>
           <div className="about__container  bd-grid bd-container">
             <div className="about__data">
               <span class="section-subtitle about__initial">UGC Marketing</span>
@@ -565,6 +591,7 @@ const Landing = () => {
                   animate="visible"
                 >
                   <Grid
+                    ref={crc_ref}
                     gridTemplateColumns={'max-content'}
                     // gridTemplateRows={'1fr 1fr'}              
                     gap={1}
@@ -577,6 +604,11 @@ const Landing = () => {
                     display={'grid'}
                     margin={0}
                     my={2}
+                    style={{
+                      transform: crcisInView ? "none" : "translateX(-200px)",
+                      opacity: crcisInView ? 1 : 0,
+                      transition: "all 0.9s cubic-bezier(0.17, 0.55, 0.55, 1) 0.5s"
+                    }}
 
                   >
                     <ImageTile img_width={'320px'} img_height={'70px'} tran_color={'var(--container-color)'} title={'Monetize Your Craft'} subtitle={'Sell exclusive content and turn creativity into cash. Your art, your revenue!'} />
@@ -607,7 +639,7 @@ const Landing = () => {
           </div>
         </section>
         {/*========== ABOUT ==========*/}
-        <section className="about bg_gray section" id="about" ref={about_ref}>
+        <section className="about bg_gray section" id="about" ref={skill_place_ref}>
           <div className="about__container  bd-grid bd-container">
             <div className="about__data">
               <span className="section-subtitle about__initial">
@@ -647,6 +679,13 @@ const Landing = () => {
                     display={'grid'}
                     margin={0}
                     my={2}
+                    ref={skc_ref}
+                    style={{
+                      transform: skcisInView ? "none" : "translateX(-200px)",
+                      opacity: skcisInView ? 1 : 0,
+                      transition: "all 0.9s cubic-bezier(0.17, 0.55, 0.55, 1) 0.5s"
+                    }}
+
 
                   >
                     <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'Learn'} subtitle={"Elevate your skills with Our Skill Centre for powerful content and engagement."} icon={Lightbulb} />
@@ -686,80 +725,89 @@ const Landing = () => {
                 label: "Brands & Vendors",
                 child:
                   <div className="services section" style={{ paddingTop: '5px' }}>
-                    <div className="services__container  bd-grid bd-container gap-2rem">
-                      <div className="services__content">
-                        {/* <img src="assets/serv1.png" alt className="services__img" /> */}
-                        <Stack direction={'row'} justifyContent='center' alignItems={'center'}>
-                          <Stack
-                            className="card services__img"
-                            borderRadius='100%'
-                            width={`70px`}
-                            height={`70px`}
-                            margin={1}
-                            bgcolor={'rgba(25, 118, 210, 0.05)'}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                            padding={'8px'}
-                          >
-                            <MonetizationOn sx={{ color: '#1976d2', fontSize: "1.5rem" }} />
-                          </Stack>
-                        </Stack>
 
-                        <i className="bx bxl-message" />
-                        <h3 className="services__title">Direct Sales Platform</h3>
-                        <p className="services__description">
-                          Engage your audience directly and showcase products seamlessly within interactive content.
-                        </p>
-                      </div>
-                      <div className="services__content">
-                        {/* <img src="assets/serv2.png" alt className="services__img" /> */}
-                        <Stack direction={'row'} justifyContent='center' alignItems={'center'}>
-                          <Stack
-                            className="card services__img"
-                            borderRadius='100%'
-                            width={`70px`}
-                            height={`70px`}
-                            margin={1}
-                            bgcolor={'rgba(25, 118, 210, 0.05)'}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                            padding={'8px'}
-                          >
-                            <Grading sx={{ color: '#1976d2', fontSize: "1.5rem" }} />
+                    <div className="services__container  bd-grid bd-container gap-2rem">
+                      <motion.div
+                        variants={item}>
+                        <div className="services__content">
+                          {/* <img src="assets/serv1.png" alt className="services__img" /> */}
+                          <Stack direction={'row'} justifyContent='center' alignItems={'center'}>
+                            <Stack
+                              className="card services__img"
+                              borderRadius='100%'
+                              width={`70px`}
+                              height={`70px`}
+                              margin={1}
+                              bgcolor={'rgba(25, 118, 210, 0.05)'}
+                              justifyContent={"center"}
+                              alignItems={"center"}
+                              padding={'8px'}
+                            >
+                              <MonetizationOn sx={{ color: '#1976d2', fontSize: "1.5rem" }} />
+                            </Stack>
                           </Stack>
-                        </Stack>
-                        <i className="bx bxl-message" />
-                        <h3 className="services__title">
-                          Fair Contracting
-                        </h3>
-                        <p className="services__description">
-                          Ensure transparent collaborations by negotiating and establishing clear, fair affiliate marketing contracts on Haulway.
-                        </p>
-                      </div>
-                      <div className="services__content">
-                        {/* <img src="assets/serv3.png" alt className="services__img" /> */}
-                        <Stack direction={'row'} justifyContent='center' alignItems={'center'}>
-                          <Stack
-                            className="card services__img"
-                            borderRadius='100%'
-                            width={`70px`}
-                            height={`70px`}
-                            margin={1}
-                            bgcolor={'rgba(25, 118, 210, 0.05)'}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                            padding={'8px'}
-                          >
-                            <Bolt sx={{ color: '#1976d2', fontSize: "1.5rem" }} />
+
+                          <i className="bx bxl-message" />
+                          <h3 className="services__title">Direct Sales Platform</h3>
+                          <p className="services__description">
+                            Engage your audience directly and showcase products seamlessly within interactive content.
+                          </p>
+                        </div>
+                      </motion.div>
+                      <motion.div
+                        variants={item}>
+                        <div className="services__content">
+                          {/* <img src="assets/serv2.png" alt className="services__img" /> */}
+                          <Stack direction={'row'} justifyContent='center' alignItems={'center'}>
+                            <Stack
+                              className="card services__img"
+                              borderRadius='100%'
+                              width={`70px`}
+                              height={`70px`}
+                              margin={1}
+                              bgcolor={'rgba(25, 118, 210, 0.05)'}
+                              justifyContent={"center"}
+                              alignItems={"center"}
+                              padding={'8px'}
+                            >
+                              <Grading sx={{ color: '#1976d2', fontSize: "1.5rem" }} />
+                            </Stack>
                           </Stack>
-                        </Stack>
-                        <i className="bx bxl-message" />
-                        <h3 className="services__title">Real-time Analytics</h3>
-                        <p className="services__description">
-                          Monitor your sales performance and track engagement metrics for informed decision-making.
-                        </p>
-                      </div>
+                          <i className="bx bxl-message" />
+                          <h3 className="services__title">
+                            Fair Contracting
+                          </h3>
+                          <p className="services__description">
+                            Ensure transparent collaborations by negotiating and establishing clear, fair affiliate marketing contracts on Haulway.
+                          </p>
+                        </div></motion.div>
+                      <motion.div
+                        variants={item}>
+                        <div className="services__content">
+                          {/* <img src="assets/serv3.png" alt className="services__img" /> */}
+                          <Stack direction={'row'} justifyContent='center' alignItems={'center'}>
+                            <Stack
+                              className="card services__img"
+                              borderRadius='100%'
+                              width={`70px`}
+                              height={`70px`}
+                              margin={1}
+                              bgcolor={'rgba(25, 118, 210, 0.05)'}
+                              justifyContent={"center"}
+                              alignItems={"center"}
+                              padding={'8px'}
+                            >
+                              <Bolt sx={{ color: '#1976d2', fontSize: "1.5rem" }} />
+                            </Stack>
+                          </Stack>
+                          <i className="bx bxl-message" />
+                          <h3 className="services__title">Real-time Analytics</h3>
+                          <p className="services__description">
+                            Monitor your sales performance and track engagement metrics for informed decision-making.
+                          </p>
+                        </div></motion.div>
                     </div>
+
                     <div className="services__container  bd-grid bd-container gap-2rem">
                       <div className="about__data mt-5rem" style={{ width: 'calc(100% - 2rem)' }}>
                         <span class="section-subtitle about__initial">As a Brand/Vendor</span>
@@ -800,6 +848,7 @@ const Landing = () => {
                               margin={0}
                               my={2}
 
+
                             >
                               <ImageTile img_width={'320px'} img_height={'70px'} tran_color={'var(--container-color)'} title={'Enhanced Visibility'} subtitle={'Reach a broader audience and elevate your brand visibility through targeted content.'} />
                               <ImageTile img_width={'320px'} img_height={'70px'} tran_color={'var(--container-color)'} title={'Increased Sales'} subtitle={'Engage potential customers directly, leading to higher conversion rates and increased sales.'} />
@@ -837,78 +886,81 @@ const Landing = () => {
                 child:
                   <div className="services section" style={{ paddingTop: '5px' }}>
                     <div className="services__container  bd-grid bd-container gap-2rem">
-                      <div className="services__content">
-                        {/* <img src="assets/serv1.png" alt className="services__img" /> */}
-                        <Stack direction={'row'} justifyContent='center' alignItems={'center'}>
-                          <Stack
-                            className="card services__img"
-                            borderRadius='100%'
-                            width={`70px`}
-                            height={`70px`}
-                            margin={1}
-                            bgcolor={'rgba(25, 118, 210, 0.05)'}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                            padding={'8px'}
-                          >
-                            <MonetizationOn sx={{ color: '#1976d2', fontSize: "1.5rem" }} />
+                      <motion.div
+                        variants={item}><div className="services__content">
+                          {/* <img src="assets/serv1.png" alt className="services__img" /> */}
+                          <Stack direction={'row'} justifyContent='center' alignItems={'center'}>
+                            <Stack
+                              className="card services__img"
+                              borderRadius='100%'
+                              width={`70px`}
+                              height={`70px`}
+                              margin={1}
+                              bgcolor={'rgba(25, 118, 210, 0.05)'}
+                              justifyContent={"center"}
+                              alignItems={"center"}
+                              padding={'8px'}
+                            >
+                              <MonetizationOn sx={{ color: '#1976d2', fontSize: "1.5rem" }} />
+                            </Stack>
                           </Stack>
-                        </Stack>
 
-                        <i className="bx bxl-message" />
-                        <h3 className="services__title">UGC Sales</h3>
-                        <p className="services__description">
-                          Monetize your creativity by selling custom User-Generated Content (UGC) directly to your engaged audience on Haulway.
-                        </p>
-                      </div>
-                      <div className="services__content">
-                        {/* <img src="assets/serv2.png" alt className="services__img" /> */}
-                        <Stack direction={'row'} justifyContent='center' alignItems={'center'}>
-                          <Stack
-                            className="card services__img"
-                            borderRadius='100%'
-                            width={`70px`}
-                            height={`70px`}
-                            margin={1}
-                            bgcolor={'rgba(25, 118, 210, 0.05)'}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                            padding={'8px'}
-                          >
-                            <Grading sx={{ color: '#1976d2', fontSize: "1.5rem" }} />
+                          <i className="bx bxl-message" />
+                          <h3 className="services__title">UGC Sales</h3>
+                          <p className="services__description">
+                            Monetize your creativity by selling custom User-Generated Content (UGC) directly to your engaged audience on Haulway.
+                          </p>
+                        </div></motion.div>
+                      <motion.div
+                        variants={item}><div className="services__content">
+                          {/* <img src="assets/serv2.png" alt className="services__img" /> */}
+                          <Stack direction={'row'} justifyContent='center' alignItems={'center'}>
+                            <Stack
+                              className="card services__img"
+                              borderRadius='100%'
+                              width={`70px`}
+                              height={`70px`}
+                              margin={1}
+                              bgcolor={'rgba(25, 118, 210, 0.05)'}
+                              justifyContent={"center"}
+                              alignItems={"center"}
+                              padding={'8px'}
+                            >
+                              <Grading sx={{ color: '#1976d2', fontSize: "1.5rem" }} />
+                            </Stack>
                           </Stack>
-                        </Stack>
-                        <i className="bx bxl-message" />
-                        <h3 className="services__title">
-                          Fair Compensation
-                        </h3>
-                        <p className="services__description">
-                          Negotiate fair affiliate marketing contracts and ensure you receive fair compensation for your collaborations.
-                        </p>
-                      </div>
-                      <div className="services__content">
-                        {/* <img src="assets/serv3.png" alt className="services__img" /> */}
-                        <Stack direction={'row'} justifyContent='center' alignItems={'center'}>
-                          <Stack
-                            className="card services__img"
-                            borderRadius='100%'
-                            width={`70px`}
-                            height={`70px`}
-                            margin={1}
-                            bgcolor={'rgba(25, 118, 210, 0.05)'}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                            padding={'8px'}
-                          >
-                            <Lightbulb sx={{ color: '#1976d2', fontSize: "1.5rem" }} />
+                          <i className="bx bxl-message" />
+                          <h3 className="services__title">
+                            Fair Compensation
+                          </h3>
+                          <p className="services__description">
+                            Negotiate fair affiliate marketing contracts and ensure you receive fair compensation for your collaborations.
+                          </p>
+                        </div></motion.div>
+                      <motion.div
+                        variants={item}><div className="services__content">
+                          {/* <img src="assets/serv3.png" alt className="services__img" /> */}
+                          <Stack direction={'row'} justifyContent='center' alignItems={'center'}>
+                            <Stack
+                              className="card services__img"
+                              borderRadius='100%'
+                              width={`70px`}
+                              height={`70px`}
+                              margin={1}
+                              bgcolor={'rgba(25, 118, 210, 0.05)'}
+                              justifyContent={"center"}
+                              alignItems={"center"}
+                              padding={'8px'}
+                            >
+                              <Lightbulb sx={{ color: '#1976d2', fontSize: "1.5rem" }} />
+                            </Stack>
                           </Stack>
-                        </Stack>
-                        <i className="bx bxl-message" />
-                        <h3 className="services__title">Skill Centre</h3>
-                        <p className="services__description">
-                          Access a robust Skill Centre offering tutorials, resources, and workshops to enhance your content creation skills.
-                        </p>
-                      </div>
+                          <i className="bx bxl-message" />
+                          <h3 className="services__title">Skill Centre</h3>
+                          <p className="services__description">
+                            Access a robust Skill Centre offering tutorials, resources, and workshops to enhance your content creation skills.
+                          </p>
+                        </div></motion.div>
                     </div>
                     <div className="services__container  bd-grid bd-container gap-2rem">
                       <div className="about__data mt-5rem" style={{ width: 'calc(100% - 2rem)' }}>
@@ -949,6 +1001,7 @@ const Landing = () => {
                               margin={0}
                               my={2}
 
+
                             >
                               <ImageTile img_width={'320px'} img_height={'70px'} tran_color={'var(--container-color)'} title={'Monetization Opportunities'} subtitle={'Diversify your revenue streams by selling exclusive content and negotiating fair contracts.'} />
                               <ImageTile img_width={'320px'} img_height={'70px'} tran_color={'var(--container-color)'} title={'Increased Visibility'} subtitle={'Showcase your skills and content to a wider audience, expanding your reach and influence.'} />
@@ -985,78 +1038,81 @@ const Landing = () => {
                 child:
                   <div className="services section" style={{ paddingTop: '5px' }}>
                     <div className="services__container  bd-grid bd-container gap-2rem">
-                      <div className="services__content">
-                        {/* <img src="assets/serv1.png" alt className="services__img" /> */}
-                        <Stack direction={'row'} justifyContent='center' alignItems={'center'}>
-                          <Stack
-                            className="card services__img"
-                            borderRadius='100%'
-                            width={`70px`}
-                            height={`70px`}
-                            margin={1}
-                            bgcolor={'rgba(25, 118, 210, 0.05)'}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                            padding={'8px'}
-                          >
-                            <Lightbulb sx={{ color: '#1976d2', fontSize: "1.5rem" }} />
+                      <motion.div
+                        variants={item}><div className="services__content">
+                          {/* <img src="assets/serv1.png" alt className="services__img" /> */}
+                          <Stack direction={'row'} justifyContent='center' alignItems={'center'}>
+                            <Stack
+                              className="card services__img"
+                              borderRadius='100%'
+                              width={`70px`}
+                              height={`70px`}
+                              margin={1}
+                              bgcolor={'rgba(25, 118, 210, 0.05)'}
+                              justifyContent={"center"}
+                              alignItems={"center"}
+                              padding={'8px'}
+                            >
+                              <Lightbulb sx={{ color: '#1976d2', fontSize: "1.5rem" }} />
+                            </Stack>
                           </Stack>
-                        </Stack>
 
-                        <i className="bx bxl-message" />
-                        <h3 className="services__title">Skill Centre</h3>
-                        <p className="services__description">
-                          Offer tutorials, resources, and workshops, and monetize your expertise on Haulway.
-                        </p>
-                      </div>
-                      <div className="services__content">
-                        {/* <img src="assets/serv2.png" alt className="services__img" /> */}
-                        <Stack direction={'row'} justifyContent='center' alignItems={'center'}>
-                          <Stack
-                            className="card services__img"
-                            borderRadius='100%'
-                            width={`70px`}
-                            height={`70px`}
-                            margin={1}
-                            bgcolor={'rgba(25, 118, 210, 0.05)'}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                            padding={'8px'}
-                          >
-                            <MonetizationOn sx={{ color: '#1976d2', fontSize: "1.5rem" }} />
+                          <i className="bx bxl-message" />
+                          <h3 className="services__title">Skill Centre</h3>
+                          <p className="services__description">
+                            Offer tutorials, resources, and workshops, and monetize your expertise on Haulway.
+                          </p>
+                        </div></motion.div>
+                      <motion.div
+                        variants={item}> <div className="services__content">
+                          {/* <img src="assets/serv2.png" alt className="services__img" /> */}
+                          <Stack direction={'row'} justifyContent='center' alignItems={'center'}>
+                            <Stack
+                              className="card services__img"
+                              borderRadius='100%'
+                              width={`70px`}
+                              height={`70px`}
+                              margin={1}
+                              bgcolor={'rgba(25, 118, 210, 0.05)'}
+                              justifyContent={"center"}
+                              alignItems={"center"}
+                              padding={'8px'}
+                            >
+                              <MonetizationOn sx={{ color: '#1976d2', fontSize: "1.5rem" }} />
+                            </Stack>
                           </Stack>
-                        </Stack>
-                        <i className="bx bxl-message" />
-                        <h3 className="services__title">
-                          Monetization
-                        </h3>
-                        <p className="services__description">
-                          Earn as creators learn by offering valuable tutorials and resources to the community.
-                        </p>
-                      </div>
-                      <div className="services__content">
-                        {/* <img src="assets/serv3.png" alt className="services__img" /> */}
-                        <Stack direction={'row'} justifyContent='center' alignItems={'center'}>
-                          <Stack
-                            className="card services__img"
-                            borderRadius='100%'
-                            width={`70px`}
-                            height={`70px`}
-                            margin={1}
-                            bgcolor={'rgba(25, 118, 210, 0.05)'}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                            padding={'8px'}
-                          >
-                            <Campaign sx={{ color: '#1976d2', fontSize: "1.5rem" }} />
+                          <i className="bx bxl-message" />
+                          <h3 className="services__title">
+                            Monetization
+                          </h3>
+                          <p className="services__description">
+                            Earn as creators learn by offering valuable tutorials and resources to the community.
+                          </p>
+                        </div></motion.div>
+                      <motion.div
+                        variants={item}><div className="services__content">
+                          {/* <img src="assets/serv3.png" alt className="services__img" /> */}
+                          <Stack direction={'row'} justifyContent='center' alignItems={'center'}>
+                            <Stack
+                              className="card services__img"
+                              borderRadius='100%'
+                              width={`70px`}
+                              height={`70px`}
+                              margin={1}
+                              bgcolor={'rgba(25, 118, 210, 0.05)'}
+                              justifyContent={"center"}
+                              alignItems={"center"}
+                              padding={'8px'}
+                            >
+                              <Campaign sx={{ color: '#1976d2', fontSize: "1.5rem" }} />
+                            </Stack>
                           </Stack>
-                        </Stack>
-                        <i className="bx bxl-message" />
-                        <h3 className="services__title">Promotion Opportunities</h3>
-                        <p className="services__description">
-                          Promote your tutoring services on a growing platform with a diverse and engaged audience.
-                        </p>
-                      </div>
+                          <i className="bx bxl-message" />
+                          <h3 className="services__title">Promotion Opportunities</h3>
+                          <p className="services__description">
+                            Promote your tutoring services on a growing platform with a diverse and engaged audience.
+                          </p>
+                        </div></motion.div>
                     </div>
                     <div className="services__container  bd-grid bd-container gap-2rem">
                       <div className="about__data mt-5rem" style={{ width: 'calc(100% - 2rem)' }}>
