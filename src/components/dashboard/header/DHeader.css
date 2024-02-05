@@ -1,0 +1,137 @@
+@tailwind base;
+@tailwind components;
+
+/*  ========= Header styles  starts=========== */
+.Dheader{
+    @apply mobile:hidden
+}
+.header__nav{
+    @apply  w-full  py-6  flex justify-center px-[9%] 
+} 
+
+.header__nav .nav__menu{
+    @apply flex gap-4 justify-evenly  gap-x-[18.16px] items-center 
+}
+
+.header__nav .nav__menu div, .header__nav .nav__menu .logo{
+    @apply flex-shrink-0
+}
+.header__nav .nav__menu .homebtn a{
+    @apply laptop:text-[22.1505px] text-[#fff] bg-[#7A7A7A] h-[58.11px] flex items-center justify-center w-[138.48px] rounded-[36.9273px] font-[700]
+}
+
+.header__nav .nav__menu  a.active{
+    @apply  bg-black  p-1 rounded-full
+}
+
+.header__nav .nav__menu input[type="search"] {
+    @apply h-[100%] rounded-[36.9072px] w-[100%] bg-[#d7d7d7]  outline-none px-[5rem] text-[22.1505px] font-[600]
+}
+.header__nav .nav__menu input[type="search"]::placeholder {
+    @apply text-[22.1505px]  font-[500]
+}
+.header__nav .nav__menu .search__input{
+    @apply relative w-[60.67%] bg-[#d7d7d7] h-[100%] rounded-[36.9072px]
+}
+.header__nav .nav__menu .search__input img {
+    @apply absolute top-[30%] left-[5%]
+}
+
+.header__nav .nav__menu .postIcon > *{
+    @apply h-[46.16px] w-[46.16px] text-[#7a7a7a] bg-[#d7d7d7] rounded-full flex items-center justify-center flex-col 
+}
+.header__nav .nav__menu .chatIcon{
+    @apply h-[46.16px] w-[46.16px] text-[#7a7a7a] bg-[#d7d7d7] rounded-full
+}
+
+
+/* header user profile css  */
+.header__nav .nav__menu .user__name{
+    @apply  flex items-center justify-center
+}
+
+.header__nav .nav__menu .user__name img{
+    @apply w-[3rem] h-[3rem] rounded-[50%] my-auto  border-[3px] border-light_accent_100 object-cover
+}
+.header__nav .nav__menu .user__details .user__dropdown{
+    @apply absolute flex flex-col text-[22px] font-[600] bg-white  gap-y-2 text-black rounded-[40px] p-[2rem]  top-[6.5rem] right-4 w-[530px] mobile:w-[100%] mobile:right-0  z-[30];
+    box-shadow: 4px 0px 4px rgba(123, 6, 164, 0.4);
+    -webkit-box-shadow: 4px 0px 4px rgba(123, 6, 164, 0.4);
+}
+.user__dropdown li{
+    @apply flex flex-shrink-0   items-center my-[.5rem]
+}
+.user__dropdown .settings{
+    @apply my-[3rem]
+}
+.user__dropdown li > *{
+    @apply flex-shrink-0 object-contain
+}
+
+@tailwind utilities;
+
+
+
+
+/* DROPDOWN CSS */
+.header__nav .user__details {
+    transition: all 0.3s ease-in-out;
+  }
+ 
+ .header__nav  .dropdown {
+    visibility: hidden;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+  }
+  
+ .header__nav  .dropdown.open {
+    visibility: visible;
+    max-height: 500px; /* Adjust the max-height as per your needs */
+  }
+
+
+/* Responsiveness */
+
+@media (max-width: 1305px){
+    .header__nav .nav__menu .homebtn a{
+        /* display: none; */
+        height: 50px;
+        width: 7rem;
+    }
+    .header__nav .nav__menu .logo img{
+        width: 8rem;
+    }
+    .header__nav .nav__menu .search__input img {
+        @apply absolute top-[30%] left-[5%] w-[1.5rem]
+    }
+}
+
+/* @media (max-width: 1000px){
+    .header__nav .nav__menu .chatIcon{
+        display: none;
+    }
+
+} */
+@media (max-width: 900px){
+ .header__nav .nav__menu .search__input{
+        /* display: none; */
+        height: 50px;
+        width: 40%;
+    }
+    .header__nav{
+        display: block;
+        padding: 1.5rem 0;
+    }
+    .header__nav .nav__menu .logo img{
+        width: 8rem;
+    }
+    .header__nav .nav__menu{
+        justify-content: space-between;
+    }
+    .header__nav .nav__menu .postIcon > *, .header__nav .nav__menu .chatIcon, .header__nav .nav__menu .user__name img{
+        height: 36.16px;
+        width: 36.16px;
+    }
+    
+}

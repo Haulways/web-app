@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "haulway-demo-project",
+    "staging": "haulway-demo-project"
+  },
+  "targets": {},
+  "etags": {}
+}

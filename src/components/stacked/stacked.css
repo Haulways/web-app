@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+.stacked--container{
+    @apply flex flex-col gap-y-[10px] w-[62px] 
+}
+
+.stacked-avatar-container {
+    display: flex;
+    justify-content: center;
+    flex: start;/* Centers the avatars horizontally */
+  }
+  
+  
+
+  .stacked--name{
+    @apply font-[600] text-center text-[10px];
+    /* margin-right: -43px; */
+
+  }
+
+ 
+@tailwind utilities;
+
+
+.stacked--contents::-webkit-scrollbar {
+    height: 0;
+    width: 0px; 
+  }
+  .stacked--contents::-webkit-scrollbar-track {
+    height: 0;
+    background-color: none;
+  }
+  .stacked--contents::-webkit-scrollbar-thumb {
+    height: 0;
+    background-color: none;
+  }

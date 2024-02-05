@@ -1,0 +1,258 @@
+@tailwind base;
+@tailwind components;
+:root {
+    --bg-color: #C6C6C6;
+    --text-color: white;
+    --menu--item: black;
+  }
+  
+  [data-theme="dark"] {
+    --bg-color: rgba(68, 68, 68, 0.3);;
+    --text-color: black;
+   --menu--item: white;
+  }
+
+.createPost__body{
+    @apply laptop:px-[9%] mobile:px-[2rem] tablet:px-[2rem] pb-[5rem] mobile:pb-[3rem]  relative transition-all ease-in-out delay-300 mobile:pt-[5rem] 
+}
+.post__container{
+    @apply laptop:px-[9%] mobile:px-[0rem] tablet:px-[2rem] pb-[5rem] mobile:pb-[3rem] relative transition-all ease-in-out delay-300 mobile:h-[800px]
+}
+.create__post .back{
+    @apply flex-shrink-0 absolute left-[3rem]  mobile:top-[2rem] mobile:left-[1rem] top-[3rem] invert
+}
+.union{
+    @apply flex flex-col items-center justify-center pt-[10%] w-full overflow-hidden  mx-auto mobile:pt-[10%] 
+}
+.union img{
+    @apply w-[70%] h-full object-cover laptop:w-[300px] mx-auto tablet:w-[50%] tablet:pt-[10%]
+}
+.union button{
+    @apply mt-[2rem]  rounded-full text-[26px] mobile:text-[16px] h-[66px] mobile:h-[47px] w-[220px] mobile:w-[160px] font-[600] mobile:my-[3rem] tablet:mt-[2rem]
+}
+
+/* Pop up content  */
+.popup__overlay{
+    @apply absolute top-0 z-0 mobile:hidden w-full right-0 left-0 bottom-0;
+    background: rgba(0, 0, 0, 0.60);
+    backdrop-filter: blur(2px);
+}
+.Mpopup__overlay{
+    @apply absolute top-0 z-0 laptop:hidden tablet:hidden w-screen h-screen right-0 left-0 bottom-0;
+    background: rgba(0, 0, 0, 0.60);
+    backdrop-filter: blur(2px);
+}
+
+/* desktop view design styling */
+
+.desktop__popup__content .add__content__box{
+    @apply flex flex-col items-center justify-center my-[1rem] border-dashed  border-[#666] w-[80%]  mx-auto rounded-[40px] py-[2rem] mb-[3rem] px-[1rem] border-spacing-6 border-separate border-[2px] 
+}
+.desktop__popup__content .add__content__box label{
+    @apply text-center w-full h-full mx-auto flex flex-col items-center justify-center cursor-pointer
+}
+.desktop__popup__content .add__content__box span{
+    @apply pt-[4rem]
+}
+.desktop__popup__content .add__content__box label .drag{
+    @apply pt-[1rem] text-[18px] w-[70%] text-center
+}
+.desktop__popup__content .add__content__box .recommended{
+    @apply pt-[5rem] text-[18px]
+}
+.mobile__add__content__box label span{
+    @apply bg-black  rounded-full p-[5px] w-[3rem] h-[3rem]  cursor-pointer absolute bottom-[10%] right-0 left-0 mx-auto flex items-center justify-center
+}
+.mobile__add__content__box label span .add__icon{
+    @apply  h-[30px] w-[30px];
+}
+
+
+/* share Image/video Container  */
+.shareImgContainer{
+    @apply   p-[3rem] pt-[1rem]
+}
+.shareImgContainer .top__container{
+    @apply flex items-center justify-between
+}
+.shareImgContainer .top__container .close__button{
+    @apply h-[30px] w-[30px]  flex-shrink-0  tablet:w-[30px] tablet:h-[30px]
+}
+.shareImgContainer .top__container .close__button img{
+    @apply flex-shrink-0 object-contain
+}
+.shareImgContainer .top__container .next__button{
+    @apply bg-black text-white rounded-full text-[18px]  h-[40px] px-[2rem] font-[600]  
+}
+.shareImgContainer .file__container{
+    @apply h-fit rounded-[40px]   bg-[#222222] w-fit tablet:w-[100%]  my-[2rem]  mx-auto px-[4rem]   flex tablet:flex-wrap gap-x-16 pt-[1rem] tablet:justify-center tablet:items-center tablet:pb-[2rem]
+}
+
+/* left side of the file container  */
+.shareImgContainer .file__container .left .bottom__part ul{
+    @apply text-white flex items-center justify-evenly my-[2rem]  font-[600] tablet:gap-x-4 gap-y-3
+}
+.shareImgContainer .file__container .left .bottom__part ul li{
+    @apply flex flex-col items-center cursor-pointer 
+}
+.shareImgContainer .file__container .left__img{
+    @apply mobile:w-[350px] tablet:w-[300px] tablet:h-[350px] tablet:mx-auto mobile:h-[500px]  rounded-[8px] overflow-hidden flex-shrink-0 relative w-[350px] h-[550px]
+}
+.shareImgContainer .file__container .left__img video, .shareImgContainer .file__container .left__img img{
+    @apply object-cover h-full w-full flex-shrink-0
+}
+
+/* right side of the .file__container  */
+.right__container{
+    @apply flex flex-wrap gap-x-16 gap-y-2 h-fit mobile:hidden mx-auto
+}
+.right, .right1{
+    @apply text-white text-center text-[16px] font-[500] h-fit flex flex-wrap gap-3 mx-auto
+}
+.right1{
+    @apply cursor-pointer
+}
+.right .image__container, .right1 .image__container{
+    @apply w-[116px] h-[180px] tablet:w-[80px] tablet:h-[134px] flex-shrink-0 overflow-hidden rounded-[8px] mb-4 mobile:hidden relative
+}
+.right .image__container img, .right .image__container video, .right1 .image__container img, .right1 .image__container video{
+    @apply w-full h-full object-cover
+}
+
+/* popcontent mobile view design styling */
+.mobile__popup__content{
+    @apply   h-full p-[3rem] laptop:hidden tablet:hidden 
+}
+
+.mobile__popup__content  .close__button{
+    @apply absolute top-[2rem] left-4 w-[30px] h-[30px]
+}
+/* mobile share container  */
+.Mobile__shareImgContainer{
+    @apply laptop:hidden tablet:hidden  w-full h-full 
+}
+.Mobile__shareImgContainer .top__container{
+    @apply flex items-center justify-between
+}
+.Mobile__shareImgContainer .top__container .close__button{
+    @apply w-[35px] h-[35px] flex-shrink-0 
+}
+.Mobile__shareImgContainer .top__container .close__button img{
+    @apply flex-shrink-0 object-contain
+}
+.Mobile__shareImgContainer .top__container .next__button{
+    @apply bg-black text-white rounded-full  text-[16px] h-[34px] px-[1.1rem] font-[600] 
+}
+.Mobile__shareImgContainer .file__container{
+    @apply h-screen justify-center items-center  rounded-none w-full  my-0 mx-auto  px-0 flex-col flex  gap-x-16 py-[3rem];
+}
+/* left side of the file container  */
+.Mobile__shareImgContainer .file__container .left .bottom__part ul{
+    @apply  flex items-center justify-center gap-x-[50px]  text-black font-[600] pt-[1rem]  flex-shrink-0
+}
+.Mobile__shareImgContainer .file__container .left .bottom__part ul li{
+    @apply flex flex-col items-center cursor-pointer mobile:gap-y-1 text-[14px]  flex-shrink-0
+}
+.file__container .selectedFiles--container{
+    @apply h-fit w-[100%] flex gap-4  overflow-x-scroll rounded-md  p-[1rem] 
+}
+.file__container .selectedFiles--container::-webkit-scrollbar {
+    width: 0px; /* Adjust the width as needed */
+}
+.file__container .selectedFiles--container::-webkit-scrollbar-track {
+    background-color: none;
+}
+.file__container .selectedFiles--container::-webkit-scrollbar-thumb {
+    background-color: none;
+}
+.Mobile__shareImgContainer .file__container .left__img{
+    @apply mobile:h-[340px] mobile:w-[252px] rounded-[10px] mx-auto overflow-hidden flex-shrink-0 relative  
+}
+.left__img .remove-button{
+    @apply absolute top-[.5rem] left-2 w-[30px] h-[30px] overflow-hidden z-[10]
+}
+.left__img .remove-button img{
+    @apply w-[100%] h-[100%] object-cover
+}
+.Mobile__shareImgContainer .file__container .left__img video, .Mobile__shareImgContainer .file__container .left__img img{
+    @apply object-cover h-full w-full flex-shrink-0
+}
+
+
+/* CREATE POST CONTAINER */
+.post__container{
+    @apply mobile:p-0 mobile:absolute mobile:top-0 mobile:pt-[2.5rem] mobile:w-full
+}
+
+.create__post__contents{
+    @apply flex items-center flex-shrink-0 mt-[3rem] gap-16 px-[2rem] bg-white rounded-[40px] mobile:p-0 py-[3rem] tablet:flex-wrap mobile:block mobile:shadow-none mobile:rounded-none shadow-custom ;
+}
+.create__post__contents .Dcreate__post__files{
+    @apply w-[350px]  tablet:h-[400px] tablet:w-[300px] tablet:mx-auto h-[500px] rounded-[30px] overflow-hidden flex-shrink-0 mobile:hidden
+}
+.create__post__form .Mcreate__post__files{
+    @apply w-[120px] h-[108px] rounded-[10px] laptop:hidden tablet:hidden p-[1rem] bg-[#d9d9d9] flex flex-col items-center justify-center
+}
+.create__post__form .Mcreate__post__files .mobile__postImg__container{
+    @apply mobile:w-[68px] mobile:h-[65px] rounded-[10px] overflow-hidden flex-shrink-0 
+}
+.Dcreate__post__files img, .Mcreate__post__files img, .Dcreate__post__files video, .Mcreate__post__files video{
+    @apply w-full h-full object-cover flex-shrink-0 my-auto mx-auto
+}
+.create__post__form{
+    @apply w-full
+}
+.create__post__form form .submit__post__button{
+    @apply mb-[4rem]
+}
+.create__post__form form .submit__post__button button{
+    @apply text-[18px]  font-[600]  h-[42px] w-[116px]  mobile:text-[16px]   mobile:font-[600] bg-black text-white rounded-full mobile:h-[34px] mobile:w-[71px]  mobile:absolute mobile:top-8 mobile:right-4
+}
+.caption__container {
+    @apply flex px-[20px] py-[13px] gap-x-4 overflow-hidden items-center justify-center rounded-[30px] mb-[3rem] mobile:rounded-none mobile:border-none border-2 border-solid border-[#d7d7d7] mobile:bg-[#F1F1F1]
+}
+.caption__container .userImage{
+    @apply w-[65px] h-[65px] overflow-hidden flex-shrink-0 rounded-full 
+}
+.caption__container .userImage img{
+    @apply w-full h-full object-cover flex-shrink-0
+}
+.caption__container textarea::placeholder{
+    @apply mobile:text-[16px] text-[18px];
+    color: #7A7A7A;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 125%;
+}
+.caption__container textarea{
+    @apply w-full outline-none text-[18px] mobile:row-[2] mobile:text-[16px] font-[500] mobile:bg-[#f1f1f1] my-auto;
+}
+.caption__container textarea::-webkit-scrollbar{
+    @apply hidden
+}
+.location__tags{
+    @apply flex justify-around flex-wrap gap-8 mobile:gap-0 mobile:flex-col-reverse
+}
+.location__tags p{
+    @apply px-[2rem] mobile:px-[1rem] mobile:h-[50px] mobile:border-none mobile:justify-normal mobile:rounded-none text-black text-[18px] font-[600] leading-[125%] py-[1rem] flex-shrink-0 rounded-[30px] flex gap-x-[1rem] items-center justify-center border-2 border-solid border-[#d7d7d7] mobile:text-[14px]
+}
+
+/* CATEGORIES SECTION */
+/* .cat__container{
+    @apply mobile:px-[1rem] pt-[1.2rem]
+} */
+.cat__container .cat__header{
+    @apply font-[600] text-black text-[18px] pb-[1rem] mobile:text-[14px]
+}
+.cat__container .categories__contents{
+    @apply flex items-center mobile:gap-3 gap-8 justify-center flex-wrap mobile:pb-[3rem]
+}
+.cat__container .categories__contents span{
+   @apply mobile:rounded-[12px] rounded-[16px] mobile:min-w-[92px] w-[123px] mobile:h-[33px] h-[43px] text-white mobile:text-[14px] text-[20px] flex items-center justify-center cursor-pointer;
+   background-color: var(--bg-color)
+}
+.cat__container .categories__contents span.selected{
+    background: var(--menu--item);
+    color: var(--text-color)
+}
+@tailwind utilities;

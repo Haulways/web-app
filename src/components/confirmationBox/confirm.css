@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+.confirmation__dialog{
+    @apply  bg-white drop-shadow-lg shadow-zinc-500 mobile:shadow-none  rounded-[20px] mobile:w-full mobile:rounded-none  p-[2rem] mobile:fixed mobile:bottom-[0] tablet:bottom-4  tablet:w-full mobile:h-fit
+}
+.desktop__confirm__box{
+    @apply mobile:hidden absolute bottom-4 tablet:left-0 tablet:right-0 left-0 right-0 p-[2rem]
+}
+.mobile__confirm__box{
+    @apply tablet:hidden laptop:hidden fixed bottom-0 z-50 right-0 left-0
+}
+.confirmation__dialog p{
+    @apply text-center text-[15px] font-[600] pb-[3rem] mobile:text-[14px]
+}
+.confirmation__dialog .confirm__btns{
+    @apply flex items-center justify-evenly tablet:flex-wrap tablet:gap-6 gap-x-4
+}
+.confirmation__dialog .confirm__btns button{
+    @apply rounded-full mobile:rounded-[20px] px-[1.5rem] py-[.5rem] text-[15px]  mobile:text-[14px] font-[600] hover:scale-75 transition-all ease-in-out delay-200 
+}
+.confirmation__dialog .confirm__btns .backbtn{
+    @apply bg-black text-white
+}
+.confirmation__dialog .confirm__btns .deletebtn{
+    @apply bg-[#d7d7d7] text-black
+}
+@tailwind utilities;

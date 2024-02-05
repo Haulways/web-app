@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+
+/* ====DASHBOARD NAVBAR STYLING====== */
+
+.Dnavbar__container{
+    @apply mt-[2rem] relative  mobile:mt-[1rem]
+}
+.Dnavbar__container .right__arrow{
+    @apply absolute right-[-4rem] text-[2rem] mobile:text-[1.5rem] top-1 tablet:right-[-2rem] mobile:right-[-1.3rem]
+}
+
+.Dnavbar__links{
+    @apply flex  gap-x-[5%] overflow-x-scroll
+}
+.Dnavbar__links li a{
+    @apply text-[22px] mobile:text-[14px] font-[600] text-[#868686] bg-[#d9d9d9] h-[48px] mobile:h-[32px] mobile:w-[80px] w-[120px] flex items-center justify-center rounded-[18px] hover:bg-black hover:text-white
+}
+.Dnavbar__links li a.active{
+    @apply text-white bg-black
+}
+
+@tailwind utilities;
+
+
+/* Define the scrollbar colors */
+.Dnavbar__links::-webkit-scrollbar {
+    width: 8px; /* Adjust the width as needed */
+}
+.Dnavbar__links::-webkit-scrollbar-track {
+    background-color: none;
+}
+.Dnavbar__links::-webkit-scrollbar-thumb {
+    background-color: none;
+}

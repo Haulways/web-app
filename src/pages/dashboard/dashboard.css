@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+
+/* ====DASHBOARD STYLING ======= */
+
+
+.dshboard__body{
+    @apply laptop:px-[9%] mobile:px-[1rem] tablet:px-[2rem] relative overflow-hidden
+}
+.dshboard__body .Dnavbar{
+    @apply sticky top-[-.1rem]  py-2 z-[20]
+}
+.dshboard__body .Dnavbar__routes{
+    @apply mt-[.5rem]
+}
+
+@tailwind utilities;

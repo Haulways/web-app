@@ -1,0 +1,172 @@
+@tailwind base;
+@tailwind components;
+:root {
+    --bg-color: #fff;
+    --text-color: #222;
+    --menu--item: rgba(0, 0, 0, 0.10);
+  }
+  
+  [data-theme="dark"] {
+    --bg-color: #222;
+    --text-color: #fff;
+   --menu--item: rgba(68, 68, 68, 0.3);
+  }
+/* Comments And reply section  */
+.desktop__comments{
+    @apply mobile:hidden
+}
+.comment__box{
+    @apply flex items-center gap-x-7 
+}
+ .comment__box textarea{
+    @apply border-[2px] rounded-[30px] w-[80%] py-[1rem] border-black px-[1rem] outline-none text-[18px] text-black font-[500]
+}
+ .comment__box textarea::placeholder{
+    @apply font-[500] text-black
+}
+.comment__box button{
+    @apply text-[18px] font-[600] 
+}
+.comment__hr{
+    @apply w-full h-[1.5px] mobile:hidden bg-light_black_100 mt-[1.1rem] 
+}
+/* comments and reply section  */
+.desktop__comment__box{
+    @apply mobile:hidden h-[100px] overflow-y-scroll pt-[1rem]
+}
+ .comments__section{
+    @apply    transition-all delay-300 ease-in-out  w-full overflow-y-scroll  
+}
+.mobile__comments .mobile__comment__divider{
+    @apply tablet:hidden laptop:hidden border-b-2 border-b-black px-[1rem] sticky top-0   cursor-pointer w-full flex items-center justify-between z-10;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+.mobile__comments .mobile__comment__divider::after{
+    @apply absolute content-[''] mx-auto top-2  w-[70px] h-[5px] bg-black rounded-full right-0 left-0
+}
+.mobile__comments .mobile__comment__divider p{
+    @apply pt-[1.8rem] pb-[.2rem] text-[16px] font-[600];
+    color: var(--text-color);
+}
+.mobile__comments .mobile__comment__divider img{
+    @apply h-[20px] w-[20px] cursor-pointer
+}
+.users__comment{
+    @apply flex gap-x-4 mobile:px-[1rem] mobile:pt-[1.7rem] 
+}
+  .users__comment .users__img{
+    @apply flex-shrink-0  h-full
+}
+ .users__comment .users__img img{
+    @apply w-[45px] h-[45px] mobile:w-[45px] mobile:h-[45px] rounded-full  border-2 border-light_black_100 
+}
+.users__comment .comment__details p{
+    @apply  pb-2
+}
+.users__comment .comment__details .user__name{
+    @apply pr-3 text-[16px]  font-[700] mobile:text-[18px] block
+}
+.users__comment .comment__details .comment__text{
+    @apply font-[600] mobile:block mobile:w-full mobile:text-[14px] text-[15px] 
+}
+.users__comment .comment__details .comment__components{
+    @apply flex items-center gap-x-4 font-semibold mobile:text-[14px] text-[14px]
+}
+.users__comment .comment__details .view__reply{
+    @apply flex items-center gap-x-4  pl-10 mt-2 mobile:text-[14px] text-[14px]  font-[600]
+}
+.comment__components .dots{
+    @apply relative 
+}
+.options--overlay{
+    @apply fixed top-0 z-[2000] laptop:hidden tablet:hidden w-full h-full right-0 left-0 bottom-0;
+    background: rgba(0, 0, 0, 0.60);
+    backdrop-filter: blur(2px);
+}
+.comment__components .dots .option__buttons{
+    @apply absolute w-[100px] h-fit  pt-[1.5rem]  p-[1rem] laptop:top-[-3rem] right-[-7rem] shadow-md transition-all ease-in-out delay-200 rounded-[10px] laptop:text-[18px] mobile:fixed mobile:w-[100%] mobile:h-[150px]
+    mobile:right-0 mobile:left-0 mobile:bottom-0 z-[20000] mobile:flex mobile:flex-col gap-y-4 mobile:justify-end mobile:items-start mobile:rounded-t-[10px] mobile:rounded-b-none mobile:pl-[2rem] font-[600];
+    background-color: var(--bg-color);
+}
+
+.comment__components .dots .option__button1{
+    @apply absolute w-[100px] h-fit  pt-[1.5rem]  p-[1rem] laptop:top-[-3rem] right-[-7rem] shadow-md transition-all ease-in-out delay-200 rounded-[10px] laptop:text-[18px] mobile:fixed mobile:w-[100%] mobile:h-[100px]
+    mobile:right-0 mobile:left-0 mobile:bottom-0 z-[20000] mobile:flex mobile:flex-col gap-y-4 mobile:justify-end mobile:items-start mobile:rounded-t-[10px] mobile:rounded-b-none mobile:pl-[3rem] font-[600] text-[16px];
+    background-color: var(--bg-color);
+}
+.option__buttons img, .option__button1 img{
+    @apply absolute top-[1rem] left-4 laptop:hidden tablet:hidden w-[25px] h-[25px]
+}
+.dots .delete__replies__container{
+    @apply absolute w-[100px] h-fit  pt-[1.5rem]  p-[1rem] top-[-6rem] right-[-2rem]  shadow-md transition-all ease-in-out delay-200 rounded-[10px] laptop:text-[18px] mobile:text-[14px]
+}
+.reply__form{
+    @apply mobile:w-full mobile:flex items-center gap-4
+}
+.users__comment .editInput, .reply__form input{
+    @apply border-black border-[2px]  p-[.5rem] rounded-[30px] mobile:text-[14px] outline-none;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+
+}
+.reply__form input::placeholder{
+    @apply  text-[14px] font-[500] pl-[.5rem];
+    color: var(--text-color);
+}
+.reply__form .reply__btn{
+    @apply  font-[600]   py-[.4rem] rounded-[20px] mobile:text-[14px] ;
+    color: var(--text-color);
+}
+.users__comment  .save__btn{
+    @apply  mt-[1rem] px-[1.5rem] py-[.4rem] rounded-[20px];
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+/* USERS REPLIES  */
+.comment__details .user__replies{
+    @apply pl-8 mt-2 mobile:text-[14px]
+}
+.comment__details .user__replies ul{
+    @apply flex gap-x-4  
+}
+
+
+/* Mobile comments css  */
+.mobile__comments{
+    @apply laptop:hidden tablet:hidden h-[500px] overflow-y-scroll relative  pb-[30%]
+}
+.mobile__comments .comment__box{
+    @apply fixed bottom-0 pb-[1rem] px-[2rem]  pt-[.3rem] w-full ;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+
+}
+.comments__section::-webkit-scrollbar,.mobile__comments .comment__box textarea::-webkit-scrollbar, .mobile__comments::-webkit-scrollbar,.comment__box textarea::-webkit-scrollbar {
+    @apply w-0
+}
+.mobile__comments .comment__box textarea{
+    @apply  rounded-full w-[80%]  border-black  outline-none text-[14px] text-black font-[500]
+}
+.mobile__comments  .comment__box textarea::placeholder{
+    @apply font-[500] text-black text-[14px]
+}
+.mobile__comments .comment__box button{
+    @apply text-[18px] font-[600] 
+}
+@tailwind utilities;
+
+
+/* Define the scrollbar colors */
+ .desktop__comment__box::-webkit-scrollbar {
+    width: 0; /* Adjust the width as needed */
+}
+ .desktop__comment__box::-webkit-scrollbar-track {
+    background: none;
+    width: 0;
+}
+ .desktop__comment__box::-webkit-scrollbar-thumb {
+    background: none;
+    width: 0;
+}

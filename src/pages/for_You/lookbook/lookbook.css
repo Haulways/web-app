@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+.lookbook--bg{
+    @apply mt-[75px] relative
+}
+.back--icon--look{
+    @apply absolute top-[30px] left-[20px]
+}
+.lookbook--bg--img{
+    @apply flex items-center justify-center gap-x-3;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.slider--icon--lookbook{
+    @apply  absolute top-[30%] right-[.5rem] translate-y-[15%] z-50
+}
+
+@tailwind utilities;

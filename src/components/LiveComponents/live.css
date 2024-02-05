@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+
+form h2,
+.conference-section h2 {
+  margin-bottom: 20px;
+}
+
+.btn-danger {
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 6px 14px;
+  background-color: #f44336;
+  color: white;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.conference-section {
+    @apply bg-[#222];
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.conference-section h2 {
+  text-align: center;
+  font-size: 32px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #546e7a;
+}
+
+
+
+.peer-video {
+  height: 100%;
+  width: 100%;
+  /* border-radius: 10px; */
+  object-fit: cover;
+  aspect-ratio: 9/9;
+}
+
+.local.peer-video {
+  transform: scaleX(-1);
+  width: 100% !important;
+  height: 100% !important;
+  aspect-ratio: 9/7;
+  /* border-radius: 0px; */
+}
+
+.peer-name {
+    @apply text-[#fff] absolute  top-[1rem] my-auto  mx-auto left-[10px] ;
+  font-size: 14px;
+  text-align: center;
+}
+
+.peer-container {
+    @apply relative;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.control-bar {
+
+}
+
+
+
+.btn-control {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 2px solid #37474f;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  text-align: center;
+  background-color: #607d8b;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  color: white;
+  cursor: pointer;
+}
+
+.hide {
+  display: none;
+}
+
+.separator {
+  font-size: 12px;
+}
+@tailwind utilities;

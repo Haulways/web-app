@@ -1,0 +1,190 @@
+@tailwind base;
+@tailwind components;
+:root {
+    --bg-color: #fff;
+    --text-color: #222;
+    --menu--item: rgba(0, 0, 0, 0.10);
+  }
+  
+  [data-theme="dark"] {
+    --bg-color: #222;
+    --text-color: #fff;
+   --menu--item: rgba(68, 68, 68, 0.3);
+  }
+/* ====SINGLE POST STYLING FOR MOBILE VIEW */
+.Mobile__sPost{
+    @apply laptop:hidden tablet:hidden pb-[60px] 
+}
+
+/* Post contents text  */
+.sPost__container .top__content{
+    @apply flex justify-between  pb-[1.5rem] px-1 items-center
+}
+.sPost__container .top__content .name-followers ul{
+    @apply flex items-center gap-x-2 
+}
+.sPost__container .top__content .name-followers ul li:nth-child(2){
+    @apply flex flex-col justify-center gap-y-[2px]
+}
+.sPost__container .top__content .name-followers ul li:nth-child(2) .userName{
+    @apply font-[700] text-[14px] 
+}
+.sPost__container .top__content .name-followers ul li:nth-child(2) .follower{
+    @apply  text-[14px] font-[500]
+}
+.sPost__container .top__content .name-followers ul .initials{
+    @apply  w-[50px] h-[50px] rounded-[50%] flex-shrink-0  flex items-center justify-center overflow-hidden drop-shadow-lg
+}
+.sPost__container .top__content .name-followers ul .initials img{
+    @apply w-[100%] h-[100%] object-cover
+}
+
+.sPost__container .top__content .follow-cart span{
+    @apply flex items-center gap-x-[1rem]
+}
+.sPost__container .top__content .follow-cart span .follow{
+    @apply bg-black text-white text-[14px] font-medium h-[28px] px-3 rounded-[18.4px] cursor-pointer 
+}
+.sPost__container .top__content .follow-cart span .cart{
+    @apply flex-shrink-0 cursor-pointer w-[20px] h-[20px]
+}
+
+/* post file container and contents  */
+.sPost__container .sPost__img{
+    @apply w-screen mx-[-8px] h-[450px] flex-shrink-0 overflow-hidden  relative
+}
+.sPost__container .sPost__img  .saveIcon{
+    @apply absolute top-4 right-5 w-[30px] h-[30px] z-50 cursor-pointer
+}
+.sPost__container .sPost__img  .backIcon{
+    @apply absolute top-4 left-5 w-[30px] h-[30px] z-50 cursor-pointer
+}
+.sPost__container .sPost__img img, .sPost__container .sPost__img video{
+    @apply w-full h-full  flex-shrink-0  object-cover
+}
+.mobile--post-splide .splide__track{
+    @apply w-full h-[450px] laptop:h-full tablet:h-full
+}
+.mobile--post-splide .splide__track img, .mobile--post-splide .splide__track video{
+    @apply object-cover w-full h-full cursor-pointer
+}
+.mobile--post-splide .splide__pagination {
+    position: absolute;
+    bottom: 20px; 
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.mobile--post-splide .splide__pagination li button{
+@apply bg-[#333]
+}
+.mobile--post-splide .splide__pagination__page.is-active {
+    background: #fff;
+    transform: scale(1.4);
+    z-index: 1;
+}
+/* Middle contents  */
+.sPost__contents .middle__content{
+    @apply pt-[20px] px-[1rem]
+}
+.sPost__contents .middle__content ul{
+    @apply flex justify-between items-center
+}
+.sPost__contents .middle__content ul .userName{
+    @apply font-[600] text-[18px]
+}
+.sPost__contents .middle__content ul .socials__icons ul{
+    @apply gap-x-5
+}
+.sPost__contents .middle__content ul .socials__icons ul li{
+    @apply w-[20px] h-[20px] overflow-hidden
+}
+.sPost__contents .middle__content ul .socials__icons ul li img{
+    @apply w-full h-full object-contain
+}
+
+.sPost__container .middle__content .post__body{
+    @apply pt-[1rem] text-[14px] font-[400] w-full pb-[10px]
+}
+.sPost__container .middle__content .post__likes{
+    @apply flex justify-between  font-[500] items-center
+}
+.sPost__container .middle__content .post__likes .comment__likes{
+    @apply flex gap-x-4 text-[14px] font-[500]
+}
+.sPost__container .post__likes .comment__likes .comment__left1{
+    @apply flex gap-x-2
+}
+.sPost__container .post__likes .comment__likes .comment__left1 li:nth-child(1){
+    @apply relative flex-shrink-0 object-cover
+}
+.sPost__container .post__likes .comment__likes .comment__left1 li:nth-child(1) .likeImg{
+    @apply relative w-[25px] h-[25px] flex-shrink-0 object-cover
+}
+.sPost__container .post__likes .comment__likes .comment__left1 li:nth-child(1) .like{
+    @apply absolute top-0 bottom-0 left-0 right-0 my-auto mx-auto cursor-pointer
+}
+.sPost__container .post__likes .comment__likes .comment__left1 li:nth-child(2){
+    @apply flex gap-x-1
+}
+
+.addToCartBtn{
+    @apply border-black border-[2px] rounded-[10px] text-black
+}
+.sPost__container .post__likes .comment__icons{
+    @apply w-[25px] h-[25px] cursor-pointer
+}
+.sPost__container .post__likes .addButton{
+    @apply h-[29px] w-[25px] 
+}
+.sPost__container .post__likes .addButton > * {
+    @apply w-full h-full
+}
+.sPost__container .post__likes .addText{
+    @apply text-[10px]
+}
+
+
+/* Comment box  */
+
+.Mpopup__overlay{
+    @apply absolute top-0 z-50 laptop:hidden tablet:hidden w-full right-0 left-0 bottom-0;
+    background: rgba(0, 0, 0, 0.60);
+    backdrop-filter: blur(2px);
+}
+.mobile__comment__box{
+    @apply laptop:hidden tablet:hidden absolute w-full h-fit  z-[999]  
+}
+.mobile__comment__box {
+    position: fixed;
+    bottom: -100%;
+    left: 0;
+    width: 100%;
+    height: 80vh;
+    padding: .1rem 0 .5rem;
+    box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.1);
+    transition: bottom .3s ease-in-out;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+  }
+  
+  .slide-in {
+    bottom: 0;
+  }
+  
+  .slide-out {
+    bottom: -100%;
+  }
+
+
+  /* Show card */
+  .showCard--post{
+    @apply    py-[.5rem] mx-auto px-[.5rem];
+
+  }
+
+
+  
+@tailwind utilities;
+
+

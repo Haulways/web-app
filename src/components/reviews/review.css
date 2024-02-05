@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+:root {
+    --bg-color: #fff;
+    --text-color: #222;
+    --menu--item: rgba(0, 0, 0, 0.10);
+    --border--tab: 0.5px solid #222;
+  }
+  
+  [data-theme="dark"] {
+    --bg-color: #222;
+    --text-color: #fff;
+   --menu--item: rgba(68, 68, 68, 0.3);
+   --border--tab: 0.5px solid #ccc;
+
+  }
+
+.lineRate{
+    @apply flex gap-x-6 items-center w-full text-[8px]
+}
+.reviewTabs{
+    @apply h-[24px] rounded-[4px] px-[14px] flex items-center justify-center text-[12px];
+    border: var(--border--tab);
+}
+.activeTab{
+    @apply bg-[#222] text-[#fff]
+}
+.reviewInput{
+    @apply w-full py-[16px] px-[20px] outline-none text-[12px];
+    background: var(--bg-color);
+    border-radius: 6px;
+border: 1px solid #D9D9D9;
+}
+.fileUpload{
+    @apply text-[12px] h-[94px] flex flex-col items-center justify-center gap-y-[10px] mt-[30px];
+    border-radius: 6px;
+border: 1px solid #D9D9D9;
+}
+.fileUpload.dragging {
+    border: 1px solid rgb(0, 123, 255); /* border color when dragging */
+}
+@tailwind utilities;

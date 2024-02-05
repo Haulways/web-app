@@ -1,0 +1,317 @@
+@tailwind base;
+@tailwind components;
+
+
+.splide__track--nav>.splide__list>.splide__slide.is-active {
+    border-radius: 4px;
+    border: 0px solid #98693b;
+    object-fit: cover;
+    overflow: hidden;
+}
+.catalogue__contents .splide__track--nav>.splide__list>.splide__slide.is-active {
+    border-radius: 8px;
+    border: 2px solid #222222;
+    object-fit: cover;
+    overflow: hidden;
+}
+.showCard--post .splide__track--nav>.splide__list>.splide__slide.is-active{
+    border-radius: 8px;
+    border: 0px;
+    object-fit: cover;
+    overflow: hidden;
+}
+.youtube--container video, .react-player video{
+    @apply w-full h-full  object-cover
+}
+.youtube--container, .react-player {
+    @apply w-full h-full  object-cover
+}
+
+.followBtn {
+    @apply text-[11px] font-[500] bg-black  
+}
+.likeBtn{
+    @apply relative 
+}
+.likeBtn .likeImg{
+    @apply relative w-[26px] h-[25px]  flex-shrink-0 object-cover
+}
+.likeBtn .like{
+    @apply absolute top-0 bottom-0 left-0 right-0 my-auto mx-auto w-[14px] h-[14px] text-black
+}
+
+.comment__icons{
+    @apply w-[25px] h-[25px] text-black
+}
+.addToCartDiv{
+    @apply ml-auto
+}
+.addToCartBtn{
+    @apply border-black border-[2px] rounded-[10px] text-black
+}
+
+
+/* Trending card  */
+.card-with-background {
+    position: relative;
+  }
+  
+  .background-image {
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    z-index: 0; /* To position the image behind other content */
+  }
+  .background-image video{
+    @apply w-full h-full object-cover
+  }
+.card-content-wrapper .MuiTypography-root:first-child, .post--content {
+  /* Apply line-clamp to the first Typography element */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Define the scrollbar colors */
+.live--card::-webkit-scrollbar, .store__card::-webkit-scrollbar {
+    width: 0px;
+    height: 0px; /* Adjust the width as needed */
+}
+.live--card::-webkit-scrollbar-track, .store__card::-webkit-scrollbar-track {
+    background-color: none;
+}
+.live--card::-webkit-scrollbar-thumb, .store__card::-webkit-scrollbar-thumb {
+    background-color: none;
+}
+
+
+.favorite__avatar{
+    @apply flex flex-col items-center justify-center mt-[15px] mb-2;
+    height: 101px;
+    width: 101px;
+    background-color: green;
+    font-size: 40.87px;
+    font-weight: 800;
+    line-height: 51px;
+    border-radius: 100%;
+    color: white;
+}
+
+/* for u cards  */
+.forU__cards{
+    @apply  grid grid-cols-2 laptop:grid-cols-3 gap-[8px] gap-y-4 my-[1rem]  justify-center items-center w-[90vw] laptop:w-[65vw]
+}
+.forU__cards div{
+    @apply w-[100%] h-[180px]  rounded-[8px]  text-white flex flex-col items-center justify-center text-[20px] font-[600]
+}
+
+
+/* Sponsored card  */
+.sponsored--slider{
+    @apply flex overflow-x-scroll gap-x-4 
+}
+
+
+/* Show card */
+.showCard__container, .tagCard__container{
+    @apply flex bg-white rounded-[15px] h-[103.65px] w-[100%] p-[8px] items-center gap-x-2 mx-auto justify-center min-w-[310px];
+    scroll-snap-align: center;
+}
+.tagCard__container{
+    @apply bg-[#d9d9d9] rounded-[6px]
+}
+.showCard__container .showCard__img, .tagCard__container .showCard__img {
+    @apply w-[90.56px] h-[90.56px] rounded-[15px] overflow-hidden flex-shrink-0
+}
+.showCard__img img, .showCard__img video  {
+    @apply w-full h-full object-cover
+}
+.tagCard__container .showCard__details{
+    @apply flex gap-x-2 h-full w-full items-center;
+    border-radius: 8px 15px 15px 8px;
+    background: #d9d9d9;
+}
+.showCard__container .showCard__details{
+    @apply bg-[#F3F3F3] flex gap-x-2 h-full w-full items-center;
+    border-radius: 8px 15px 15px 8px;
+}
+
+.showCard__details .info{
+    @apply p-1 pl-2 w-full
+}
+.showCard__details .price{
+    @apply text-[11.4px] font-[500] text-[#222222]
+}
+.tagCard__container .showCard__details .price{
+    @apply text-[14px] font-[500] text-[#222222]
+}
+.showCard__details .body{
+    @apply text-[13px] font-[400] text-black py-[2px] w-full;
+    display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow-y: hidden;
+}
+.body{
+    @apply  font-[500]  w-[89%];
+    display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow-y: hidden;
+}
+.tagCard__container .showCard__details .body{
+    @apply text-[14px] font-[400] text-black py-[2px] w-full;
+    display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.sponsored--slider::-webkit-scrollbar , .showCard--post::-webkit-scrollbar, .showCard--postbody .showCard__details .body::-webkit-scrollbar {
+    width: 0px; /* Adjust the width as needed */
+}
+.sponsored--slider::-webkit-scrollbar-track , .showCard--post::-webkit-scrollbar-track, .showCard__details .body::-webkit-scrollbar-track {
+    background-color: none;
+}
+.sponsored--slider::-webkit-scrollbar-thumb , .showCard--post::-webkit-scrollbar-thumb, .showCard__details .body::-webkit-scrollbar-thumb {
+    background-color: none;
+}
+
+.search__card--container::-webkit-scrollbar, .showCard__details .body::-webkit-scrollbar {
+    height: 0;
+    width: 0px; /* Adjust the width as needed */
+}
+.search__card--container::-webkit-scrollbar-track, .showCard__details .body::-webkit-scrollbar-track {
+    width: 0px; /* Adjust the width as needed */
+    height: 0;
+    background-color: none;
+}
+.search__card--container::-webkit-scrollbar-thumb, .showCard__details .body::-webkit-scrollbar-thumb {
+    width: 0px; /* Adjust the width as needed */
+    background-color: none;
+    height: 0;
+}
+.showCard__details .brand{
+    @apply text-[11.3px] font-[400] text-[#868686]
+}
+.tagCard__container .showCard__details .brand{
+    @apply text-[11.3px] font-[400] text-[#000]
+}
+
+.showCard__container .action__btn, .tagCard__container .action__btn{
+    @apply h-[90.56px] w-[43.77px] rounded-[11px] flex-shrink-0 overflow-hidden cursor-pointer
+}
+.showCard__container .action__btn img, .tagCard__container .action__btn img{
+    @apply  flex-shrink-0 w-full h-full object-cover 
+}
+
+.showCard__details .addTag-btn{
+    @apply text-[12px] font-[500] border-solid border-[1px] border-black rounded-[8px] px-[11px] py-[4px]
+}
+
+/* Catalogue  */
+
+.catalogue__container .catalogue__contents{
+    @apply flex-col flex items-center  w-[76px] h-fit bg-white  rounded-[16px] pb-[.3rem]
+}
+.catalogue__contents .catalogueImg{
+    @apply w-[60.16px] h-[63.16px] rounded-[8px] overflow-hidden flex-shrink-0 
+}
+.catalogueImg img, .catalogueImg video {
+    @apply object-cover h-full w-full flex-shrink-0
+}
+
+
+/* Live card */
+.live--avatar{
+  @apply border-[3px] border-red-600 mt-[.3rem] mb-[.4rem] overflow-hidden;
+    height: 80px;
+    width: 80px;
+    background-color: rgb(238, 238, 238);
+    border-radius: 100%;
+    color: white;
+}
+.live--avatar img{
+    @apply object-cover h-full w-full
+}
+
+
+/* Normal Card */
+
+.normalCard--bg{
+    @apply h-[253px] w-full relative laptop:h-[420px] tablet:h-[380px]
+}
+.normalSearchCard{
+    @apply w-full 
+}
+.normalCard--text{
+    @apply   w-[77%];
+    display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow-y: hidden;
+}
+
+
+
+
+/* Ads Container */
+
+.Ad--container{
+    @apply flex gap-x-[15px] px-[20px] rounded-[10px] max-w-[330px] tablet:max-w-sm laptop:max-w-sm tablet:mx-auto laptop:mx-auto;
+    background: linear-gradient(97deg, #5C0364 0%, rgba(124.70, 0, 145, 0.80) 100%)
+}
+.Ad--contents{
+    @apply text-white pt-[30px] w-[172px];
+    text-transform: uppercase;
+}
+.Ad--contents h2{
+    @apply pb-[3px];
+font-size: 12px;
+font-style: normal;
+font-weight: 500;
+line-height: 125%;
+}
+.Ad--contents h3{
+    @apply pb-[13px];
+font-size: 14.5px;
+font-style: normal;
+font-weight: 700;
+line-height: 125%;
+}
+.Ad--contents button {
+    @apply py-[7px] px-[8px];
+font-size: 9px;
+font-style: normal;
+font-weight: 500;
+line-height: 125%;
+border-radius: 10px;
+text-transform: uppercase;
+border: 2px solid #FFF;
+}
+.Ad--image{
+    width: 139px;
+height: 137.334px;
+}
+.Ad--image img{
+    @apply flex-shrink-0;
+    width: 100%;
+height: 137.334px;
+}
+
+
+
+@tailwind utilities;
+
+
+.card--header .MuiCardHeader-avatar{
+    @apply mr-[9px]
+}
+.normalcard--header .MuiCardHeader-avatar, .Sponsored--header .MuiCardHeader-avatar {
+    margin-right: 10px;
+}

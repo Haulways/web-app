@@ -1,0 +1,206 @@
+@tailwind base;
+@tailwind components;
+
+/* Editor styles  */
+.tag--icon, .frame--icon, .text--icon, .music--icon{
+  @apply relative cursor-pointer
+}
+.tag--icon--text{
+  @apply absolute  top-[120%] left-[-3rem] text-[14px] font-[500] text-black w-[145px] py-[.5rem] px-[1rem] z-[50] bg-white rounded-[5px] shadow-lg 
+}
+
+.frame--icon--text{
+  @apply absolute  top-[120%] left-[-3rem] text-[14px] font-[500] text-black w-[110px] py-[.5rem] px-[.5rem] z-[50] bg-white rounded-[5px] shadow-lg 
+}
+
+.text--icon--text{
+  @apply absolute  top-[120%] left-[-3rem] text-[14px] font-[500] text-black w-[110px] py-[.5rem] px-[.5rem] z-[50] bg-white rounded-[5px] shadow-lg 
+}
+
+.music--icon--text{
+  @apply absolute  top-[120%] right-[4px] text-[14px] font-[500] text-black w-[110px] py-[.5rem] px-[.5rem] z-[50] bg-white rounded-[5px] shadow-lg 
+}
+
+
+
+
+
+
+
+
+/* Video trimmer styles  */
+.App{
+  @apply mt-[3.5rem] pb-[1rem] h-full ;
+  position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.video--duration{
+  @apply relative flex justify-center items-center text-[#000] text-[12px] font-[600] gap-x-[4px] mb-[10px]
+}
+
+.video--duration p:nth-child(1)::before {
+  content: attr(data-start);
+}
+.video--duration p:nth-child(3)::after {
+  content: attr(data-end);
+}
+  
+  .range_pack {
+    @apply relative mb-[14px] flex justify-center max-w-[340px] mx-auto;
+  }
+  
+  .image_box > input {
+    pointer-events: none;
+    position: absolute;
+    appearance: none;
+    opacity: 0;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    top: 50%;
+    background-color: transparent;
+  }
+  
+  .image_box {
+    @apply h-[52.605px] flex items-start relative w-fit;
+  }
+  .image_box--img{
+    @apply h-[52.605px] flex items-start relative w-fit overflow-hidden;
+  }
+
+  .image_box--img > img {
+    @apply h-full w-full object-cover
+  }
+  
+  .clip_box {
+    @apply absolute h-[100%];
+    transform: translateY(0%);
+  }
+  
+  
+  .clip_box_des {
+    width: 1rem;
+    height: 100%;
+    background-color: rgb(0, 0, 0);
+    position: absolute;
+    z-index: 500000;
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .clip_box_des:nth-child(1) {
+    left: 0;
+    transform: translateX(-10%);
+  }
+  .clip_box_des:nth-child(2) {
+    right: 0;
+    transform: translateX(10%);
+    flex-flow: row-reverse;
+  }
+  
+
+  
+  .range::-webkit-slider-thumb {
+    appearance: none;
+    pointer-events: all;
+    width: 10px;
+    height: 52.605px;
+    /* border-radius: 50%; */
+    /* opacity: 1; */
+    background: pink;
+    cursor: ew-resize;
+    /* z-index: 2; */
+  }
+
+  .overlay-left {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Adjust opacity here */
+    pointer-events: none; /* Allows interaction with elements beneath the overlay */
+    z-index: 1; /* Adjust z-index to control stacking order */
+  }
+  
+  .overlay-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Adjust opacity here */
+    pointer-events: none; /* Allows interaction with elements beneath the overlay */
+    z-index: 1; /* Adjust z-index to control stacking order */
+  }
+
+  .editor--video--container{
+    @apply mt-[1.5rem] rounded-[14px] overflow-hidden h-[390px] w-[340px] mx-auto mb-[2rem] relative shadow-light_black_75 shadow-md drop-shadow-md
+  }
+  .tag--video--container{
+    @apply mt-[5rem] rounded-[14px] overflow-hidden h-[390px] max-w-[340px] min-w-full mx-auto mb-[2rem] relative shadow-light_black_75 shadow-md drop-shadow-md
+  }
+  .editor--video--container  video, .tag--video--container video{
+    @apply object-cover h-full w-full
+  }
+  
+  
+  .deck {
+    width: 100%;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    flex: start;
+    margin-top: 1.4rem;
+  
+    gap: 4rem;
+  }
+  .deck > * {
+    border-radius: 5px;
+    align-items: start;
+  }
+  
+  .deck > button {
+    align-self: center;
+  }
+  
+  .grid_txt_2 {
+    display: grid;
+    gap: 1rem;
+  }
+  
+  
+  button:disabled {
+    background-color: #f4f4f4;
+    color: rgb(155, 150, 150);
+  }
+  
+  .btn {
+    padding: 1rem 2rem;
+    border-radius: 100px;
+    font-size: 1.2rem;
+  }
+  
+  .btn_g {
+    background-color: #24d34e;
+    color: #f2f2f2;
+  }
+  .btn_b {
+    background-color: #0a57fe;
+    color: #f3f3f3;
+  }
+  .bord_g_2 {
+    border: 2px solid rgb(230, 220, 220);
+  }
+  .p_2 {
+    padding: 2rem;
+  }
+  .u-center {
+    text-align: center;
+  }
+  @tailwind utilities;

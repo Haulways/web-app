@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+
+/*  ========= Header styles  starts=========== */
+.home{
+    @apply  w-full  py-3 px-[7%] z-30 mobile:px-4 absolute
+} 
+
+.home .header__nav{
+    @apply flex items-center justify-between
+}
+.home  .logo img {
+    @apply w-[7rem] mobile:w-[4rem]
+}
+
+.home .header__right ul{
+    @apply flex flex-wrap gap-x-8 gap-y-4 mobile:gap-x-2 items-center laptop:text-[18.7323px] mobile:text-[14px]
+}
+.home .header__right .signup, .signin {
+    @apply  font-[600] rounded-[16.289px] border-[2.44335px] px-[1.2rem] mobile:px-[.9rem] cursor-pointer
+}
+.home .header__right .signin{
+    @apply  border-normal_black_50  py-1 hover:bg-normal_black_75 hover:text-light_black_50 transition-all delay-75
+}
+.home .header__right .signup{
+    @apply  bg-normal_black_50 text-light_black_50  px-[.8rem] py-[.3rem] font-[500] border-none
+}
+
+
+
+
+@tailwind utilities;

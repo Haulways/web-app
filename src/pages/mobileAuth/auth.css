@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+.slide_div{
+    @apply relative w-[180px] h-[330px] mx-auto flex justify-center my-auto items-center ;
+    box-sizing: content-box;
+
+}
+.slide_img{
+    @apply h-[300px] w-[100%] block
+}
+.second_slide{
+    background: linear-gradient(180deg, #F6C492 0%, #F69292 100%)
+}
+.slide__text{
+    @apply font-[600] text-[170px]   absolute top-0 bottom-0 ;
+    top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white; 
+}
+.slide__text2{
+    @apply font-[600] text-[70px]   absolute top-0 bottom-0 ;
+    top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-text-stroke: 4px white; 
+    stroke: 4px white; 
+    color: transparent;
+}
+.mobile_sign_container form{
+    @apply px-[1rem] 
+}
+
+.mobile_sign_container form input[type="text"], .mobile_sign_container form input[type="email"], .mobile_sign_container form input[type="password"] {
+    @apply block text-[12px] font-[500] p-[.8rem] px-[1rem] mx-auto mobile:h-[51px]   w-[100%] mobile:w-[100%]  border-none  outline-none rounded-[30px]  bg-light_accent_75
+    my-[1rem] 
+}
+.mobile_sign_container form input::placeholder{
+    @apply text-[23px] mobile:text-[14px] text-normal_accent_50 opacity-70 font-medium
+}
+.mobile_sign_container .reset__form {
+    @apply mt-[1rem]
+}
+.password-input{
+    @apply relative
+}
+.password-toggle{
+    @apply absolute top-[40%] right-4
+}
+
+.mobile_sign_container form button {
+    @apply w-[100%] bg-dark_black_100 h-[51px]  text-light_accent_50 rounded-[30px] mt-1 hover:bg-light_accent_50 hover:text-dark_accent_100 font-medium transition-all delay-200 text-[14px] 
+}
+
+/* google sign up  */
+.mobile_sign_container .google__link {
+    @apply flex my-4 text-center mx-auto justify-center  items-center bg-light_accent_100 h-[51px]  tablet:w-[100%]  rounded-[30px] font-semibold  text-[12px]  text-normal_accent_50 
+}
+.mobile_sign_container .google__link .google {
+    @apply  text-[24.76px] mobile:text-[17px] my-auto mr-1 text-peach_B500
+}
+
+
+.mobile_sign_container .reset__link{
+    @apply text-[21.76px] mobile:text-[14px]  mt-[1.5rem] text-center
+}
+.mobile_sign_container .reset__link a{
+    @apply pl-[.3rem] font-semibold hover:text-peach_B500
+}
+
+.mobile_sign_container .signup__link span {
+    @apply flex justify-center gap-x-2 text-[24.55px] mobile:text-[14px] text-center mt-[.8rem] 
+}
+.signup__link span a{
+    @apply font-semibold hover:text-peach_B500
+}
+
+.mobile_sign_container .terms__link {
+    @apply text-center text-[18px] mobile:text-[11px] mt-[3rem] mobile:px-[2rem] font-medium relative 
+}
+.mobile_sign_container .reset__terms{
+    @apply mt-[8rem]
+}
+.terms__link a {
+    @apply font-bold hover:text-peach_B500 ml-1
+}
+.terms__link::after{
+    @apply content-[''] absolute  bg-light_black_100 bg-opacity-60 h-[.2rem] w-[50%] left-[25%] bottom-[-1rem] rounded-[30px]
+}
+
+.reset__links{
+    @apply flex justify-between pt-[2rem] text-[21.76px] mobile:text-[14px]
+}
+.reset__links a{
+    @apply font-medium hover:text-peach_B500
+}
+@tailwind utilities;

@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+.onboard--content h1{
+    @apply text-[36px] mt-[-60px] mb-[5px] font-[500];
+    line-height: 125%;
+}
+.onboard--content h1 span{
+    @apply block
+}
+.onboard--content p{
+    @apply text-[14px] text-[#d7d7d7] font-[500]
+}
+.startButton{
+    @apply text-[#000] fixed flex justify-center items-center bottom-[40px] mx-auto bg-[#fff] w-[60px] h-[60px] rounded-[13px] font-[500] left-0 right-0;
+    transform: rotate(-45deg);
+}
+.startButton button{
+    transform: rotate(45deg);
+}
+@tailwind utilities;
+
+.onboard--page {
+    padding: 20px;
+    height: 100vh;
+    background-color: #000;
+
+  }
+  
+  .page {
+    display: none;
+  }
+  
+  .page.active {
+    display: block;
+    color: #fff;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 62px;
+  }
+  
+  .dot {
+    height: 6px !important;
+    width: 10px !important;
+    background-color: #bbb;
+    border-radius: 10px !important;
+    display: inline-block;
+    margin: 0 2px;
+  }
+  
+  .dot.active {
+    background-color: #fff;
+    width: 35px !important;
+  }
+  
+  .nextButton {
+    color: #fff;
+    position: fixed;
+    right: 20px;
+    bottom: 40px;
+    height: 50px;
+    width: 50px;
+  }
+  .skipButton{
+    color: #fff;
+    position: fixed;
+    left: 20px;
+    bottom: 55px;
+    font-size: 18px;
+  }
+  

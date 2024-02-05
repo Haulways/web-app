@@ -1,0 +1,148 @@
+@tailwind base;
+@tailwind components;
+
+.chatShowList{
+    @apply pt-[1rem] px-[.5rem]
+}
+
+/* chatlist */
+.chatList{
+    @apply mt-[2.5rem] pb-[3rem]
+}
+.chatList .heading {
+    @apply text-[20px]  font-[600] 
+}
+
+.friends--container{
+    @apply mt-[2.5rem] 
+}
+.user--friend{
+    @apply flex gap-x-2 pb-[2rem] 
+}
+.user--friend .friend--image{
+    @apply flex-shrink-0 h-[50px] w-[50px] overflow-hidden 
+}
+.friend--image img{
+    @apply object-cover h-full w-full
+}
+.friend--info{
+    @apply w-full  h-fit relative font-[600]
+}
+.friend--info h3{
+    @apply  text-[16px] 
+}
+.short--message{
+    @apply text-[14px] w-[90%];
+    display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.message--time{
+    @apply absolute top-0 right-1 text-[14px] 
+}
+.number--of--message{
+    @apply absolute text-[14px] bottom-0 right-1 bg-black text-white w-[20px] h-[20px] rounded-full flex items-center justify-center
+}
+
+/* chat show page  */
+.friend--online{
+    @apply flex items-center gap-x-2 pt-[.2rem] pl-[1.5rem] font-[700] 
+}
+.friend--avatar{
+    @apply w-[50px] h-[50px] flex-shrink-0 overflow-hidden
+}
+.friend--avatar img{
+    @apply object-cover h-full w-full
+}
+.friend--name h2{
+    @apply text-[16px] leading-none
+}
+.friend--name p{
+    @apply text-[12px] w-[45px] inline-block 
+}
+
+.messages--container{
+    @apply mt-[4rem]  pb-[3rem]
+}
+.friend--message{
+    @apply flex gap-x-4 mb-[2rem]
+}
+.friend--message--image, .user--message--image{
+    @apply flex-shrink-0 
+}
+.friend--message--image img, .user--message--image img{
+    @apply object-cover h-full w-full
+}
+.message--body{
+    @apply  p-[.6rem] pb-[4px] rounded-tr-[10px] rounded-bl-[10px] text-[12px]
+}
+.message--body p{
+    @apply  font-[600]
+}
+.user--message{
+    @apply flex justify-end gap-x-4 mb-[2rem]
+}
+.user--message--body{
+    @apply  p-[.6rem] pb-[4px] rounded-tl-[10px] rounded-br-[10px] text-[12px] 
+}
+.user--message--body p{
+    @apply  font-[600]
+}
+.share_files li{
+    @apply mb-[.5rem] cursor-pointer 
+}
+.create--chat--box{
+    @apply fixed h-[85px] bottom-[-.2rem] w-full pt-[.7rem] pb-5 z-[3000]
+}
+.create--chat--box .chatBox{
+    @apply flex items-center justify-center w-full gap-x-4
+}
+.chatBox textarea{
+    @apply w-[70%] py-[.5rem] px-[.5rem] font-[500] placeholder:text-[#333] bg-[#D7D7D7] outline-none rounded-full text-[#333];
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.hidden {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  
+  .visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .upload-progress-bar {
+    position: absolute;
+    z-index: 3000;
+    margin: auto auto;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 50px;
+    height: 50px;
+
+   }
+ 
+  /* .media-item{
+    @apply  my-auto
+  } */
+  .media-item img, .media-item video{
+    @apply w-[140px] h-[140px] rounded-[10px] 
+  }
+  /* .lastOverlay {
+    position: absolute;
+    bottom: 0;
+    right: 70px;
+    height: 70px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+  } */
+  
+@tailwind utilities;

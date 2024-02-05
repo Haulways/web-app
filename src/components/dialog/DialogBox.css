@@ -1,0 +1,259 @@
+@tailwind base;
+@tailwind components;
+.close__btn{
+  @apply absolute left-4 top-3 text-white bg-black bg-opacity-25 rounded-full w-[45px] h-[45px] hover:bg-opacity-50 transition-all delay-200 ease-in-out
+}
+.brand__name{
+  @apply   rounded-full w-[50px] h-[50px] flex-shrink-0  flex items-center justify-center  drop-shadow-lg overflow-hidden
+}
+.brand__name img{
+  @apply w-full h-full object-cover
+}
+ .comment__icon{
+  @apply text-white w-[40px] h-[40px] 
+}
+ .likeMe{
+  @apply  w-[15px] h-[15px] text-white absolute top-0 bottom-0 left-0 right-0 my-auto mx-auto cursor-pointer font-[600]
+}
+.likeImg1{
+  @apply relative invert w-[25px] h-[25px] flex-shrink-0 object-cover
+}
+.comment-modal-container span div{
+  @apply text-[12px]
+}
+.User__comments{
+  @apply flex gap-x-4 mb-[1rem]
+}
+.comment__details{
+  @apply flex flex-col 
+}
+.comment__name{
+  @apply text-[12px] font-[400]
+}
+.comment__text{
+  @apply font-[400] text-[15px]
+}
+
+/* comment box  */
+.Showcomment__box .commentInput{
+  @apply w-[100%] bg-black bg-opacity-40 text-white placeholder:text-white rounded-full py-4 px-4 pr-[3rem] outline-none relative text-[14px] font-[400]
+}
+.Showcomment__box button{
+  @apply absolute right-4 flex-shrink-0
+}
+.Showcomment__box button img {
+  @apply w-[28.82px] h-[27.32px] flex-shrink-0
+}
+
+.showCard{
+  @apply absolute bottom-[4.7rem] px-[1rem] flex  gap-x-4 overflow-x-scroll w-screen py-[.5rem] mx-auto
+}
+
+/* Catalogue  */
+.catalogue{
+  @apply absolute top-[19%] right-[1rem]
+}
+
+
+
+/* Purchase box */
+.product__details--Top{
+  @apply flex pt-[1rem] px-2 items-center
+}
+.product__details--Top .product--price{
+  @apply text-center font-[700] text-[20px] mx-auto
+}
+
+.product__details--Middle{
+  @apply pt-[1rem] pb-[2rem] flex items-center  px-[.5rem]
+}
+.product__details--Middle .brand--name{
+  @apply font-[600] text-[18px] 
+}
+.product__details--Middle .product--socials{
+  @apply flex items-center ml-auto gap-x-2
+}
+.product--socials .share{
+  @apply h-[14px] w-[28px]
+}
+.product--socials .fb-ig{
+  @apply h-[28px] w-[28px]
+}
+
+.product__details--MiddleText{
+  @apply font-[600] text-[14px]  pb-[6rem] px-[.5rem]
+}
+
+.product__details--Bottom {
+  @apply bg-black text-white w-full py-[1rem] rounded-[20px] flex items-center justify-center text-[14px] font-[500]
+}
+
+/* payment  */
+.paymet__details--close{
+  @apply pt-[.5rem] pl-[.5rem] w-[50px]
+}
+.payment__details{
+  @apply pt-[2rem] px-[1rem] w-[100%]
+}
+.payment__details--Top h2{
+  @apply  text-[16px] font-[600]
+}
+.payment__details--Top{
+  @apply pb-[.8rem]
+}
+.payment__details--Top .sold--by{
+  @apply flex gap-x-1  font-[500] text-[12px] pt-[.5rem]
+}
+/* delivery location */
+ .delivery--location{
+  @apply  font-[600] text-[16px] 
+}
+.location{
+  @apply flex items-center pt-[.8rem] justify-between cursor-pointer
+}
+.location--name{
+  @apply flex gap-x-3 items-center
+}
+.location--name span h3{
+  @apply  font-[600] text-[14px] leading-none
+}
+.location--name span p{
+  @apply text-[#828282] font-[600] text-[12px]
+}
+/* payment method */
+.payment--method{
+  @apply pt-[1rem]
+}
+.payment--method h2{
+  @apply  font-[600] text-[18px] 
+}
+.payment--method .form--details{
+  @apply flex items-center pb-[.5rem] justify-between
+}
+.form--details label{
+  @apply font-[500]  text-[14px]
+}
+.payment--system--name{
+  @apply flex items-center gap-x-6
+}
+/* Shipping */
+.free--shipping{
+  @apply pt-[1rem]
+}
+.free--shipping span {
+  @apply flex gap-x-3 items-center
+}
+.free--shipping h2{
+  @apply text-[16px] font-[600] 
+}
+.free--shipping p{
+  @apply pt-[.3rem] text-[12px] font-[500] 
+}
+/* Order history */
+.order--info{
+  @apply pt-[1rem] text-[12px]
+}
+.order--info h2{
+  @apply font-[600] text-[16px]  pb-[.8rem]
+}
+.order--summation{
+  @apply flex items-center justify-between pb-[.5rem]
+}
+.sum--name{
+  @apply font-[600] text-[#828282]
+}
+.sum--digit{
+  @apply font-[600] 
+}
+/* product__details--Bottom */
+.product__details--Bottom{
+  @apply mt-[1rem] cursor-pointer text-[14px]
+}
+
+/* processing payment */
+.processing{
+  @apply flex items-center justify-center flex-col py-[5rem] px-[1rem] text-center gap-y-2   font-[500]
+}
+.processing h2{
+  @apply text-[28px] font-[600]
+}
+.processing p, .completed p{
+  @apply text-[14px]
+}
+
+/* Completed */
+.completed{
+  @apply flex flex-col items-center justify-center pt-[3rem] pb-[5rem] px-[1rem] text-center gap-y-2   font-[500]
+}
+.completed h2{
+  @apply text-[28px] font-[600]
+}
+.thank--you p{
+  @apply font-[500] text-[14px]  pb-[1rem] text-center
+}
+
+.product__details--Bottom {
+  @apply bg-black text-white w-full h-[58px] rounded-[20px] flex items-center justify-center text-[14px] font-[500]
+}
+
+/* payment  */
+
+@tailwind utilities;
+
+.comment-modal-container span div .User__comments .comment__text{
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+
+.Right-modal-container {
+    display: flex;
+    row-gap: 1rem;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    color: #fff;
+    position: absolute;
+    bottom: 35%;
+    right: 1.5rem;
+  }
+
+  .comment-modal-container{
+    background-color: none;
+    width: 70%;
+    height: 110px;
+    overflow-y: scroll;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    position: absolute;
+    bottom: 12rem;
+    left: 1rem;
+  }
+
+.Showcomment__box{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: none;
+    color: #fff;
+    position: absolute;
+    margin: 0 auto;
+    bottom: 2%;
+    left: 0;
+    right: 0;
+    width: 80%;
+}
+.comment-modal-container span div .User__comments .comment__text::-webkit-scrollbar, .showCard::-webkit-scrollbar, .comment-modal-container::-webkit-scrollbar, .Showcomment__box .commentInput::-webkit-scrollbar {
+    width: 0px; /* Adjust the width as needed */
+    height: 0px;
+}
+.comment-modal-container span div .User__comments .comment__text::-webkit-scrollbar-track, .showCard::-webkit-scrollbar-track, .comment-modal-container::-webkit-scrollbar-track, .Showcomment__box .commentInput::-webkit-scrollbar-track {
+    background-color: none;
+}
+.comment-modal-container span div .User__comments .comment__text::-webkit-scrollbar-thumb, .showCard::-webkit-scrollbar-thumb, .comment-modal-container::-webkit-scrollbar-thumb, .Showcomment__box .commentInput::-webkit-scrollbar-thumb {
+    background-color: none;
+}
+

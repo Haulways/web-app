@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+
+.hauls--first--page{
+    @apply bg-[#222222] relative w-screen m-[-8px] h-fit pb-[10rem]
+}
+
+.back--icon{
+    @apply absolute top-[20px] left-[20px]
+}
+.hauls--header{
+    @apply mt-[2.5rem] flex justify-center
+}
+
+.hauls--bg--img{
+    @apply mt-[24px] relative;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.slider--icon{
+    @apply  absolute top-[50%] right-[1rem] translate-y-[15%] z-50
+}
+@tailwind utilities;
+

@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+/* Stat styling */
+.Doughnut{
+    @apply h-[100px] w-[100px]
+}
+
+.dot{
+    @apply h-[8px] w-[8px] rounded-[50%] flex-shrink-0 mt-[2px]
+}
+.stat-value{
+    @apply text-[12px] font-[600] mb-[2px]
+}
+.stat-label{
+    @apply text-[9px]  font-[500]
+}
+.stat-change{
+    @apply text-[10px] font-[500] mb-[2px]
+}
+
+/* Total views  */
+.totalViews--container{
+    @apply min-w-[180px] p-[10px] bg-[#1748C5] rounded-[6px] text-white;
+    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.1), 2px 0px 2px 0px rgba(0, 0, 0, 0.019);
+}
+.partners--container{
+    @apply min-w-[180px] p-[10px] rounded-[6px] ;
+    /* box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.1), 2px 0px 2px 0px rgba(0, 0, 0, 0.019); */
+}
+.views--top{
+    @apply flex justify-between items-center mb-[18px]
+}
+.views--top h2{
+    @apply text-white font-[600] text-[12px] mb-[6px]
+}
+.views--top p{
+    @apply font-[500] text-[10px]
+}
+
+.partner--top{
+    @apply flex justify-between items-center mb-[18px]
+}
+.partner--top h2{
+    @apply  font-[600] text-[12px] mb-[6px]
+}
+.partner--top p{
+    @apply font-[500] text-[10px]
+}
+
+/* .App1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  } */
+  
+  
+  
+@tailwind utilities;
+

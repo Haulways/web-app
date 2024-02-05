@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+
+/* ==========SIGNIN STYLINGS STARTS========== */
+.auth__container{
+    @apply h-full overflow-hidden pt-[5rem] mobile:pt-[3rem]
+}
+.background__overlay{
+    @apply w-full h-[1200px] mobile:h-[1000px] absolute top-0 z-40;
+    background: rgba(0, 0, 0, 0.60);
+    backdrop-filter: blur(2px);
+}
+
+.SignIn__container{
+    @apply bg-white relative laptop:w-[650px] tablet:w-[70%] mobile:w-[90%] mx-auto h-full  z-40 rounded-[20px] mobile:rounded-[15px] p-[2rem] mobile:px-[0px] max-w-full 
+}
+
+.SignIn__container .close__icon{
+    @apply absolute right-[3rem] top-[3rem] mobile:top-4 mobile:right-4 tablet:top-[2rem] mobile:w-[2rem]
+}
+
+.SignIn__container .profileImg{
+    @apply w-[3.5rem] h-[3.5rem]  rounded-[50%] object-cover absolute top-[1rem] left-[1rem] cursor-pointer
+}
+
+.SignIn__container label .icon{
+    @apply  absolute top-[3.5rem] text-[#666] left-[3.5rem]
+}
+
+.SignIn__container .logo{
+    @apply laptop:pt-[6rem] mobile:mt-[0rem]  mx-auto flex items-center justify-center tablet:mt-[7rem]
+}
+.SignIn__container .logo img{
+    @apply  mobile:w-[100px]
+}
+.SignIn__container form{
+    @apply mt-[3rem] px-[3rem] mobile:px-[2rem] 
+}
+.SignIn__container form input[type="text"], .SignIn__container form input[type="email"], .SignIn__container form input[type="password"] {
+    @apply block text-[20px] mobile:text-[14px] font-[500] p-[.8rem] mx-auto h-[100px] mobile:h-[61px]   w-[100%] mobile:w-[100%]  border-none  outline-none rounded-[15px] mobile:rounded-[15px]  bg-light_accent_75
+    my-[1.3rem] 
+}
+.SignIn__container form input::placeholder{
+    @apply text-[23px] mobile:text-[14px] text-normal_accent_50 opacity-70 font-medium
+}
+.SignIn__container .reset__form {
+    @apply mt-[1rem]
+}
+.password-input{
+    @apply relative
+}
+.password-toggle{
+    @apply absolute top-[40%] right-4
+}
+
+.SignIn__container form button {
+    @apply w-[100%] bg-dark_black_100  h-[100px] mobile:h-[61px]  text-light_accent_50 rounded-[15px] mobile:rounded-[15px] mt-4 hover:bg-light_accent_50 hover:text-dark_accent_100 font-medium transition-all delay-200 text-[23px] mobile:text-[14px] 
+}
+/* google sign up  */
+.SignIn__container .google__link {
+    @apply flex my-4 text-center mx-auto justify-center  items-center bg-light_accent_100 h-[90px] mobile:h-[61px] mobile:rounded-[15px] tablet:w-[100%]  rounded-[15px] font-semibold text-[23px] mobile:text-[14px] laptop:w-[100%] text-normal_accent_50 
+}
+.SignIn__container .google__link .google {
+    @apply  text-[24.76px] mobile:text-[17px] my-auto mr-1 text-peach_B500
+}
+
+
+.SignIn__container .reset__link{
+    @apply text-[21.76px] mobile:text-[14px]  mt-[1.5rem] text-center
+}
+.SignIn__container .reset__link a{
+    @apply pl-[.3rem] font-semibold hover:text-peach_B500
+}
+
+.SignIn__container .signup__link span {
+    @apply flex justify-center gap-x-2 text-[24.55px] mobile:text-[14px] text-center mt-[.8rem] 
+}
+.signup__link span a{
+    @apply font-semibold hover:text-peach_B500
+}
+
+.SignIn__container .terms__link {
+    @apply text-center text-[18px] mobile:text-[11px] mt-[3rem] mobile:px-[2rem] font-medium relative 
+}
+.SignIn__container .reset__terms{
+    @apply mt-[8rem]
+}
+.terms__link a {
+    @apply font-bold hover:text-peach_B500 ml-1
+}
+.terms__link::after{
+    @apply content-[''] absolute  bg-light_black_100 bg-opacity-60 h-[.2rem] w-[50%] left-[25%] bottom-[-1rem] rounded-[30px]
+}
+
+.reset__links{
+    @apply flex justify-between pt-[2rem] text-[21.76px] mobile:text-[14px]
+}
+.reset__links a{
+    @apply font-medium hover:text-peach_B500
+}
+/* ==========SIGNIN STYLINGS ENDS========== */
+
+@tailwind utilities;
+
+.SignIn__container{
+background: #FFFFFF;
+box-shadow: 0px 5px 4px rgba(0, 0, 0, 0.25);
+-webkit-box-shadow: 0px 5px 4px rgba(201, 201, 201, 0.25);
+}
+
+
+
+/* Responsiveness */
+@media (max-width: 800px) and (min-width: 641px){
+    .SignIn__container{
+        width: 90%;
+    }
+}
+
+/* Responsiveness */
+@media (max-width: 400px){
+    .SignIn__container{
+        width: 95%;
+    }
+}

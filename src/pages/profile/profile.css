@@ -1,0 +1,185 @@
+@tailwind base;
+@tailwind components;
+
+/* ====PROFILE PAGE STYLING ======= */
+
+
+.profile__body{
+     @apply laptop:px-[9%]  tablet:px-[2rem]
+}
+.profile__body .user__info{
+     @apply flex flex-col items-center justify-center pt-[2rem] mobile:pt-[1rem]
+}
+.user__info .user__image, .user__info .user__image1{
+     @apply w-[120px] h-[120px] mobile:h-[120px] mobile:w-[120px] overflow-hidden relative rounded-full;
+}
+.uImage--container{
+     @apply relative 
+}
+.profile--editBtn{
+     @apply absolute top-[70%] right-[0] w-[30px] h-[30px] rounded-full
+}
+
+.user__info .user__image img, .user__info .user__image1 img{
+     @apply w-full h-full flex-shrink-0 object-cover;
+}
+.user__info .user__image .editButton{
+     @apply text-white p-[.2rem] bg-black rounded-full w-[2.1rem] h-[2.1rem]  cursor-pointer absolute z-20 bottom-0 right-0
+}
+.bio{
+     @apply text-[1.2rem] mobile:text-[15px] w-[30%] mobile:w-[80%] font-[500] text-center py-[2rem] 
+}
+.account--text{
+     @apply  w-[99.5%];
+     display: -webkit-box;
+   -webkit-line-clamp: 1;
+   -webkit-box-orient: vertical;
+   overflow-y: hidden;
+ }
+
+/* Spinner  */
+.spinner{
+     @apply flex flex-col justify-center items-center h-screen
+}
+
+.user__info .display__name{
+     @apply mt-[1rem] text-[34px] font-[600] mobile:text-[20px]
+}
+.user__info .username{
+     @apply text-[24px] text-[#7a7a7a] mobile:text-[16px]
+}
+.user__info .user__followers{
+     @apply flex items-center text-[22px] gap-x-4 font-[500] mt-[20px] flex-shrink-0
+}
+.profile__body .user__links{
+     @apply  text-[24px] font-[600]
+}
+.profile__body .user__links li{
+     @apply relative mobile:text-[16px] mx-[5px]
+}
+.profile__body .user__links li a{
+     @apply  flex gap-x-3 items-center
+}
+.profile__body .user__links li .active{
+     @apply w-fit rounded-full px-[20px] py-1 shadow-lg 
+}
+
+
+.settings__dots{
+     @apply laptop:hidden tablet:hidden
+}
+.settings__dots .profileSetting{
+     @apply text-[35px]
+}
+.settings__dots button{
+     @apply absolute top-[1rem] right-[1rem] 
+}
+ .user__dropdown{
+     @apply laptop:max-w-[460px] mx-auto flex flex-col font-[600]     w-[100%] right-0  z-50  pb-[8rem] px-[1rem]
+ }
+  .user__dropdown li{
+     @apply flex flex-shrink-0   items-center my-[.5rem]
+ }
+  .user__dropdown .settings{
+     @apply mb-[3rem] mt-[1.5rem]
+ }
+ .user__dropdown li > *{
+     @apply flex-shrink-0 object-contain
+ }
+
+ /* Personal info */
+.personalInfo{
+     @apply my-[4rem]  mobile:w-full shadow-xl p-[2rem] pr-[4rem] laptop:w-[70%] mobile:p-[1rem] mobile:mb-[5rem]
+}
+.personalInfo h2{
+     @apply text-[2rem] font-[600] mb-[2rem] mobile:text-[20px]
+}
+.personalInfo .information_box{
+     @apply flex flex-col gap-y-8 pl-[2rem] mobile:pl-0 w-full
+}
+.information_box li{
+     @apply flex gap-x-4 items-center
+}
+.information_box .icon{
+     @apply text-[2rem] text-[#666]
+}
+.information_box .title{
+     @apply font-[600] text-[22px] mobile:text-[17px]
+}
+.information_box .info{
+     @apply  text-black mobile:text-[14px] font-[500]
+}
+/* Edit Profile info */
+.right form .formInput{
+     @apply mt-[1rem] relative text-left
+}
+.right form .formInput label{
+     @apply text-[1.2rem] font-[500] text-black mobile:text-[16px]
+}
+.right form .formInput input{
+     @apply w-full border-2 border-[#666] p-4 text-[1.1rem] mobile:text-[14px] rounded-[10px] my-[.5rem] outline-none relative text-black
+}
+.right form .formInput .password-toggle{
+     @apply absolute top-[55%] right-4
+}
+.right form .formInput textarea{
+     @apply w-full border-2 border-[#666] p-4 rounded-[10px] my-[.5rem] resize-none text-black mobile:text-[14px] placeholder:mobile:text-[14px]
+}
+.right form .updateButton{
+     @apply w-full mt-[2rem] text-[1.3rem] mobile:text-[14px] bg-black text-white p-4 cursor-pointer rounded font-[600] hover:scale-75 transition-all ease-in-out delay-200
+}
+.right form .formInput select{
+     @apply  w-full border-2 border-[#666] p-4 text-[1.1rem] mobile:text-[14px] rounded-[10px] my-[.5rem] outline-none relative text-black
+}
+
+/* saved post  */
+.saved__post__container{
+     @apply columns-3 tablet:columns-2 mobile:columns-2 gap-[20px]  my-0 mx-auto justify-center items-center mobile:flex flex-wrap
+}
+.saved__post__container .file__container{
+     @apply break-inside-avoid  mobile:w-[100px] mobile:h-[100px] overflow-hidden relative mb-[20px] 
+}
+.file__container span img {
+     @apply absolute top-4 left-2 mobile:w-[20px] w-[20px] cursor-pointer z-30
+}
+.saved__post__container .file__container a img, .file__container a video{
+     @apply w-full h-full flex-shrink-0 object-cover 
+}
+.no__post__available{
+     @apply flex items-center justify-center mx-auto my-auto h-[100px] font-[500] text-[18px] w-full
+}
+/* orderhistory Profile section */
+.order__history{
+     @apply flex justify-between items-center my-[3rem] mobile:flex-wrap gap-y-4 mobile:justify-center
+}
+.order__history .right__container{
+     @apply flex items-center gap-x-[1.5rem] 
+}
+.order__history .img__container{
+     @apply w-[211.81px] h-[225.15px] rounded-tl-[49px] rounded-br-[49px] overflow-hidden 
+}
+.order__history .img__container img{
+     @apply w-full h-full flex-shrink-0 object-cover
+}
+.order__history .order__info h2{
+     @apply  text-[33px] font-[600] mobile:text-[20px]
+}
+.order__history .order__info p{
+     @apply  text-[22px] mobile:text-[14px] text-[#c6c6c6] font-[500] pb-2
+}
+.order__history .order__info img{
+     @apply cursor-pointer
+}
+
+.order__history .left__container{
+     @apply flex items-center text-[25px] font-[600]
+}
+.order__history .left__container span{
+     @apply px-[.5rem] cursor-pointer flex-shrink-0
+}
+
+
+
+
+
+@tailwind utilities;

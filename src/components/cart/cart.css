@@ -1,0 +1,167 @@
+@tailwind base;
+@tailwind components;
+
+/* cart page */
+.my--cart{
+    @apply pt-[2rem] tablet:max-w-md laptop:max-w-lg tablet:mx-auto laptop:mx-auto px-[10px]
+}
+.my--cart .header{
+    font-size: 22px;
+    font-weight: 600;
+   padding-bottom: 5px; /* 27.5px */
+}
+.my--cart .para{
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 125%; /* 15px */
+    padding-bottom: 30px;
+}
+.my--cart .brand{
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 125%; /* 23.897px */
+}
+.number--of--order{
+    color: #9F9F9F;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 125%;
+}
+
+.product--card{
+    @apply flex  px-[10px] py-[5px] justify-between w-full tablet:max-w-md laptop:max-w-lg tablet:mx-auto laptop:mx-auto;
+    border-radius: 6px;
+    border: 1px solid #D9D9D9;
+    background: #FFF;
+}
+
+.card--left{
+    @apply flex items-center gap-x-[10px]
+}
+.card--img{
+    @apply h-[70px] w-[70px] rounded-[3px] overflow-hidden flex-shrink-0
+}
+.card--img img, .card--img video{
+    @apply object-cover h-full w-full
+}
+.card--details{
+    @apply py-[3px]
+}
+.card--details h3{
+    @apply font-[600] text-[12px] leading-[125%] text-black
+}
+.card--details p{
+    @apply text-[#757575] text-[10px] font-[500] leading-[125%]
+}
+.increment--drecrement{
+    @apply pt-[14px] text-[12px] text-black font-[700] flex items-center gap-x-[10px]
+}
+
+.card--right{
+    @apply flex flex-col items-end justify-between py-[3px]
+}
+.product--price{
+    @apply text-[12px] font-[500] text-black
+}
+
+/* Payment options */
+.payment--details{
+    @apply pt-[1rem] mb-[1rem]   w-[100%] tablet:max-w-md laptop:max-w-lg tablet:mx-auto laptop:mx-auto
+  }
+  .payment--details--Top h2{
+    @apply text-black text-[16px] font-[600]
+  }
+  .payment--details--Top{
+    @apply pb-[.8rem]
+  }
+  .payment--details--Top .sold-by{
+    @apply flex gap-x-1 text-black font-[500] text-[12px] pt-[.5rem]
+  }
+  /* delivery location */
+   .delivery-location{
+    @apply  font-[600] text-[16px] text-black
+  }
+  .location-part{
+    @apply flex items-center pt-[.8rem] justify-between cursor-pointer
+  }
+  .location-name{
+    @apply flex gap-x-3 items-center
+  }
+  .location-name span h3{
+    @apply text-black font-[600] text-[13px] leading-none
+  }
+  .location-name span p{
+    @apply text-[#828282] font-[600] text-[11px]
+  }
+  /* payment method */
+  .payment-method{
+    @apply pt-[1rem]
+  }
+  .payment-method h2{
+    @apply text-black font-[600] text-[16px] pb-[.9rem]
+  }
+  .payment-method .form-details{
+    @apply flex items-center pb-[.5rem] justify-between
+  }
+  .form-details label{
+    @apply font-[500] text-black text-[14px]
+  }
+  .payment-system-name{
+    @apply flex items-center gap-x-6
+  }
+  /* Shipping */
+  .free-shipping{
+    @apply pt-[1rem]
+  }
+  .free-shipping span {
+    @apply flex gap-x-3 items-center
+  }
+  .free-shipping h2{
+    @apply text-[16px] font-[600] text-black
+  }
+  .free-shipping p{
+    @apply pt-[.3rem] text-[12px] font-[500] text-black
+  }
+  /* Order history */
+  .order-info{
+    @apply pt-[1rem] text-[12px]
+  }
+  .order-info h2{
+    @apply font-[600] text-[16px] text-black pb-[.8rem]
+  }
+  .order-summation{
+    @apply flex items-center justify-between pb-[.5rem]
+  }
+  .sum-name{
+    @apply font-[600] text-[#828282] text-[18px]
+  }
+  .sum-digit{
+    @apply font-[600] text-black
+  }
+
+  /* Action buttons */
+  .action--btns{
+    @apply flex gap-[10px] mt-[30.37px] mx-auto items-center justify-center flex-wrap
+  }
+  .update--bag{
+    @apply px-[2rem] flex items-center justify-center;
+    height: 53px;
+    border-radius: 20px;
+    border: 2px solid #000;
+    color: #000;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 125%; /* 20px */
+  }
+
+  .ckeck--out{
+    @apply px-[2rem] flex items-center justify-center;
+    height: 53px;
+    border-radius: 20px;
+    background: #000;
+    color: #FFF;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 125%; /* 20px */
+  }
+@tailwind utilities;

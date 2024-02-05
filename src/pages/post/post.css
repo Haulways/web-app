@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+/* ====SINGLE POST STYLING DESKTOP VIEW*/
+.post__header{
+    @apply tablet:px-[2rem]
+}
+.Destktop__sProducts{
+    @apply px-[9%] py-[2rem] w-full mobile:px-[1rem] mobile:hidden relative 
+}
+.Destktop__sProducts .back{
+    @apply flex-shrink-0 absolute left-[0%] h-[30px] w-[30px] top-[7%] tablet:left-[0%] invert
+}
+.Destktop__sProducts .Destktop__sProduct__container{
+    @apply border-y border-l-0 border-r-[.3rem] drop-shadow-lg border-s-0 rounded-[40px]  py-[2rem] pb-[2rem] px-[2rem] mobile:px-[1rem] flex gap-x-8 container mobile:flex-col tablet:flex-col
+}
+.Destktop__sProduct__container .sProduct__img{
+    @apply w-[409px] h-[624px] flex-shrink-0 mobile:w-full mobile:h-[500px] tablet:w-full
+}
+.Destktop__sProduct__container .sProduct__img img, .Destktop__sProduct__container .sProduct__img video{
+    @apply w-full h-full  flex-shrink-0 rounded-[15px] object-cover
+}
+
+/* Post contents text  */
+.Destktop__sProduct__container .sProduct__contents{
+    @apply w-full
+}
+.Destktop__sProduct__container .top__content{
+    @apply flex justify-between pt-[2rem] items-center
+}
+.Destktop__sProduct__container .top__content .name-followers ul{
+    @apply flex items-center gap-x-3
+}
+.Destktop__sProduct__container .top__content .name-followers ul li:nth-child(2){
+    @apply flex flex-col justify-center leading-[1.2]
+}
+.Destktop__sProduct__container .top__content .name-followers ul li:nth-child(2) .userName{
+    @apply font-[700] text-[20px]
+}
+.Destktop__sProduct__container .top__content .name-followers ul li:nth-child(2) .follower{
+    @apply  text-[18px] font-[500]
+}
+.Destktop__sProduct__container .top__content .name-followers ul .initials img{
+    @apply w-[100%] h-[100%] object-cover
+}
+.Destktop__sProduct__container .top__content .name-followers ul .initials{
+    @apply w-[50px] h-[50px] rounded-[50%] flex-shrink-0  flex items-center justify-center  drop-shadow-lg overflow-hidden
+}
+
+.Destktop__sProduct__container .top__content .follow-cart ul{
+    @apply flex items-center gap-x-[2rem]
+}
+.Destktop__sProduct__container .top__content .follow-cart ul .follow{
+    @apply bg-black text-white text-[16px] font-medium px-4 py-[.6rem] rounded-[14.4px] cursor-pointer 
+}
+.Destktop__sProduct__container .top__content .follow-cart ul .cart{
+    @apply flex-shrink-0 cursor-pointer
+}
+
+/* middle contents  */
+.Destktop__sProduct__container .middle__content{
+    @apply pt-[6rem]
+}
+.Destktop__sProduct__container .middle__content ul{
+    @apply flex justify-between items-center
+}
+.Destktop__sProduct__container .middle__content ul .userName{
+    @apply font-[700] text-[20px]
+}
+.Destktop__sProduct__container .middle__content ul .socials__icons ul{
+    @apply gap-x-5
+}
+.Destktop__sProduct__container .middle__content .post__body{
+    @apply py-[1rem] text-[17px] font-[400]
+}
+.Destktop__sProduct__container .middle__content .post__likes{
+    @apply flex justify-between pt-[.5rem] font-[600] items-center
+}
+.Destktop__sProduct__container .middle__content .post__likes .comment__likes{
+    @apply flex gap-x-4 text-[17px] font-[600]
+}
+.Destktop__sProduct__container .post__likes .comment__likes .comment__left1{
+    @apply flex gap-x-2 
+}
+.Destktop__sProduct__container .post__likes .comment__likes .comment__left1 li:nth-child(1){
+    @apply relative flex-shrink-0 object-cover
+}
+.Destktop__sProduct__container .post__likes .comment__likes .comment__left1 li:nth-child(1) .likeImg{
+    @apply relative w-[2.7rem] flex-shrink-0 object-cover
+}
+.Destktop__sProduct__container .post__likes .comment__likes .comment__left1 li:nth-child(1) .like{
+    @apply absolute top-0 bottom-0 left-0 right-0 my-auto mx-auto cursor-pointer
+}
+.Destktop__sProduct__container .post__likes .comment__likes .comment__left1 li:nth-child(2){
+    @apply flex gap-x-1
+}
+.Destktop__sProduct__container .post__likes .comment__likes .comment__left2{
+    @apply  gap-x-2
+}
+.addToCartBtn{
+    @apply border-black border-[2px] rounded-[10px] text-black
+}
+.Destktop__sProduct__container .post__likes .comment__icons{
+    @apply text-[3rem] cursor-pointer
+}
+.Destktop__sProduct__container .post__likes .comment__icons.add{
+    @apply text-[3.8rem] 
+}
+
+/* Bottom/comment section */
+.Destktop__sProduct__container .post__bottom__section{
+    @apply laptop:mt-[15%] mobile:mt-[20%] tablet:mt-[10%]  justify-center items-center
+}
+
+
+
+@tailwind utilities;
+
+
+@media (max-width:1300px) and (min-width:1024px) {
+    .Destktop__sProduct__container .top__content .follow-cart ul, .Destktop__sProduct__container .top__content, .Destktop__sProduct__container .top__content, .middle__content .post__likes{
+        flex-wrap: wrap;
+        row-gap: 2rem;
+    }
+}

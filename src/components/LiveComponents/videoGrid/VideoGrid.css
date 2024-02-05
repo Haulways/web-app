@@ -1,0 +1,23 @@
+.video-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two columns for two tiles in a row */
+    gap: 10px; /* Adjust as needed */
+    height: 100vh;
+    background-color: #222;
+    padding: 10px 5px 10px;
+    /* background-color: #222; Full height of the viewport */
+  }
+  
+  .video-tile {
+    border: 1px solid rgba(204, 204, 204, 0.397);
+    /* padding: 10px; */
+  border-radius: 15px;
+  text-align: center;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .active-video-tile{
+    border: 3px solid rgba(0, 175, 15, 0.8)
+  }

@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+/* Search cards */
+.search--card{
+    @apply w-[120px] h-[120px] rounded-[6px] overflow-hidden flex-shrink-0
+}
+.search--card img{
+    @apply object-cover h-full w-full
+}
+
+.searched--result{
+    @apply flex justify-between items-center mt-[20px] mb-[10px] tablet:max-w-md laptop:max-w-lg tablet:mx-auto laptop:mx-auto mx-auto
+}
+.seached-text h2{
+    @apply font-[600]  text-[14px];
+    line-height: 125%;
+}
+.seached-text span{
+    @apply  text-[12px] font-[500];
+    line-height: 125%;
+}
+.view--all{
+    @apply px-[5px];
+    border-radius: 15px;
+background: #E3E3E3;
+}
+.search__card--container{
+    @apply flex gap-x-[10px] overflow-x-scroll max-w-[90vw] tablet:max-w-md laptop:max-w-lg tablet:mx-auto mx-auto
+}
+
+.general.search--box{
+    @apply tablet:max-w-xl laptop:max-w-xl w-[100%] h-[45px] bg-[#D7D7D7] rounded-[30px] relative flex items-center pl-[2.7rem] pr-[1rem] justify-center py-[.5rem]
+}
+.general.search--box img {
+    @apply absolute top-[50%] left-[1rem] translate-y-[-50%]
+}
+.general.search--box .search--input {
+    @apply relative bg-[#d7d7d7] text-[#7A7A7A] placeholder:text-[#7A7A7A] placeholder:font-[600] outline-none w-full text-[14px] font-semibold
+}
+
+/* Search page */
+.search--page{
+    @apply pt-[1rem]  mx-auto
+}
+.searched{
+    @apply pb-[5rem] pt-[5px]
+}
+.Ads{
+    @apply tablet:mx-auto laptop:mx-auto
+}
+ /* stacked contents */
+ .stacked--contents{
+    @apply flex w-full overflow-x-scroll gap-x-4 my-[20px] tablet:max-w-md laptop:max-w-md  tablet:mx-auto laptop:mx-auto max-w-[90vw] mx-auto
+  }
+@tailwind utilities;
