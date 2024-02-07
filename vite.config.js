@@ -15,7 +15,7 @@ export default defineConfig({
 	},
 	build: {
 		rollupOptions: {
-			external: "@cloudinary/url-gen",
+			external: ["@cloudinary/url-gen"],
 		},
 	},
 });
