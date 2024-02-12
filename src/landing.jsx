@@ -23,6 +23,7 @@ const supabase = createClient(
 );
 import { motion, useInView } from "framer-motion"
 import { container, item } from "./components/framer_utils";
+import TabbedGridSection from "./components/sections/tabbedGridSection";
 
 
 const Landing = () => {
@@ -656,7 +657,8 @@ const Landing = () => {
               </p>
               {/* <a href="#menu" class="button get-started bd_radius">Get Started</a> */}
             </div>
-            <div className="about__img__section " style={{ width: 'calc(100%)' }}><Splide
+            <div className="about__img__section " style={{ width: 'calc(100%)' }}>
+              <Splide
               options={{ rewind: true, autoplay: false, arrows: false, pagination: false }}
               aria-label="Haulway"
             >
@@ -1187,7 +1189,11 @@ const Landing = () => {
             ]}
           />
 
-        </section>
+        </section> 
+        {/*========== SERVICES ==========*/}
+        {/* <TabbedGridSection data={{subtitle: 'Great Ideas. Great Companies', title: 'Our Current Companies'}} /> */}
+        {/*========== SERVICES ==========*/}
+        {/* <TabbedGridSection data={{subtitle: 'Great Ideas. Great Companies', title: 'IPO and M&A Activity'}} /> */}
 
         {/*========== ABOUT ==========*/}
         <section

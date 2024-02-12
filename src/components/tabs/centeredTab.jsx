@@ -23,10 +23,11 @@ const CenteredTab = (props) => {
                 hidden={value !== index}
                 id={`simple-tabpanel-${index}`}
                 aria-labelledby={`simple-tab-${index}`}
+                style={{ width: '100%' }}
                 {...other}
             >
                 {value === index && (
-                    <Stack sx={{ p: 3, py: 0 }}>
+                    <Stack sx={{ px: 1, py: 0 }}>
                         {/* <Typography></Typography> */}
                         {children}
                     </Stack>
@@ -55,52 +56,51 @@ const CenteredTab = (props) => {
 
     return (
         <motion.div
-                        variants={container}
-                        initial="hidden"
-                        animate="visible"
-                      >
-        <Stack justifyContent={'center'} alignItems={'center'} sx={{ width: '100%', bgcolor: 'transparent' }}>
-            <Tabs value={value} onChange={handleChange} centered className="card"
-                sx={{
-                    width: 'max-content',
-                    height: 'max-content',
-                    padding: '5px',
-                    borderRadius: '30px',
-                    background: 'var(--container-color)',
-
-                    "& .Mui-selected": {
-                        background: "rgba(25, 118, 210, 0.05)",
+            variants={container}
+            initial="hidden"
+            animate="visible"
+            
+        >
+            <Stack justifyContent={'center'} alignItems={'center'} sx={{ width: '100%', bgcolor: 'transparent' }}>
+                <Tabs value={value} onChange={handleChange} centered className="card"
+                    sx={{
+                        width: 'max-content',
+                        height: 'max-content',
+                        padding: '5px',
                         borderRadius: '30px',
-                        color: '#1976d2 !important'
+                        background: 'var(--container-color)',
 
-                    },
-                    "& .MuiTab-root": {
-                        padding: '4px 12px',
-                        minHeight: '36px',
-                        textTransform: 'none',
-                        color: 'var(--text-color)',
-                        transition: 'all .2s ease-in-out'
-                    },
-                    "& .MuiTabs-indicator": {
-                        background: "transparent",
-                    }
-                }}>
+                        "& .Mui-selected": {
+                            background: "rgba(25, 118, 210, 0.05)",
+                            borderRadius: '30px',
+                            color: '#1976d2 !important'
+
+                        },
+                        "& .MuiTab-root": {
+                            padding: '4px 12px',
+                            minHeight: '36px',
+                            textTransform: 'none',
+                            color: 'var(--text-color)',
+                            transition: 'all .2s ease-in-out'
+                        },
+                        "& .MuiTabs-indicator": {
+                            background: "transparent",
+                        }
+                    }}>
+                    {_children ? (
+                        _children.map((chld, index) => {
+                            return <Tab label={_children[index]?.label} />
+                        })
+                    ) : (null)}
+                </Tabs>
                 {_children ? (
                     _children.map((chld, index) => {
-                        return <Tab label={_children[index]?.label} />
+                        return <CustomTabPanel value={value} index={index}>
+                            {chld.child}
+                        </CustomTabPanel>
                     })
                 ) : (null)}
-            </Tabs>
-            <CustomTabPanel value={value} index={0}>
-                {_children[value]?.child}
-            </CustomTabPanel>
-            <CustomTabPanel value={value} index={1}>
-                {_children[value]?.child}
-            </CustomTabPanel>
-            <CustomTabPanel value={value} index={2}>
-                {_children[value]?.child}
-            </CustomTabPanel>
-        </Stack>
+            </Stack>
         </motion.div>
     );
 }
