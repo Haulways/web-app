@@ -14,6 +14,7 @@ import { ThemeContext } from '../context/ThemeProvider';
 import { supabase } from '../../supabase/SupabaseConfig';
 import { useRefresh } from 'react-admin';
 import { toast } from 'react-toastify';
+import PostCard from '../postCard/PostCard';
 
 
 
@@ -34,6 +35,55 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
     const [show, setShow] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const [loaded, setLoaded] = React.useState(false);
+
+
+    const [inputValue, setInputValue] = React.useState('');
+    const [extractedUrls, setExtractedUrls] = React.useState([]);
+
+    function extractUrls(input, site) {
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        const urls = input.match(urlRegex);
+
+        if (!urls) return [];
+
+        const filteredUrls = urls.filter(url => url.includes(site)
+            && url.split('/')[2] === site);
+
+        const parsedUrls = filteredUrls.map(url => {
+            const urlParts = url.split('/');
+            const _table = urlParts[3];
+            const _id = urlParts[4];
+            return `${_table}:${_id}`;
+        });
+
+        return parsedUrls;
+    }
+
+
+    const handleInputChange = (message) => {
+       
+        setInputValue(message);
+        const urls = extractUrls(message, "haulway-demo-project.web.app");
+        setExtractedUrls(urls);
+    };
+
+    React.useEffect(() => {
+
+        if (message) {
+            
+            handleInputChange(message)
+        }
+
+    }, [message])
+
+    React.useEffect(() => {
+
+        if (extractedUrls) {
+            console.log(extractedUrls);
+        }
+
+    }, [extractedUrls])
+
     
 
     let gridClass = mediaFiles?.length > 1 ? "grid-cols-2" : "grid-cols-1";
@@ -74,7 +124,7 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
                         from_photoURL: currentUser.photoURL,
                         from_displayName: currentUser.displayName,
                         to_displayName: user?.displayName || conversation?.userName,
-                        
+                        attached_post_id: extractedUrls?.length > 0 ? extractedUrls[0] : null
                     }
                 ]); // replace with the actual user IDs
       
@@ -202,6 +252,8 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
         let dateString = previous.toLocaleDateString('en-US', { day: '2-digit', month: '2-digit', year: '2-digit' });
         return `${timeString} ${dateString}`;
     }
+
+    
     
     return (
         <>
@@ -247,6 +299,10 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
 
                                             {/* message from user  */}
                                             <div className='user--message--body' style={{ backgroundColor: theme === "light" ? "#e6e6e6" : "rgba(68, 68, 68, 1)", color: theme === "light" ? "#222" : "#fff", }}>
+
+                                                {message?.attached_post_id ?
+                                                    <PostCard postId={message?.attached_post_id} /> : null}
+                                                
                                                 <p>
                                                     {capitalizeFirstLetter(message?.content)}
                                                 </p>
@@ -278,6 +334,10 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
 
                                             {/* message from friend  */}
                                             <div className='message--body' style={{ backgroundColor: theme === "light" ? "#222" : "rgba(68, 68, 68, 1)", color: theme === "light" ? "#fff" : "#fff", }}>
+
+                                                {message?.attached_post_id ? 
+                                                    <PostCard postId={message?.attached_post_id} /> : null}
+
                                                 <p>
                                                     {capitalizeFirstLetter(message?.content)}
                                                 </p>
@@ -409,6 +469,8 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
                             </li>
                         </ul>
                     </div>
+
+                    
                     
                 </div>
                 {/* message box  */}

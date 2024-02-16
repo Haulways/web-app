@@ -93,7 +93,7 @@ function App() {
 								title={"Haulway"}
 								layout={MyLayout}
 								dashboard={MyDashboard}
-							  loginPage={SignIn}
+							  loginPage={LoginScreen}
 							>
 								<Resource
 									name="posts"
@@ -197,17 +197,17 @@ function App() {
 								{/* CustomRoutes  */}
 								<CustomRoutes noLayout>
 									<Route path="/" element={<Home />} />
-									<Route path="/login" element={<SignIn />} />
+									{/* <Route path="/login" element={<SignIn />} />
 									<Route path="/signup" element={<SignUp />} />
 									<Route path="/reset" element={<Reset />} />
 									<Route path="/reset-page" element={<ResetPage />} />
-									<Route path="/onboard" element={<Slider />} />
+									<Route path="/onboard" element={<Slider />} /> */}
 									{/* mobile screens */}
-									{/* <Route path="/onboard" element={<OnboardScreen />} />
+									<Route path="/onboard" element={<OnboardScreen />} />
 									<Route path="/login" element={<LoginScreen />} />
 									<Route path="/signup" element={<SignupScreen />} />
 									<Route path="/reset" element={<ResetScreen />} />
-									<Route path="/reset-page" element={<ResetScreenPage />} /> */}
+									<Route path="/reset-page" element={<ResetScreenPage />} />
 								</CustomRoutes>
 
 								<CustomRoutes>

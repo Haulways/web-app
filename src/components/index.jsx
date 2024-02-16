@@ -11,7 +11,8 @@ import JoinForm from "./LiveComponents/joinForm/JoinForm";
 import SFooter from "./dashboard/footer/SFooter";
 import CreateAd from "./createAds/CreateAd";
 import AdFooter from "../pages/ads/AdActions";
+import PostCard from "./postCard/PostCard";
 
 
 
-export {Header, DHeader, DFooter, DNavbar, Products, SavedPost, MakePost, CreatePost,  OnboardScreen, JoinForm, SFooter, CreateAd, AdFooter}
+export { Header, DHeader, DFooter, DNavbar, Products, SavedPost, MakePost, CreatePost, OnboardScreen, JoinForm, SFooter, CreateAd, AdFooter, PostCard }

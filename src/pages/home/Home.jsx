@@ -17,12 +17,12 @@ const Home = () => {
   }, [authenticated]);
 
   if (isLoading) {
-    return <Slider />;
-    // return <OnboardScreen />;
+    // return <Slider />;
+    return <OnboardScreen />;
   }
 
-  // return <OnboardScreen />;
-  return <Slider />;
+  return <OnboardScreen />;
+  // return <Slider />;
 };
 
 export default Home;

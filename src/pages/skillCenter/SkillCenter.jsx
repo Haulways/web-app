@@ -1,6 +1,6 @@
 import * as React from 'react'
 import SkillDialog from './SkillDialog'
-import { InfiniteList, Title, WithListContext, useGetList } from 'react-admin';
+import { InfiniteList, Link, Title, WithListContext, useGetList } from 'react-admin';
 import { ThemeContext } from '../../components/context/ThemeProvider';
 import { CardMedia, Skeleton } from '@mui/material';
 import { SFooter } from '../../components';
@@ -10,6 +10,7 @@ import { Splide, SplideSlide } from '@splidejs/react-splide';
 import { VideoPlay } from '../../components/videoPlayer/VideoPlayer';
 import '@splidejs/splide/dist/css/splide.min.css';
 import { supabase } from '../../supabase/SupabaseConfig';
+import { CoursesActions } from './skill/courses/CoursesActions';
 
 const SkillCenter = () => {
     const location = useLocation();
@@ -88,7 +89,7 @@ const SkillCenter = () => {
             <Title className='font-[600] text-[14px]' title='SKILL CENTER' />
             <SkillDialog open={open} handleClickOpen={handleClickOpen} />
           
-            <InfiniteList resource='courses' actions={false} title=' '
+            <InfiniteList resource='courses' actions={<CoursesActions />} title=' '
                 sx={{
                     '& .MuiToolbar-root': {
                         minHeight: '0px !important'
@@ -318,7 +319,7 @@ const CourseVideos = ({ product, isImage, mediaUrl, isReady, handleCanPlay }) =>
     return (
         <div key={product.id} className="min-w-[100px]  flex-shrink-0 " >
             <div className="min-w-[100px] h-[100px] laptop:w-[250px] laptop:h-[250px] rounded-[5.374px] overflow-hidden relative">
-             
+            <Link to={`/courses/${product.id}/show`}>
                 {isImage ? (
   
                     <img src={mediaUrl} alt='user-post' className="object-cover w-full h-full" />
@@ -349,13 +350,13 @@ const CourseVideos = ({ product, isImage, mediaUrl, isReady, handleCanPlay }) =>
                 <div className='absolute bottom-[6.34px] left-[5.93px] laptop:text-[12px] text-[6.374px] text-white'>
                     {formatFollowers(totalViews)} views
                 </div>
+            </Link>               
             </div>
             <div className='mt-[5.6px] text-[8.6px] laptop:text-[13px]'>
                 <p>Single style video</p>
                 <p>$10.00</p>
             </div>
                                                
-                            
                                              
         </div>
     );
