@@ -93,7 +93,7 @@ function App() {
 								title={"Haulway"}
 								layout={MyLayout}
 								dashboard={MyDashboard}
-								loginPage={LoginScreen}
+							  loginPage={LoginScreen}
 							>
 								<Resource
 									name="posts"

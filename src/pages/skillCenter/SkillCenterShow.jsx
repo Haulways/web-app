@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { ThemeContext } from '../../components/context/ThemeProvider';
 import { AuthContext } from '../../components/context/AuthContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { InfiniteList, WithListContext, useGetList, useRecordContext } from 'react-admin';
 import { Avatar, Dialog } from '@mui/material';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
@@ -36,6 +36,7 @@ const SkillCenterShow = () => {
     const [open, setOpen] = React.useState(false);
     const [viewsCount, setViewsCount] = React.useState(0);
     const uuid = uuidv4();
+    let navigate = useNavigate();
 
     const { data: views, total: totalViews, isLoading, error } = useGetList(
         'viewers', {filter: { video_id: record?.id }}
@@ -301,10 +302,8 @@ const SkillCenterShow = () => {
                     {/* post file container  */}
                     <div className='w-full flex-shrink-0 overflow-hidden   relative h-[250px] laptop:h-[400px] rounded-t-[10px]' >
                         {/* back icon  */}
-                        <span>
-                            <Link to={post?.categories[0] === 'posts' ? '/dashboard' : `/${post?.categories[0]}`}>
+                        <span onClick={() => navigate(-1)}>
                                 {backIcon}
-                            </Link>
                         </span>
                           
                         {/* post file  */}

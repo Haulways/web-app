@@ -103,46 +103,6 @@ const Profile = () => {
 
                     let allPosts = [];
 
-
-                    let allCollections = {general: []};
-
-                    for (let item of savedData) {
-                        if (item.coll_name === null) {
-                            allCollections.general.push(item)
-                        } else {
-                            if (Object.keys(allCollections).includes(item.coll_name)) {
-                                allCollections[item.coll_name].push(item)
-                                
-                            } else {
-                                allCollections[item.coll_name] = []
-                                allCollections[item.coll_name].push(item)
-                                
-                            }
-                        }
-                    }
-
-                    // for (let coll of Object.keys(allCollections)) {
-                    //     for (let item of savedData) {
-                    //         const tables = ['posts', 'hauls', 'lookbook', 'diy', 'grwm'];
-                    //         const fetchedData = await Promise.all(tables.map(table =>
-                    //             supabase
-                    //                 .from(table)
-                    //                 .select("*")
-                    //                 .eq("postId", item.postId)
-                    //         ));
-    
-                    //         // Check for errors in the fetched data
-                    //         fetchedData.forEach(({ error }) => {
-                    //             if (error) throw error;
-                    //         });
-    
-                    //         // Combine the data from all tables
-                    //         const combinedData = fetchedData.reduce((acc, { data }) => [...acc, ...data], []);
-                    //         allPosts.push(...combinedData);
-                    //     }
-                    // }
-
-    
                     // Fetch related data for each saved post
                     for (let item of savedData) {
                         const tables = ['posts', 'hauls', 'lookbook', 'diy', 'grwm'];
@@ -152,6 +112,7 @@ const Profile = () => {
                                 .select("*")
                                 .eq("postId", item.postId)
                         ));
+                        // console.log(fetchedData)
     
                         // Check for errors in the fetched data
                         fetchedData.forEach(({ error }) => {
@@ -161,6 +122,7 @@ const Profile = () => {
                         // Combine the data from all tables
                         const combinedData = fetchedData.reduce((acc, { data }) => [...acc, ...data], []);
                         allPosts.push(...combinedData);
+
                     }
     
                     setSavedPosts(allPosts);
@@ -169,8 +131,80 @@ const Profile = () => {
                 } finally {
                     setLoading(false);
                 }
+                
             };
-    
+
+            const fetchCollection = async () => {
+                try {
+                    setLoading(true);
+                    // Fetch the saved posts
+                    let { data: savedData, error: savedError } = await supabase
+                        .from('saved_post')
+                        .select("*")
+                        .match({ user_id: userId });
+                    if (savedError) throw savedError;
+
+
+
+
+                    let allCollections = { general: [] };
+
+                    for (let item of savedData) {
+                        if (item.coll_name === null) {
+                            allCollections.general.push(item)
+                        } else {
+                            if (Object.keys(allCollections).includes(item.coll_name)) {
+                                allCollections[item.coll_name].push(item)
+
+                            } else {
+                                allCollections[item.coll_name] = []
+                                allCollections[item.coll_name].push(item)
+
+                            }
+                        }
+                    }
+
+                    for (let coll_name of Object.keys(allCollections)) {
+                        let coll_array = []
+                        for (let coll of allCollections[coll_name]) {
+                            console.log(coll)
+                            const tables = ['posts', 'hauls', 'lookbook', 'diy', 'grwm'];
+
+                            const fetchedData = await Promise.all(tables.map(table =>
+                                supabase
+                                    .from(table)
+                                    .select("*")
+                                    .eq("postId", coll.postId)
+                            ));
+
+                            
+                            // Check for errors in the fetched data
+                            fetchedData.forEach(({ error }) => {
+                                if (error) throw error;
+                            });
+
+                            // console.log(fetchedData)
+                            // Combine the data from all tables
+                            const combinedData = fetchedData.reduce((acc, { data }) => [...acc, ...data], []);
+                            coll_array.push(...combinedData)
+                            
+                            // allCollections[coll_name] = [...combinedData];
+                        }
+                        console.log(coll_array)
+                    }
+                    
+
+                    console.log(allCollections)
+                    setCollections(allCollections);
+                } catch (e) {
+                    setError(e);
+                } finally {
+                    setLoading(false);
+                }
+
+            };
+
+            fetchCollection();
             fetchSavedPosts();
         }, [userId]);
     
@@ -179,7 +213,7 @@ const Profile = () => {
 
     const { savedPosts, loading, error } = useSavedPosts(currentUser.uid);
 
-    
+    // console.log(collections);
     
     useEffect(() => {
         getContractDoc();
