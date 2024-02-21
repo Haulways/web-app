@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import backIcon from "../../assets/hauls/backIcon.png";
 import Union from "../../assets/postImg-Icons/Union.webp";
 import { ThemeContext } from '../context/ThemeProvider';
-import PostCard from '../postCard/PostCard';
+
 
 
 
@@ -155,6 +155,7 @@ const CreatePost = ({ title, collectionName }) => {
 							</button>
 						</div>
 
+          
             
 					</div>
         )}

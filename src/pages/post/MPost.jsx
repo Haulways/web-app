@@ -4,7 +4,7 @@ import {  AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import './post.css';
 import Comments from '../../components/comments/Comments';
 import { DFooter } from '../../components';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../components/context/AuthContext';
 import { Avatar, IconButton } from '@mui/material';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
@@ -17,7 +17,6 @@ import { ShowVideoBox } from '../../components/videoPlayer/VideoPlayer';
 import cartImg from "../../assets/cart.png";
 import backIcon from "../../assets/postImg-Icons/back.png";
 import saveIcon from "../../assets/postImg-Icons/save.png";
-import shareIcon from "../../assets/socials/share.png";
 import fb from "../../assets/socials/fb.png";
 import IG from "../../assets/socials/ig.png";
 import commentIcon from "../../assets/chatlike.png";
@@ -35,6 +34,7 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
     const [isMuted, setIsMuted] = useState(true);
     const [isPlaying, setIsPlaying] = useState(true);
     const redirect = useRedirect();
+    const navigate = useNavigate();
     const { theme } = useContext(ThemeContext);
     const location = useLocation();
     const [open, setOpen] = useState(location.state?.open || false);
@@ -93,7 +93,12 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
 
 
 
+    const shareIcon = (
+        <svg width="20" height="18" style={{ filter: theme === "light" ? "invert(0)" : "invert(1)" }} viewBox="0 0 34 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M25.3065 10.668H8.63985V7.33464H25.3065V10.668ZM26.9732 0.667969H25.3065C22.5882 0.667969 20.1982 1.98797 18.6782 4.0013H26.9732C28.8115 4.0013 30.3065 5.4963 30.3065 7.33464V10.668C30.3065 12.5063 28.8115 14.0013 26.9732 14.0013H18.6782C20.1999 16.0146 22.5899 17.3346 25.3065 17.3346H26.9732C28.7413 17.3346 30.437 16.6323 31.6872 15.382C32.9375 14.1318 33.6399 12.4361 33.6399 10.668V7.33464C33.6399 5.56653 32.9375 3.87083 31.6872 2.62059C30.437 1.37035 28.7413 0.667969 26.9732 0.667969ZM0.306519 7.33464V10.668C0.306519 12.4361 1.0089 14.1318 2.25914 15.382C3.50938 16.6323 5.20508 17.3346 6.97319 17.3346H8.63985C11.3565 17.3346 13.7482 16.0146 15.2682 14.0013H6.97319C5.13485 14.0013 3.63985 12.5063 3.63985 10.668V7.33464C3.63985 5.4963 5.13485 4.0013 6.97319 4.0013H15.2682C13.7482 1.98797 11.3582 0.667969 8.63985 0.667969H6.97319C5.20508 0.667969 3.50938 1.37035 2.25914 2.62059C1.0089 3.87083 0.306519 5.56653 0.306519 7.33464Z" fill="black" />
+        </svg>
 
+    );
 
 
     const toggleMute = () => {
@@ -121,9 +126,10 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
     };
 
     const slideComment = showComment ? 'slide-in' : 'slide-out';
-
     
-
+    const goToChat = () => {
+        navigate('/chats', { state: { url: `http://haulway-demo-project.web.app${location.pathname}` } });
+    };
 
 
     const mPostCarousel = {
@@ -241,9 +247,9 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
                                 <li className='userName'>{post.name}</li>
                                 <li className='socials__icons'>
                                     <ul>
-                                        {/* <li>
-                                            <img src={shareIcon} alt='share' />
-                                        </li> */}
+                                        <li className='min-w-[25px] cursor-pointer' onClick={goToChat}>
+                                            {shareIcon}
+                                        </li>
                                         <li>
                                             <img src={fb} alt='share' />
                                         </li>
