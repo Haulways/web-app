@@ -93,7 +93,7 @@
     @apply mb-[.5rem] cursor-pointer 
 }
 .create--chat--box{
-    @apply fixed h-[85px] bottom-[-.2rem] w-full pt-[.7rem] pb-5 z-[3000]
+    @apply fixed  bottom-[-.2rem] w-full pt-[.7rem] pb-5 z-[3000]
 }
 .create--chat--box .chatBox{
     @apply flex items-center justify-center w-full gap-x-4

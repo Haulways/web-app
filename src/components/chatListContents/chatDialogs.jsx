@@ -23,9 +23,9 @@ import PostCard from '../postCard/PostCard';
 
 
   
-export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation, bottomRef, executeScroll, mediaFiles, setMediaFiles, cameraFile, setCameraFile, docFile, setDocFile, audioFile, setAudioFile }) => {
+export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation, bottomRef, executeScroll, mediaFiles, setMediaFiles, cameraFile, setCameraFile, docFile, setDocFile, audioFile, setAudioFile, sharedURL, setSharedURL }) => {
     const { theme } = React.useContext(ThemeContext);
-    const [message, setMessage] = React.useState('');
+    const [message, setMessage] = React.useState(sharedURL ? sharedURL : '');
     const [sentMessage, setSentMessage] = React.useState('');
     const refresh = useRefresh();
     const loggedInUserId = currentUser.id;
@@ -35,10 +35,30 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
     const [show, setShow] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const [loaded, setLoaded] = React.useState(false);
-
-
     const [inputValue, setInputValue] = React.useState('');
     const [extractedUrls, setExtractedUrls] = React.useState([]);
+    const textareaRef = React.useRef();
+
+    React.useEffect(() => {
+        if (textareaRef.current) {
+            textareaRef.current.style.height = 'inherit';
+            const scrollHeight = textareaRef.current.scrollHeight;
+            textareaRef.current.style.height = `${scrollHeight}px`;
+        }
+    }, [message]);
+
+    const style = message
+        ? { resize: 'none', overflow: 'auto', maxHeight: '100px', borderRadius: '10px', position: 'relative' }
+        : { resize: 'none', overflow: 'auto', maxHeight: '100px' };
+    
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            // Call your form submit function here
+            handleSubmit(e);
+        }
+    };
+
 
     function extractUrls(input, site) {
         const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -110,11 +130,12 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
         setLoading(true)
 
         if (message.trim() !== '' || filesToUpload.length > 0) {
+            const messageWithoutUrls = message.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '');
             const { error } = await supabase
                 .from('chats')
                 .insert([
                     {
-                        content: message,
+                        content: messageWithoutUrls,
                         from_id: currentUser.id,
                         to_id: user?.id || conversation?.userId,
                         created_at: new Date(),
@@ -134,6 +155,7 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
                 setMessage('');
                 refresh()
                 executeScroll();
+                setSharedURL(null);
             }
     
         }
@@ -477,8 +499,15 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
                 <div className='create--chat--box' style={{ backgroundColor: theme === "light" ? "#fff" : "#222", color: theme === "light" ? "#222" : "#fff", }}>
                     <form className='chatBox' onSubmit={handleSubmit}>
                         <AttachFileIcon onClick={() => setShow(!show)} />
-                        <textarea rows={1} style={{ resize: "none" }} value={message}
-                            onChange={(e) => { setMessage(e.target.value); setSentMessage(e.target.value) }} placeholder='Write a message' />
+                        <textarea
+                            ref={textareaRef}
+                            onKeyDown={handleKeyPress}
+                            rows={1}
+                            style={style}
+                            value={message}
+                            onChange={(e) => { setMessage(e.target.value); setSentMessage(e.target.value) }}
+                            placeholder='Write a message'
+                        />
                         <button type='submit'>
                             <img width='36' height='36' src={sendChat} className='cursor-pointer' />
                         </button>

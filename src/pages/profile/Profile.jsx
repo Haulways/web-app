@@ -3,7 +3,7 @@ import './profile.css';
 import { AuthContext } from '../../components/context/AuthContext';
 import { DFooter, MakePost, SavedPost } from '../../components';
 import {  Avatar, CircularProgress, Grid,  Skeleton,  useTheme } from '@mui/material';
-import { useDataProvider, useGetList, useRecordContext } from 'react-admin';
+import { useDataProvider, useGetList, useRecordContext, useRedirect, useRefresh } from 'react-admin';
 import divider from "../../assets/profileIcons/divider.png";
 import post from "../../assets/profileIcons/post.png";
 import AccountType from "../../assets/profileIcons/AccType.png";
@@ -18,7 +18,7 @@ import { AppBar, Box, Tab, Tabs, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import SwipeableViews from 'react-swipeable-views';
 import { RequestCard } from '../../components/card/RequestCard';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../../supabase/SupabaseConfig';
 import { InfluencerProducts, VendorProducts } from '../../components/profile/SavedPost';
 import { v4 as uuidv4 } from "uuid";
@@ -41,6 +41,11 @@ const Profile = () => {
     const { theme } = useContext(ThemeContext);
     const realtimeData = useSupabaseRealtime();
     const { data: users } = useGetList('users');
+    const [sentContract, setSentContract] = useState(null);
+    const redirect = useRedirect()
+    const refresh = useRefresh();
+    const navigate = useNavigate();
+    
     const { data: followers, total: totalFollowers, isLoading } = useGetList(
         'followers', { filter: { followed_id: userData?.uid } }
     );
@@ -186,11 +191,13 @@ const Profile = () => {
                             // console.log(fetchedData)
                             // Combine the data from all tables
                             const combinedData = fetchedData.reduce((acc, { data }) => [...acc, ...data], []);
-                            coll_array.push(...combinedData)
+                            coll_array = coll_array.concat(combinedData)
+
                             
                             // allCollections[coll_name] = [...combinedData];
                         }
-                        console.log(coll_array)
+                        allCollections[coll_name] = coll_array
+
                     }
                     
 
@@ -220,6 +227,13 @@ const Profile = () => {
         getSenderContract();
     }, [userData]);
     
+    
+    useEffect(() => {
+        if (sentContract) {
+            navigate('/contract', { state: { url: {sentContract} } });
+        }
+    }, [sentContract]);
+
 
     const follow = async () => {
         try {
@@ -477,6 +491,7 @@ const Profile = () => {
                 vendor_last_viewed: null,
                 influencer_last_updated: null,
                 vendor_last_updated: null,
+                videos: [],
                 influencer_name: (userData && currentUser && (currentUser.role === 'influencer' && currentUser.displayName) || (userData.role === 'influencer' && userData.displayName)),
                 vendor_name: (userData && currentUser && (currentUser.role === 'vendor' && currentUser.displayName) || (userData.role === 'vendor' && userData.displayName)),
                 influencer_address: null,
@@ -489,7 +504,11 @@ const Profile = () => {
             .select();
     
         if (error) throw error;
-    
+        else {
+            console.log("The contract was inserted successfully");
+        }
+        refresh();
+        setSentContract(data);
         toast.success("Contract Request sent!");
     }
     

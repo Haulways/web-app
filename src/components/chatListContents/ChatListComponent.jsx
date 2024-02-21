@@ -1,14 +1,13 @@
 import * as React from 'react';
 import { ChatShow } from './chatDialogs';
 import './chats.css'
-// import { SearchBox } from '../search/SearchBox';
-import avenueIcon from '../../assets/avenueIcon.png';
 import { AuthContext } from '../context/AuthContext';
 import search from "../../assets/searchIcon.png";
 import { ThemeContext } from '../context/ThemeProvider';
 import { supabase } from '../../supabase/SupabaseConfig';
 import { Avatar } from '@mui/material';
 import { useRefresh } from 'react-admin';
+import { useLocation } from 'react-router-dom';
 
 export const Chats = ({ messages, mediaFiles, setMediaFiles, cameraFile, setCameraFile, docFile, setDocFile, audioFile, setAudioFile }) => {
     const { theme } = React.useContext(ThemeContext);
@@ -18,12 +17,16 @@ export const Chats = ({ messages, mediaFiles, setMediaFiles, cameraFile, setCame
     const { currentUser } = React.useContext(AuthContext);
     const [input, setInput] = React.useState('');
     const [users, setUsers] = React.useState([]);
+    const location = useLocation();
     const [selectedConvs, setSelectedConvs] = React.useState([]);
     const [selectedUser, setSelectedUser] = React.useState(null);
     const [selectedConv, setSelectedConv] = React.useState(null);
+    const [sharedURL, setSharedURL] = React.useState(location?.state?.url);
     const bottomRef = React.useRef()
 
-    const executeScroll = () => bottomRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+   
+
+    const executeScroll = () => bottomRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })   
     const refresh = useRefresh();
 
 
@@ -253,7 +256,7 @@ export const Chats = ({ messages, mediaFiles, setMediaFiles, cameraFile, setCame
                                     />
                                     <p>{user.displayName}</p>
                                 </div>
-                                <ChatShow executeScroll={executeScroll} bottomRef={bottomRef} openChat={openChat} currentUser={currentUser} conversation={selectedConvs} closeChat={closeChat} user={selectedUser}  mediaFiles={mediaFiles} setMediaFiles={setMediaFiles} cameraFile={cameraFile} setCameraFile={setCameraFile} docFile={docFile} setDocFile={setDocFile} audioFile={audioFile} setAudioFile={setAudioFile} />
+                                <ChatShow setSharedURL={setSharedURL} sharedURL={sharedURL} executeScroll={executeScroll} bottomRef={bottomRef} openChat={openChat} currentUser={currentUser} conversation={selectedConvs} closeChat={closeChat} user={selectedUser}  mediaFiles={mediaFiles} setMediaFiles={setMediaFiles} cameraFile={cameraFile} setCameraFile={setCameraFile} docFile={docFile} setDocFile={setDocFile} audioFile={audioFile} setAudioFile={setAudioFile} />
                             </div>
                         ))}
                     </div>
@@ -297,7 +300,7 @@ export const Chats = ({ messages, mediaFiles, setMediaFiles, cameraFile, setCame
                                                 <p className='number--of--message'>1</p>
                                             </div>
                                         </div>
-                                        <ChatShow executeScroll={executeScroll} bottomRef={bottomRef} openChat={openChat2} conversation={selectedConvs} closeChat={closeChat2} currentUser={currentUser} user={selectedUser?.id === conversation.userId ? selectedUser : ''}  mediaFiles={mediaFiles} setMediaFiles={setMediaFiles} cameraFile={cameraFile} setCameraFile={setCameraFile} docFile={docFile} setDocFile={setDocFile} audioFile={audioFile} setAudioFile={setAudioFile} />
+                                        <ChatShow setSharedURL={setSharedURL} sharedURL={sharedURL} executeScroll={executeScroll} bottomRef={bottomRef} openChat={openChat2} conversation={selectedConvs} closeChat={closeChat2} currentUser={currentUser} user={selectedUser?.id === conversation.userId ? selectedUser : ''}  mediaFiles={mediaFiles} setMediaFiles={setMediaFiles} cameraFile={cameraFile} setCameraFile={setCameraFile} docFile={docFile} setDocFile={setDocFile} audioFile={audioFile} setAudioFile={setAudioFile} />
 
                                     
                                     </div>

@@ -160,6 +160,53 @@ export const Partnership = () => {
         setValues1({ ...values1, [name]: event.target.value });
     };
 
+    const handleSaveForm = async () => {
+        if (currentUser && currentUser.role === 'vendor') {
+            const { data, error } = await supabase
+                .from('contract')
+                .update({
+                    vendor_name: values.vendor_name,
+                    vendor_address: values.address,
+                    vendor_email: values.email,
+                    vendor_phone: values.phone,
+                    vendor_time_frame: selectedDay,
+                    vendor_unit: selectedUnit,
+                    vendor_last_updated: new Date(),
+                    agreed_at: record && ((record?.vendor_unit === record?.influencer_unit && record?.vendor_time_frame === record?.influencer_time_frame && record.vendor_unit !== null && record?.vendor_time_frame !== null) ? new Date() : null),
+                    products: [taggedData]
+                })
+                .eq('id', record.id);
+
+            if (error) {
+                console.error('Error updating contract:', error);
+            } else {
+                console.log('Contract updated:', data);
+
+            }
+        } else if (currentUser && currentUser.role === 'influencer') {
+            const { data, error } = await supabase
+                .from('contract')
+                .update({
+                    influencer_name: values1.influencer_name,
+                    influencer_address: values1.address,
+                    influencer_email: values1.email,
+                    influencer_phone: values1.phone,
+                    influencer_time_frame: selectedDay,
+                    influencer_unit: selectedUnit,
+                    influencer_last_updated: new Date(),
+                    agreed_at: record && ((record?.vendor_unit === record?.influencer_unit && record?.vendor_time_frame === record?.influencer_time_frame && record.vendor_unit !== null && record?.vendor_time_frame !== null) ? new Date() : null),
+                    videos: [taggedDataVideo]
+                })
+                .eq('id', record.id);
+
+            if (error) {
+                console.error('Error updating contract:', error);
+            } else {
+                console.log('Contract updated:', data);
+            }
+        }
+    };
+
     const checkIfAgreed = async () => {
         // First, retrieve the current record
         const { data: currentData, error: currentError } = await supabase
@@ -170,7 +217,7 @@ export const Partnership = () => {
         // If there's no error and agreed_at is not set
         if (currentData && !currentData[0].agreed_at) {
             // Check if vendor_unit equals influencer_unit and vendor_time_frame equals influencer_time_frame
-            if (record && record.vendor_unit === record.influencer_unit && record.vendor_time_frame === record.influencer_time_frame && record.products !== null && (record.influencer_time_frame && record.vendor_time_frame !== null) && (record.record.influencer_unit && record.vendor_unit !== null) ) {
+            if (record && record.vendor_unit === record.influencer_unit && record.vendor_time_frame === record.influencer_time_frame && record.products !== null && (record.influencer_time_frame !== null && record.vendor_time_frame !== null) && (record.record.influencer_unit !== null && record.vendor_unit !== null) ) {
                 // If they are equal, update agreed_at
                 const { data, error } = await supabase
                     .from('contract')
@@ -187,55 +234,12 @@ export const Partnership = () => {
     
 
     useEffect(() => {
-        checkIfAgreed();
+        if (record) {
+            checkIfAgreed();
+        }
     }, [currentUser, record]);
 
-    const handleSaveForm = async () => {
-        if (currentUser && currentUser.role === 'vendor') {
-            const { data, error } = await supabase
-                .from('contract')
-                .update({
-                    vendor_name: values.vendor_name,
-                    vendor_address: values.address,
-                    vendor_email: values.email,
-                    vendor_phone: values.phone,
-                    vendor_time_frame: selectedDay,
-                    vendor_unit: selectedUnit,
-                    vendor_last_updated: new Date(),
-                    agreed_at: (record && (record.vendor_unit === record.influencer_unit && record.vendor_time_frame === record.influencer_time_frame) ? (new Date()) : null),
-                    products: [taggedData]
-                })
-                .eq('id', record.id);
     
-            if (error) {
-                console.error('Error updating contract:', error);
-            } else {
-                console.log('Contract updated:', data);
-            
-            }
-        } else if (currentUser && currentUser.role === 'influencer') {
-            const { data, error } = await supabase
-                .from('contract')
-                .update({
-                    influencer_name: values1.influencer_name,
-                    influencer_address: values1.address,
-                    influencer_email: values1.email,
-                    influencer_phone: values1.phone,
-                    influencer_time_frame: selectedDay,
-                    influencer_unit: selectedUnit,
-                    influencer_last_updated: new Date(),
-                    agreed_at: (record && (record.vendor_unit === record.influencer_unit && record.vendor_time_frame === record.influencer_time_frame) ? (new Date()) : null),
-                    videos: [taggedDataVideo]
-                })
-                .eq('id', record.id);
-    
-            if (error) {
-                console.error('Error updating contract:', error);
-            } else {
-                console.log('Contract updated:', data);
-            }
-        }
-    };
 
     console.log(record);
 
@@ -251,7 +255,7 @@ export const Partnership = () => {
     const handleSend = () => {
         if (currentTab === tabs.length - 1 && isCheckedList[currentTab]) {
             toast.success("Information sent")
-            redirect(`/users/${currentUser?.id}/show`)
+            redirect(`/contract`)
         }
     };
 
