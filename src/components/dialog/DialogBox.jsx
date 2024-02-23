@@ -3,10 +3,11 @@ import Dialog from "@mui/material/Dialog";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import SendIcon from "@mui/icons-material/Send";
 import { AiOutlineComment, AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import "./DialogBox.css";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { LiveCarousels, ShowPageCarousels, SmallProductCard } from "../card/ShowCard";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/splide/dist/css/splide.min.css";
@@ -34,6 +35,7 @@ import { Tag2 } from "../productTag/AddTag";
 
 
 
+
 export const FullScreenDialog = ({ liked, open, handleClose, post, currentUser, toggleLike, savePost, likes2 }) => {
     const [currentMediaUrl, setCurrentMediaUrl] = useState(null);
     const [openCard, setOpenCard] = React.useState(false);
@@ -47,6 +49,7 @@ export const FullScreenDialog = ({ liked, open, handleClose, post, currentUser, 
     const [showCarousels, setShowCarousels] = React.useState(true);
     const [initialPost, setInitialPost] = React.useState(post);
     const [isMuted, setIsMuted] = React.useState(true);
+    const navigate = useNavigate();
  
    
     const { theme } = React.useContext(ThemeContext);
@@ -173,6 +176,13 @@ export const FullScreenDialog = ({ liked, open, handleClose, post, currentUser, 
         setOpenActions(true);
         setOpenCard(false);
     };
+    
+    
+    const goToChat = () => {
+        navigate('/chats', { state: { url: `http://haulway-demo-project.web.app${location.pathname}` } });
+    };
+
+    
 
     const uuid = uuidv4();
 
@@ -402,6 +412,19 @@ export const FullScreenDialog = ({ liked, open, handleClose, post, currentUser, 
 
                                                             <div
                                                                 className="bg-black rounded-full w-[45px] h-[45px]"
+                                                                // onClick={handleOpenCard}
+                                                                onClick={goToChat}
+
+                                                            >
+                                                                <IconButton
+                                                                    aria-label="Comment"
+                                                                    className="bg-black rounded-full w-[45px] h-[45px]"
+                                                                >
+                                                                    <SendIcon className="text-white h-[30px] w-[30px]" />
+                                                                </IconButton>
+                                                            </div>
+                                                            {/* <div
+                                                                className="bg-black rounded-full w-[45px] h-[45px]"
                                                                 onClick={handleOpenCard}
                                                             >
                                                                 <IconButton
@@ -410,7 +433,7 @@ export const FullScreenDialog = ({ liked, open, handleClose, post, currentUser, 
                                                                 >
                                                                     <ExpandLessIcon className="text-white h-[30px] w-[30px]" />
                                                                 </IconButton>
-                                                            </div>
+                                                            </div> */}
                                                         </>
                                                     )}
                                                 </div>

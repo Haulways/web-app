@@ -15,14 +15,14 @@ import { supabase } from '../../supabase/SupabaseConfig';
 import { useRefresh } from 'react-admin';
 import { toast } from 'react-toastify';
 import PostCard from '../postCard/PostCard';
+import ProductCard from '../productCard/ProductCard';
+import ExploreCard from '../exploreCard/exploreCard';
 
 
 
 
 
 
-
-  
 export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation, bottomRef, executeScroll, mediaFiles, setMediaFiles, cameraFile, setCameraFile, docFile, setDocFile, audioFile, setAudioFile, sharedURL, setSharedURL }) => {
     const { theme } = React.useContext(ThemeContext);
     const [message, setMessage] = React.useState(sharedURL ? sharedURL : '');
@@ -50,7 +50,7 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
     const style = message
         ? { resize: 'none', overflow: 'auto', maxHeight: '100px', borderRadius: '10px', position: 'relative' }
         : { resize: 'none', overflow: 'auto', maxHeight: '100px' };
-    
+
     const handleKeyPress = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -79,9 +79,82 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
         return parsedUrls;
     }
 
+    function transformUrls(input, site) {
+        const regex = new RegExp(`(?:https?://${site}/([^/]+)/([^/]+)/(\\S+))`, 'g');
+        return input.replace(regex, '{$1:$2}');
+    }
+
+    function renderUrlComponents(input) {
+        const regex = /{([^:}]+):([^}]+)}/g;
+        const matches = input.match(regex);
+
+        if (!matches) return input;
+
+        const components = matches.map((match, index) => {
+            const [table, id] = match.substring(1, match.length - 1).split(':');
+            if (table === 'product') {
+                return (
+                    <ProductCard key={index} postId={`${table}:${id}`} />
+
+                );
+            }
+            else if (table === 'posts') {
+                return (
+                    <PostCard key={index} postId={`${table}:${id}`} />
+
+                );
+            }
+            else {
+                return (
+                    <ExploreCard key={index} postId={`${table}:${id}`} />
+                );
+            }
+
+        });
+
+        let renderedText = input;
+        components.forEach((component, index) => {
+            renderedText = renderedText.replace(matches[index], `{{${index}}}`);
+        });
+
+  
+        return (
+            <>
+                {/* {components} */}
+                {renderedText.split(' ').map((text, index) => {
+                    const regex = /{{(\d+)}}/g;
+
+                    let match;
+                    // if (index === 0) return text;
+                    if ((match = regex.exec(text)) !== null) {
+                        const number = match[1];
+                        return (components[number])
+                    }
+                    else {
+                        return (<span key={index - 1}>
+                            {text}
+                            {' '}
+                        </span>)
+                    }
+
+
+
+
+
+
+                })}
+            </>
+        );
+    }
+
+
+
+
+
+
 
     const handleInputChange = (message) => {
-       
+
         setInputValue(message);
         const urls = extractUrls(message, "haulway-demo-project.web.app");
         setExtractedUrls(urls);
@@ -90,7 +163,7 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
     React.useEffect(() => {
 
         if (message) {
-            
+
             handleInputChange(message)
         }
 
@@ -104,7 +177,7 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
 
     }, [extractedUrls])
 
-    
+
 
     let gridClass = mediaFiles?.length > 1 ? "grid-cols-2" : "grid-cols-1";
 
@@ -130,7 +203,10 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
         setLoading(true)
 
         if (message.trim() !== '' || filesToUpload.length > 0) {
-            const messageWithoutUrls = message.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '');
+            // const messageWithoutUrls = message.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '');
+            const messageWithoutUrls = transformUrls(message, "haulway-demo-project.web.app");
+            console.log(transformUrls(message, "haulway-demo-project.web.app"));
+
             const { error } = await supabase
                 .from('chats')
                 .insert([
@@ -148,7 +224,7 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
                         attached_post_id: extractedUrls?.length > 0 ? extractedUrls[0] : null
                     }
                 ]); // replace with the actual user IDs
-      
+
             if (error) {
                 console.error('Error inserting message:', error);
             } else {
@@ -157,15 +233,15 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
                 executeScroll();
                 setSharedURL(null);
             }
-    
+
         }
-        
+
         const uploadedFiles = [];
 
         for (let i = 0; i < filesToUpload.length; i++) {
             const file = filesToUpload[i];
             const filePath = file.name;
- 
+
             const { data, error } = await supabase.storage.from('chats').upload(filePath, file, {
                 resumable: true,
                 onProgress: (bytesUploaded, bytesTotal) => {
@@ -175,7 +251,7 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
                 },
             });
 
- 
+
             if (error) {
                 console.error('Error uploading file:', error);
                 toast.error(error.message);
@@ -183,7 +259,7 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
                 return
             } else {
                 console.log('File uploaded successfully:', data);
-                
+
                 // Retrieve the public URL of the uploaded file
                 const { data: urlData, error: urlError } = supabase.storage.from('chats').getPublicUrl(filePath);
 
@@ -197,7 +273,7 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
                 }
             }
         }
-     
+
 
         if (uploadedFiles.length > 0) {
             const { error } = await supabase
@@ -206,7 +282,7 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
                 .eq('content', sentMessage)
                 .eq('from_id', currentUser.id)
                 .eq('to_id', user?.id || conversation?.userId)
-      
+
             if (error) {
                 console.error('Error inserting message:', error);
                 setLoading(false)
@@ -220,7 +296,7 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
                 refresh()
                 executeScroll();
             }
-    
+
         }
     };
 
@@ -239,7 +315,7 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
         const selectedFile = e.target.files[0];
         setDocFile(selectedFile);
     };
-    
+
 
     const handleCameraFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -264,8 +340,8 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
-    
-    
+
+
 
 
     function timeFuntion(current, previous) {
@@ -275,8 +351,8 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
         return `${timeString} ${dateString}`;
     }
 
-    
-    
+
+
     return (
         <>
             <Dialog
@@ -306,79 +382,83 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
                     {/* messages */}
                     <div className='messages--container' >
 
-                        {conversation?.messages?.map((message) => (
-                            <div key={message.id}>
-                                {message.from_id === loggedInUserId ?
-                                    (
-                                        
-                                        <div className='user--message relative' ref={isOpenRef}
-                                            onMouseEnter={() => setIsButtonVisible(prevState => ({ ...prevState, [message.id]: true }))}
-                                            onMouseLeave={() => setIsButtonVisible(prevState => ({ ...prevState, [message.id]: false }))}
-                                        >
-                                            <RenderButton message={message} isButtonVisible={isButtonVisible} setIsOpen={setIsOpen} />
+                        {conversation?.messages?.map((message) => {
 
-                                            <RenderDropdown message={message} isOpen={isOpen} theme={theme} />
+                            return (
+                                <div key={message.id}>
+                                    {message.from_id === loggedInUserId ?
+                                        (
 
-                                            {/* message from user  */}
-                                            <div className='user--message--body' style={{ backgroundColor: theme === "light" ? "#e6e6e6" : "rgba(68, 68, 68, 1)", color: theme === "light" ? "#222" : "#fff", }}>
+                                            <div className='user--message relative' ref={isOpenRef}
+                                                onMouseEnter={() => setIsButtonVisible(prevState => ({ ...prevState, [message.id]: true }))}
+                                                onMouseLeave={() => setIsButtonVisible(prevState => ({ ...prevState, [message.id]: false }))}
+                                            >
+                                                <RenderButton message={message} isButtonVisible={isButtonVisible} setIsOpen={setIsOpen} />
 
-                                                {message?.attached_post_id ?
-                                                    <PostCard postId={message?.attached_post_id} /> : null}
-                                                
-                                                <p>
-                                                    {capitalizeFirstLetter(message?.content)}
-                                                </p>
-                                                <RenderSingleMedia message={message} />
+                                                <RenderDropdown message={message} isOpen={isOpen} theme={theme} />
 
-                                                <RenderMedia message={message} />
-                                                
-                                                <span className='text-[9px] float-right pt-[3px]'>
-                                                    {timeFuntion(new Date(), new Date(message?.created_at))}
-                                                </span>
+                                                {/* message from user  */}
+                                                <div className='user--message--body' style={{ backgroundColor: theme === "light" ? "#e6e6e6" : "rgba(68, 68, 68, 1)", color: theme === "light" ? "#222" : "#fff", }}>
+
+                                                    {/* {message?.attached_post_id ?
+                                                        <PostCard postId={message?.attached_post_id} /> : null} */}
+
+                                                    {/* <p>
+                                                        {capitalizeFirstLetter(message?.content)}
+                                                    </p> */}
+                                                    {renderUrlComponents(message?.content)}
+                                                    <RenderSingleMedia message={message} />
+
+                                                    <RenderMedia message={message} />
+
+                                                    <span className='text-[9px] float-right pt-[3px]'>
+                                                        {timeFuntion(new Date(), new Date(message?.created_at))}
+                                                    </span>
+                                                </div>
+                                                <div className='user--message--image'>
+                                                    <Avatar className='drop-shadow-lg' sx={{ width: '40px', height: "40px" }}
+                                                        src={message?.from_photoURL}
+                                                    />
+                                                </div>
+
                                             </div>
-                                            <div className='user--message--image'>
-                                                <Avatar className='drop-shadow-lg' sx={{ width: '40px', height: "40px" }}
-                                                    src={message?.from_photoURL}
-                                                />
+                                        ) : (
+                                            <div ref={isOpenRef} className='friend--message relative'
+                                                onMouseEnter={() => setIsButtonVisible(prevState => ({ ...prevState, [message.id]: true }))}
+                                                onMouseLeave={() => setIsButtonVisible(prevState => ({ ...prevState, [message.id]: false }))}
+                                            >
+                                                <div className='friend--message--image'>
+                                                    <Avatar className='drop-shadow-lg' sx={{ width: '40px', height: "40px" }}
+                                                        src={conversation?.userPhoto}
+                                                    />
+                                                </div>
+
+                                                {/* message from friend  */}
+                                                <div className='message--body' style={{ backgroundColor: theme === "light" ? "#222" : "rgba(68, 68, 68, 1)", color: theme === "light" ? "#fff" : "#fff", }}>
+
+                                                    {message?.attached_post_id ?
+                                                        <PostCard postId={message?.attached_post_id} /> : null}
+
+                                                    <p>
+                                                        {capitalizeFirstLetter(message?.content)}
+                                                    </p>
+                                                    <RenderSingleMedia message={message} />
+
+                                                    <RenderMedia message={message} />
+
+                                                    <span className='text-[9px] float-right pt-[3px]'>
+                                                        {timeFuntion(new Date(), new Date(message?.created_at))}
+                                                    </span>
+                                                </div>
+
+                                                <RenderButton message={message} isButtonVisible={isButtonVisible} setIsOpen={setIsOpen} />
+                                                <RenderDropdown message={message} isOpen={isOpen} theme={theme} />
                                             </div>
-                                        
-                                        </div>
-                                    ) : (
-                                        <div ref={isOpenRef} className='friend--message relative'
-                                            onMouseEnter={() => setIsButtonVisible(prevState => ({ ...prevState, [message.id]: true }))}
-                                            onMouseLeave={() => setIsButtonVisible(prevState => ({ ...prevState, [message.id]: false }))}
-                                        >
-                                            <div className='friend--message--image'>
-                                                <Avatar className='drop-shadow-lg' sx={{ width: '40px', height: "40px" }}
-                                                    src={conversation?.userPhoto}
-                                                />
-                                            </div>
+                                        )}
 
-                                            {/* message from friend  */}
-                                            <div className='message--body' style={{ backgroundColor: theme === "light" ? "#222" : "rgba(68, 68, 68, 1)", color: theme === "light" ? "#fff" : "#fff", }}>
-
-                                                {message?.attached_post_id ? 
-                                                    <PostCard postId={message?.attached_post_id} /> : null}
-
-                                                <p>
-                                                    {capitalizeFirstLetter(message?.content)}
-                                                </p>
-                                                <RenderSingleMedia message={message} />
-
-                                                <RenderMedia message={message} />
-
-                                                <span className='text-[9px] float-right pt-[3px]'>
-                                                    {timeFuntion(new Date(), new Date(message?.created_at))}
-                                                </span>
-                                            </div>
-
-                                            <RenderButton message={message} isButtonVisible={isButtonVisible} setIsOpen={setIsOpen} />
-                                            <RenderDropdown message={message} isOpen={isOpen} theme={theme} />
-                                        </div>
-                                    )}
-                                
-                            </div>
-                        ))}
+                                </div>
+                            )
+                        })}
                         <div className='h-[70px] w-full bg-transparent' ref={bottomRef}></div>
                     </div>
 
@@ -404,7 +484,7 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
                                 <MediaItem media={cameraFile} />
                             </>
                         )}
-                        
+
                         {/* {docFile && (
                             <>
                                
@@ -435,7 +515,7 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
                         )}
                     </div>
 
-                    
+
 
                     <div className={`p-[1rem] rounded-[10px] z-[1500] fixed bottom-[6rem] min-w-[220px] ${show ? 'visible' : 'hidden'}`} style={{ backgroundColor: theme === "light" ? "#222" : "rgba(68, 68, 68, 1)", color: theme === "light" ? "#fff" : "#fff", transition: 'all 3s ease-in-out' }}>
                         <ul className='share_files'>
@@ -492,8 +572,8 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
                         </ul>
                     </div>
 
-                    
-                    
+
+
                 </div>
                 {/* message box  */}
                 <div className='create--chat--box' style={{ backgroundColor: theme === "light" ? "#fff" : "#222", color: theme === "light" ? "#222" : "#fff", }}>
@@ -521,23 +601,23 @@ export const ChatShow = ({ closeChat, openChat, currentUser, user, conversation,
 function MediaItem({ media }) {
     // Create a ref to store the media element
     const mediaRef = React.useRef(null);
-  
+
     // Create a blob URL from the media object
     const blobURL = URL.createObjectURL(media);
-  
+
     // Revoke the blob URL when the media is loaded or when the component is unmounted
     React.useEffect(() => {
-      const media = mediaRef.current;
-      if (media) {
-        media.addEventListener("load", () => {
-          URL.revokeObjectURL(blobURL);
-        });
-      }
-      return () => {
-        URL.revokeObjectURL(blobURL);
-      };
+        const media = mediaRef.current;
+        if (media) {
+            media.addEventListener("load", () => {
+                URL.revokeObjectURL(blobURL);
+            });
+        }
+        return () => {
+            URL.revokeObjectURL(blobURL);
+        };
     }, [blobURL]);
-  
+
     // Render the media item component
     return (
         <div className="media-item">

@@ -7,7 +7,8 @@ const ThemeContext = React.createContext({
 
 const ThemeProvider = ({ children }) => {
     const [theme, setTheme] = React.useState(
-        window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        // window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        'light'
     );
     const toggleTheme = () => {
         setTheme(theme === 'light' ? 'dark' : 'light');

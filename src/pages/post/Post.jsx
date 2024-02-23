@@ -4,11 +4,11 @@ import './post.css';
 import MPost from './MPost';
 import Comments from '../../components/comments/Comments';
 import React, { useContext, useEffect, useState } from 'react';
-import { collection, onSnapshot, orderBy, query,  } from 'firebase/firestore';
+import { collection, onSnapshot, orderBy, query, } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { AuthContext } from '../../components/context/AuthContext';
-import {  Avatar, Box, CircularProgress, IconButton, Skeleton } from '@mui/material';
-import { useGetList, useRecordContext, useRefresh, useStore } from 'react-admin';
+import { Avatar, Box, CircularProgress, IconButton, Skeleton } from '@mui/material';
+import { useGetIdentity, useGetList, useRecordContext, useRefresh, useStore } from 'react-admin';
 import cartImg from "../../assets/cart.png";
 import backIcon from "../../assets/postImg-Icons/back.png";
 import shareIcon from "../../assets/socials/share.png";
@@ -32,6 +32,53 @@ const medusa = new Medusa({
   baseUrl: "https://ecommerce.haulway.co",
 });
 
+export const CheckSavedPost = (postId) => {
+  const record = useRecordContext();
+  const [post, setPost] = useState(null);
+  const [savedPost, setSavedPost] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  // const [user, setUser] = useStore('user');
+  const { currentUser } = useContext(AuthContext);
+
+
+  useEffect(() => {
+    const getPost = async () => {
+      try {
+        console.log(currentUser?.uid);
+        // Check if the post already exists
+        let { data: savedData, error } = await supabase
+          .from('saved_post')
+          .select('*')
+          .eq('postId', postId)
+          .eq('user_id', currentUser.uid);
+
+        if (error) throw error;
+
+        // console.log(savedData);
+
+
+
+        setSavedPost(savedData);
+
+
+        
+      } catch (error) {
+        console.log(error.message);
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+
+    }
+    getPost();
+  }, [postId]);
+
+  return { savedPost, loading, error };
+};
+
+
+
 const Signlepost = () => {
   const record = useRecordContext();
   const [post, setPost] = useState(null);
@@ -53,13 +100,13 @@ const Signlepost = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const splideRef = React.useRef(); // Create the ref
   // Attach an event listener after the Splide instance is mounted
-  
-   // Function to add a unique view
-   const addUniqueView = async (userId, videoId) => {
+
+  // Function to add a unique view
+  const addUniqueView = async (userId, videoId) => {
     const { data, error } = await supabase
       .from('viewers')
       .upsert(
-        { user_id: userId, video_id: videoId, id: uuid, viewed_at: new Date()},
+        { user_id: userId, video_id: videoId, id: uuid, viewed_at: new Date() },
         { onConflict: ['user_id', 'video_id'] }
       );
 
@@ -68,7 +115,7 @@ const Signlepost = () => {
     } else {
       console.log('Viewer added/updated:', data);
     }
-    };
+  };
   // Effect to handle adding a view when the component mounts
   React.useEffect(() => {
     if (currentUser && currentUser.id && record && record.id) {
@@ -77,7 +124,7 @@ const Signlepost = () => {
     }
   }, [currentUser, record]);
 
-  
+
   useEffect(() => {
     if (!cart_id) {
       medusa.carts.create().then(({ cart }) => {
@@ -130,7 +177,7 @@ const Signlepost = () => {
           .from('followers')
           .select('*')
           .eq('followed_id', record?.uid);
-          
+
         if (error) console.log('Error fetching initial data: ', error);
         else {
           setFollowing(initialData.some(follower => follower.follower_id === currentUser.uid));
@@ -138,13 +185,13 @@ const Signlepost = () => {
           // console.log(initialData);
         }
       };
-  
+
       const fetchLikes = async () => {
         let { data, error } = await supabase
           .from('likes')
           .select('*')
           .match({ postId: record?.postId });
-        
+
         if (error && status !== 406) throw error;
         setLiked(data.some(like => like.user_id === currentUser.uid));
         setLikes(data);
@@ -156,7 +203,7 @@ const Signlepost = () => {
           .select('*')
           .eq("postId", id)
           .order('publishedAt', { ascending: false });
-            
+
         if (error && status !== 406) throw error;
         setComments(data);
       };
@@ -167,17 +214,17 @@ const Signlepost = () => {
     }
 
     return () => {
-    
+
     }
-  }, [record, ]);
+  }, [record,]);
 
 
 
   // follow and unfollowe functionality 
 
 
- 
-  
+
+
 
 
   useEffect(() => {
@@ -185,38 +232,38 @@ const Signlepost = () => {
 
     // Subscribe to changes
     const followerSubscription = supabase
-    .channel('room1')
-    .on('postgres_changes', { event: '*', schema: '*', table: 'followers', filter: `postId=eq.${post?.postId}` }, payload => {
-      console.log('Change received!', payload);
-      // If new follower is added
-      if (payload.new) {
-        setFollowers(prevFollowers => {
-          if (payload.new.follower_id === currentUser.uid) {
-            // Follower is added by the currentUser
-            setFollowing(true);
-            if (!prevFollowers.some(follower => follower.id === payload.new.id)) {
-              return [...prevFollowers, payload.new];
+      .channel('room1')
+      .on('postgres_changes', { event: '*', schema: '*', table: 'followers', filter: `postId=eq.${post?.postId}` }, payload => {
+        console.log('Change received!', payload);
+        // If new follower is added
+        if (payload.new) {
+          setFollowers(prevFollowers => {
+            if (payload.new.follower_id === currentUser.uid) {
+              // Follower is added by the currentUser
+              setFollowing(true);
+              if (!prevFollowers.some(follower => follower.id === payload.new.id)) {
+                return [...prevFollowers, payload.new];
+              }
+            } else {
+              // Follower is added by someone else
+              if (!prevFollowers.some(follower => follower.id === payload.new.id)) {
+                return [...prevFollowers, payload.new];
+              }
             }
-          } else {
-            // Follower is added by someone else
-            if (!prevFollowers.some(follower => follower.id === payload.new.id)) {
-              return [...prevFollowers, payload.new];
-            }
-          }
-          return prevFollowers;
-        });
-      }
-      // If follower is removed
-      else if (payload.old) {
-        if (payload.old.follower_id === currentUser.uid) {
-          // Follower is removed by the currentUser
-          setFollowing(false);
+            return prevFollowers;
+          });
         }
-        // Follower is removed by someone else
-        setFollowers(prevFollowers => prevFollowers.filter(follower => follower.id !== payload.old.id));
-      }
-    })
-    .subscribe();
+        // If follower is removed
+        else if (payload.old) {
+          if (payload.old.follower_id === currentUser.uid) {
+            // Follower is removed by the currentUser
+            setFollowing(false);
+          }
+          // Follower is removed by someone else
+          setFollowers(prevFollowers => prevFollowers.filter(follower => follower.id !== payload.old.id));
+        }
+      })
+      .subscribe();
 
 
     const likesSubscription = supabase
@@ -235,7 +282,7 @@ const Signlepost = () => {
                 return prevLikes;
               }
             });
-            
+
           } else {
             // Like is made by someone else
             setLikes(prevLikes => {
@@ -252,7 +299,7 @@ const Signlepost = () => {
           if (payload.old.user_id === currentUser.uid) {
             // Like is removed by the currentUser
             setLiked(false);
-            
+
             setLikes(prevLikes => prevLikes.filter(like => like.user_id !== currentUser.uid));
           } else {
             // Like is removed by someone else
@@ -261,7 +308,7 @@ const Signlepost = () => {
         }
       })
       .subscribe();
-      
+
 
     return () => {
       supabase.removeChannel(followerSubscription);
@@ -308,7 +355,7 @@ const Signlepost = () => {
         .from('following')
         .delete()
         .eq('follower_id', currentUser.uid);
-        
+
       if (error) throw error;
 
       setFollowing(false);
@@ -318,10 +365,10 @@ const Signlepost = () => {
     }
   };
 
-    
+
 
   // Likes functionality
- 
+
 
   const like = async () => {
     try {
@@ -347,7 +394,7 @@ const Signlepost = () => {
         .from('likes')
         .delete()
         .match({ postId: post.postId, user_id: currentUser.uid });
-        
+
       if (error) throw error;
 
       setLiked(false);
@@ -356,7 +403,7 @@ const Signlepost = () => {
       console.log(error.message);
     }
   };
-      
+
   const toggleLike = async () => {
     if (liked) {
       await unlike();
@@ -368,40 +415,53 @@ const Signlepost = () => {
   const toggleMute = () => {
     setIsMuted(!isMuted);
   };
-  
-  const savePost = async () => {
+
+  const savePost = async ({ filter }) => {
     try {
-        // Check if the post already exists
-        let { data: savedPost, error } = await supabase
-            .from('saved_post')
-            .select('*')
-            .eq('postId', post.postId)
-            .eq('user_id', currentUser.uid);
+      // Check if the post already exists
+      let { data: savedPost, error } = await supabase
+        .from('saved_post')
+        .select('*')
+        .eq('postId', post.postId)
+        .eq('user_id', currentUser.uid);
+
+      if (error) throw error;
+
+      // If the post does not exist, insert it
+      if (!savedPost.length) {
+        let { error } = await supabase
+          .from('saved_post')
+          .insert({
+            postId: post.postId,
+            user_id: currentUser.uid,
+            coll_name: filter && filter === 'general' ? (filter) : (null)
+          })
+          .single();
 
         if (error) throw error;
 
-        // If the post does not exist, insert it
-        if (!savedPost.length) {
-            let { error } = await supabase
-                .from('saved_post')
-                .insert({
-                    postId: post.postId,
-                    user_id: currentUser.uid,
-                })
-                .single();
 
-            if (error) throw error;
+        toast("Post saved");
+      } else {
+        const { data, error } = await supabase
+          .from('saved_post')
+          .update({ coll_name: filter && filter !== 'general' ? (filter) : (null) })
+          .eq('postId', post.postId)
+          .eq('user_id', currentUser.uid)
+          .select();
 
-            toast("Post saved");
-        } else {
-            toast("Post already saved");
-        }
+
+
+        if (error) throw error;
+        console.log(filter);
+        toast(`Post moved to ${filter} collection.`);
+      }
     } catch (error) {
-        console.log(error.message);
+      console.log(error.message);
     }
-}
+  }
 
-    
+
   // formatting the number of followers
   const formatFollowers = (count) => {
     if (count >= 1000) {
@@ -415,15 +475,15 @@ const Signlepost = () => {
 
 
   // fetch comments from the database 
-  
 
-    
+
+
   const handleClickOpen = () => {
     setOpen(true);
     setIsMuted(true);
   };
-  
-    
+
+
 
   const mPostCarousel = {
     type: 'slide',
@@ -433,12 +493,12 @@ const Signlepost = () => {
   };
 
   const posterUrl = post?.posterUrl;
-    
+
   const mediaUrl = post && post.media && post.media.length > 0 ? post.media[0] : null;
   const isImage = mediaUrl && (mediaUrl.includes('.jpg') || mediaUrl.includes('.jpeg') || mediaUrl.includes('.png'));
 
-  
-  
+
+
 
   return (
     <>
@@ -457,7 +517,7 @@ const Signlepost = () => {
                   const isImage = mediaUrl.includes('.jpg') || mediaUrl.includes('.jpeg') || mediaUrl.includes('.png');
                   return (
                     <SplideSlide key={index} className='w-[409px] overflow-hidden tablet:w-full'>
-                                        
+
                       <div className='sProduct__img' >
                         {isImage ? (
                           <img src={mediaUrl} alt={`Image ${index}`} />
@@ -465,7 +525,7 @@ const Signlepost = () => {
 
                           <ShowVideoBox onClick={handleClickOpen} url={mediaUrl} posterUrl={index === 0 ? post.posterUrl : null} isMuted={isMuted} post={post} isPlaying={isPlaying} />
                         )}
-                                       
+
                         {!isImage && (
                           <>
                             <button className="mute-btn-show bottom-[2rem] right-[1.5rem]" onClick={toggleMute}>
@@ -475,13 +535,13 @@ const Signlepost = () => {
                                 <VolumeUpIcon />
                               }
                             </button>
-                            
-                                
+
+
                           </>
                         )}
                       </div>
 
-                                        
+
                     </SplideSlide>
                   );
                 })}
@@ -499,7 +559,7 @@ const Signlepost = () => {
                           />
                         </Link>
                       </li>
-                      
+
 
                       <li>
                         <Link to={`/users/${post.uid}/show`}>
@@ -507,7 +567,7 @@ const Signlepost = () => {
                             {post.name}
                           </span>
                         </Link>
-                        
+
                         <span className='follower'>{formatFollowers(followers.length || 0)} Followers</span>
                       </li>
                     </ul>
@@ -557,13 +617,13 @@ const Signlepost = () => {
                               <AiOutlineHeart className='like' color={theme === "light" ? "#222" : "#fff"} />
                             )}
                           </IconButton>
-                                                  
+
                           <li>
-                                                      
+
                             <span>
                               {likes.length || 0}
                             </span>
-                                                     
+
 
                             {likes.length < 2 ? (
                               <span>like</span>
@@ -584,18 +644,18 @@ const Signlepost = () => {
                     </ul>
                   </div>
 
-                  
+
 
                 </div>
                 {/* middle content ends here  */}
-                            
+
                 {/* last content/comment section starts here  */}
 
                 <div className='post__bottom__section'>
                   <Comments postId={id} comments={comments} setComments={setComments} />
                 </div>
                 {/* last content/comment section ends here  */}
-                            
+
 
 
               </div>
@@ -623,7 +683,7 @@ const Signlepost = () => {
             </div>
 
           </div>
-          
+
           <MPost post={post} id={id} comments={comments} liked={liked} likes={likes} follow={follow} followers={followers} unfollow={unfollow} toggleLike={toggleLike} formatFollowers={formatFollowers} following={following} savePost={savePost} cart={cart} />
         </>
       ) : (

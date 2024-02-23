@@ -1,6 +1,6 @@
 import React, { useContext, useRef, useState } from 'react'
 import './mPost.css';
-import {  AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import './post.css';
 import Comments from '../../components/comments/Comments';
 import { DFooter } from '../../components';
@@ -10,7 +10,7 @@ import { Avatar, IconButton } from '@mui/material';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import { FullScreenDialog } from '../../components/dialog/DialogBox';
-import {  ShowPageCarousels_1 } from '../../components/card/ShowCard';
+import { ShowPageCarousels_1 } from '../../components/card/ShowCard';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/splide/dist/css/splide.min.css';
 import { ShowVideoBox } from '../../components/videoPlayer/VideoPlayer';
@@ -21,11 +21,15 @@ import fb from "../../assets/socials/fb.png";
 import IG from "../../assets/socials/ig.png";
 import commentIcon from "../../assets/chatlike.png";
 import chat from "../../assets/commentIcon.png";
-import { InfiniteList, WithListContext, useRedirect } from 'react-admin';
+import { InfiniteList, WithListContext, useRedirect, useStore } from 'react-admin';
 import { ThemeContext } from '../../components/context/ThemeProvider';
 import { useEffect } from 'react';
 import { v4 as uuidv4 } from "uuid";
 import { supabase } from '../../supabase/SupabaseConfig';
+import { CollectionDialog } from '../../components/dialog/CollectionDialog';
+import { useSavedPosts } from '../profile/Profile';
+
+
 
 
 const MPost = ({ post, id, comments, formatFollowers, following, followers, unfollow, follow, toggleLike, liked, likes, savePost, cart }) => {
@@ -41,28 +45,51 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
     const [activeIndex, setActiveIndex] = useState(0);
     const splideRef = React.useRef(); // Create the ref
     const uuid = uuidv4();
+    const [openColList, setOpenColList] = useState(false);
+    
+
+    const { savedPosts, savedCols, savedColNames, loading, error } = useSavedPosts(currentUser.uid);
+    const [savedCol, setSavedCols] = useState([]);
+    const [savedColName, setSavedColNames] = useState([]);
+
+
+    const handleColList = () => {
+        setOpenColList(!openColList);
+    }
+
+    useEffect(()=>{
+        if(savedCols){
+            setSavedCols(savedCols)
+        }
+        if(savedColNames){
+            setSavedColNames(savedColNames)
+        }
+    },[savedCols, savedColNames])
+
+
+
 
     const addUniqueView = async (userId, videoId) => {
         const { data, error } = await supabase
-          .from('viewers')
-          .upsert(
-            { user_id: userId, video_id: videoId, id: uuid, viewed_at: new Date(), object_viewed: post?.URL},
-            { onConflict: ['user_id', 'video_id'] }
-          );
-    
+            .from('viewers')
+            .upsert(
+                { user_id: userId, video_id: videoId, id: uuid, viewed_at: new Date(), object_viewed: post?.URL },
+                { onConflict: ['user_id', 'video_id'] }
+            );
+
         if (error) {
-          console.error('Error adding/updating viewer:', error);
+            console.error('Error adding/updating viewer:', error);
         } else {
-          console.log('Viewer added/updated:', data);
+            console.log('Viewer added/updated:', data);
         }
-        };
-      // Effect to handle adding a view when the component mounts
-     useEffect(() => {
+    };
+    // Effect to handle adding a view when the component mounts
+    useEffect(() => {
         if (currentUser && currentUser.id && post && post.id) {
-          addUniqueView(currentUser.id, post.id);
-          // fetchTotalViews(record.id);
+            addUniqueView(currentUser.id, post.id);
+            // fetchTotalViews(record.id);
         }
-      }, [currentUser, post]);
+    }, [currentUser, post]);
 
     const options = {
         perPage: 1,
@@ -104,16 +131,16 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
     const toggleMute = () => {
         setIsMuted(!isMuted);
     };
-    
+
     const handleClickOpen = () => {
         setOpen(true);
         setIsMuted(true);
     };
-  
+
     const handleClose = (props) => {
         const { postId, resource, page } = props;
         console.log(page, resource, postId);
-            
+
         setOpen(false);
         if (postId && resource && page) {
             redirect(page, resource, postId)
@@ -126,7 +153,7 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
     };
 
     const slideComment = showComment ? 'slide-in' : 'slide-out';
-    
+
     const goToChat = () => {
         navigate('/chats', { state: { url: `http://haulway-demo-project.web.app${location.pathname}` } });
     };
@@ -140,11 +167,12 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
     };
 
     const posterUrl = post.posterUrl;
-    
+
 
     return (
         <>
             <div className='Mobile__sPost' style={{ backgroundColor: theme === "light" ? "#fff" : "#222", color: theme === "light" ? "#222" : "#fff", }}>
+                <CollectionDialog open={openColList} setOpen={setOpenColList} col_list={savedCol} col_names={savedColName} theme={theme} savePost={savePost} post={post}/>
                 <div className='sPost__container'>
                     {/* top content starts here  */}
                     <div className='top__content'>
@@ -153,7 +181,7 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
                                 <li>
                                     <Link to={`/users/${post.uid}/show`}>
                                         <div className='initials'>
-                                          
+
                                             <Avatar sx={{ width: '50px', height: "50px" }}
                                                 src={post.photoURL}
                                             />
@@ -197,17 +225,17 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
                         </span>
 
                         {/* save icon  */}
-                        <span className='cursor-pointer' onClick={savePost}>
+                        <span className='cursor-pointer' onClick={handleColList}>
                             <img className='saveIcon' src={saveIcon} alt='save' />
                         </span>
-                      
+
                         {/* post file  */}
                         <Splide options={mPostCarousel} className='mobile--post-splide'>
                             {Array.isArray(post.media) && post.media.map((mediaUrl, index) => {
                                 const isImage = mediaUrl.includes('.jpg') || mediaUrl.includes('.jpeg') || mediaUrl.includes('.png');
                                 return (
                                     <SplideSlide key={index}>
-                                        
+
                                         {isImage ? (
                                             <img src={mediaUrl} alt={`Image ${index}`} onClick={handleClickOpen} />
                                         ) : (
@@ -216,7 +244,7 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
                                                 <ShowVideoBox url={mediaUrl} posterUrl={index === 0 ? post.posterUrl : null} isMuted={isMuted} post={post} isPlaying={isPlaying} />
                                             </div>
                                         )}
-                                       
+
                                         {!isImage && (
                                             <>
                                                 <button className="mute-btn-show bottom-[2rem] right-[1.5rem]" onClick={toggleMute}>
@@ -226,18 +254,18 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
                                                         <VolumeUpIcon />
                                                     }
                                                 </button>
-                            
-                                
+
+
                                             </>
                                         )}
 
-                                        
+
                                     </SplideSlide>
                                 );
                             })}
                         </Splide>
-                
-                        
+
+
                     </div>
 
                     <div className='sPost__contents'>
@@ -250,9 +278,9 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
                                         <li className='min-w-[25px] cursor-pointer' onClick={goToChat}>
                                             {shareIcon}
                                         </li>
-                                        <li>
+                                        {/* <li>
                                             <img src={fb} alt='share' />
-                                        </li>
+                                        </li> */}
                                         <li>
                                             <img src={IG} alt='share' />
                                         </li>
@@ -275,12 +303,12 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
                                                     <AiOutlineHeart color={theme === "light" ? "#222" : "#fff"} className='like' />
                                                 )}
                                             </IconButton>
-                                            
+
                                             <div className="flex items-center gap-x-1">
                                                 <span>
                                                     {likes.length || 0}
                                                 </span>
-                                                
+
                                                 {likes.length < 2 ? (
                                                     <span>like</span>
                                                 ) : (
@@ -300,11 +328,11 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
                                 </ul>
 
                                 {/* Add to Cart */}
-                               
+
                             </div>
                         </div>
                         {/* middle content ends here  */}
-                  
+
                     </div>
                 </div>
 
@@ -325,7 +353,7 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
                             </SplideSlide>
                         ))}
                     </Splide>
-                          
+
                 </div>
 
                 <InfiniteList resource='likes' actions={false} title=' '
@@ -338,13 +366,13 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
                         '& .RaList-content': {
                             backgroundColor: 'transparent !important',
                             color: '#fff'
-                                                                    
+
                         },
                         backgroundColor: 'transparent !important',
                         color: '#fff'
-                    
+
                     }}
-             
+
                 >
                     <WithListContext render={({ isLoading, data }) => (
                         !isLoading && (
@@ -353,7 +381,7 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
                             </>
                         ))} />
                 </InfiniteList>
-                
+
 
 
                 {/* last content/comment section starts here  */}
@@ -369,7 +397,7 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
 
             </div>
             <DFooter />
-          
+
         </>
     );
 };

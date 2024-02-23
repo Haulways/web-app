@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from 'react'
 import './profile.css';
 import { AuthContext } from '../../components/context/AuthContext';
 import { DFooter, MakePost, SavedPost } from '../../components';
-import {  Avatar, CircularProgress, Grid,  Skeleton,  useTheme } from '@mui/material';
-import { useDataProvider, useGetList, useRecordContext, useRedirect, useRefresh } from 'react-admin';
+import { Avatar, CircularProgress, Grid, Skeleton, useTheme } from '@mui/material';
+import { useDataProvider, useGetList, useRecordContext, useRedirect, useRefresh, useStore } from 'react-admin';
 import divider from "../../assets/profileIcons/divider.png";
 import post from "../../assets/profileIcons/post.png";
 import AccountType from "../../assets/profileIcons/AccType.png";
@@ -28,6 +28,152 @@ import useSupabaseRealtime from '../../supabase/realTime';
 
 
 
+export const useSavedPosts = (userId) => {
+    const [savedPosts, setSavedPosts] = useState([]);
+    const [savedCols, setSavedCols] = useStore("col_list");
+    const [savedColNames, setSavedColNames] = useStore("col_names");
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchSavedPosts = async () => {
+            try {
+                setLoading(true);
+                // Fetch the saved posts
+                let { data: savedData, error: savedError } = await supabase
+                    .from('saved_post')
+                    .select("*")
+                    .match({ user_id: userId });
+                if (savedError) throw savedError;
+
+
+                let allPosts = [];
+
+                // Fetch related data for each saved post
+                for (let item of savedData) {
+                    const tables = ['posts', 'hauls', 'lookbook', 'diy', 'grwm'];
+                    const fetchedData = await Promise.all(tables.map(table =>
+                        supabase
+                            .from(table)
+                            .select("*")
+                            .eq("postId", item.postId)
+                    ));
+                    // console.log(fetchedData)
+
+                    // Check for errors in the fetched data
+                    fetchedData.forEach(({ error }) => {
+                        if (error) throw error;
+                    });
+
+                    // Combine the data from all tables
+                    const combinedData = fetchedData.reduce((acc, { data }) => [...acc, ...data], []);
+                    allPosts.push(...combinedData);
+
+                }
+
+                setSavedPosts(allPosts);
+            } catch (e) {
+                setError(e);
+            } finally {
+                setLoading(false);
+            }
+
+        };
+
+        const fetchCollection = async () => {
+            try {
+                setLoading(true);
+                // Fetch the saved posts
+                let { data: savedData, error: savedError } = await supabase
+                    .from('saved_post')
+                    .select("*")
+                    .match({ user_id: userId });
+                if (savedError) throw savedError;
+
+
+
+
+                let allCollections = { general: [] };
+                let collectionList = [];
+
+                for (let item of savedData) {
+                    if (item.coll_name === null) {
+                        allCollections.general.push(item)
+                    } else {
+                        if (Object.keys(allCollections).includes(item.coll_name)) {
+                            allCollections[item.coll_name].push(item)
+
+                        } else {
+                            allCollections[item.coll_name] = []
+                            allCollections[item.coll_name].push(item)
+
+                        }
+                    }
+                }
+
+                for (let coll_name of Object.keys(allCollections)) {
+                    let coll_array = []
+                    for (let coll of allCollections[coll_name]) {
+                        // console.log(coll)
+                        const tables = ['posts', 'hauls', 'lookbook', 'diy', 'grwm'];
+
+                        const fetchedData = await Promise.all(tables.map(table =>
+                            supabase
+                                .from(table)
+                                .select("*")
+                                .eq("postId", coll.postId)
+                        ));
+
+
+                        // Check for errors in the fetched data
+                        fetchedData.forEach(({ error }) => {
+                            if (error) throw error;
+                        });
+
+                        // console.log(fetchedData)
+                        // Combine the data from all tables
+                        const combinedData = fetchedData.reduce((acc, { data }) => [...acc, ...data], []);
+                        // console.log(combinedData);
+                        if (combinedData.length === 0) {
+                            const { error } = await supabase
+                                .from('saved_post')
+                                .delete()
+                                .eq('id', coll.id)
+                            console.log(error)
+
+                        }
+                        coll_array = coll_array.concat(combinedData.map(dt => {
+                            return { ...dt, coll_name: coll_name }
+                        }))
+
+
+                        // allCollections[coll_name] = [...combinedData];
+                    }
+                    collectionList = collectionList.concat(coll_array);
+                    allCollections[coll_name] = coll_array
+
+                }
+
+
+                // console.log(allCollections)
+                // setCollFilters(Object.keys(allCollections))
+                // setCollections(collectionList);
+                setSavedColNames(Object.keys(allCollections))
+                setSavedCols(collectionList);
+            } catch (e) {
+                setError(e);
+            } finally {
+                setLoading(false);
+            }
+
+        };
+
+        fetchCollection();
+        fetchSavedPosts();
+    }, [userId]);
+
+    return { savedPosts, savedCols, savedColNames, loading, error };
+};
 
 
 const Profile = () => {
@@ -36,7 +182,8 @@ const Profile = () => {
     const [followed, setFollowed] = useState(false);
     const [userContract, setUserContract] = useState([]);
     const [senderContract, setSenderContract] = useState([]);
-    const [collections, setCollections] = useState({});
+    const [collections, setCollections] = useState([]);
+    const [collFilters, setCollFilters] = useState([]);
     const [senderInfo, setSenderInfo] = useState({});
     const { theme } = useContext(ThemeContext);
     const realtimeData = useSupabaseRealtime();
@@ -45,7 +192,7 @@ const Profile = () => {
     const redirect = useRedirect()
     const refresh = useRefresh();
     const navigate = useNavigate();
-    
+
     const { data: followers, total: totalFollowers, isLoading } = useGetList(
         'followers', { filter: { followed_id: userData?.uid } }
     );
@@ -53,186 +200,61 @@ const Profile = () => {
         'following', { filter: { follower_id: userData?.uid } }
     );
 
+
+
     const useFetchMultipleLists = (resources) => {
         const dataProvider = useDataProvider();
         const [data, setData] = useState([]);
         const [loading, setLoading] = useState(true);
         const [error, setError] = useState(null);
-      
+
         useEffect(() => {
-          const fetchResources = async () => {
-            try {
-              const dataPromises = resources.map((resource) =>
-                dataProvider.getList(resource, {
-                  pagination: { page: 1, perPage: 10 },
-                  sort: { field: 'id', order: 'ASC' },
-                  filter: {},
-                })
-              );
-      
-              const results = await Promise.all(dataPromises);
-              const combinedData = results.reduce((acc, { data }) => [...acc, ...data], []);
-              setData(combinedData);
-            } catch (e) {
-              setError(e);
-            } finally {
-              setLoading(false);
-            }
-          };
-      
-          fetchResources();
+            const fetchResources = async () => {
+                try {
+                    const dataPromises = resources.map((resource) =>
+                        dataProvider.getList(resource, {
+                            pagination: { page: 1, perPage: 10 },
+                            sort: { field: 'id', order: 'ASC' },
+                            filter: {},
+                        })
+                    );
+
+                    const results = await Promise.all(dataPromises);
+                    const combinedData = results.reduce((acc, { data }) => [...acc, ...data], []);
+                    setData(combinedData);
+                } catch (e) {
+                    setError(e);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            fetchResources();
         }, [dataProvider]);
-      
+
         return { data, loading, error };
-      };
-    
-      const tables = ["posts", "hauls", "lookbook", "diy", "grwm"];
-      const { data: posts, loading: postLoading } = useFetchMultipleLists(tables);
-    
-    const useSavedPosts = (userId) => {
-        const [savedPosts, setSavedPosts] = useState([]);
-        const [loading, setLoading] = useState(true);
-        const [error, setError] = useState(null);
-    
-        useEffect(() => {
-            const fetchSavedPosts = async () => {
-                try {
-                    setLoading(true);
-                    // Fetch the saved posts
-                    let { data: savedData, error: savedError } = await supabase
-                        .from('saved_post')
-                        .select("*")
-                        .match({ user_id: userId });
-                    if (savedError) throw savedError;
-    
-
-                    let allPosts = [];
-
-                    // Fetch related data for each saved post
-                    for (let item of savedData) {
-                        const tables = ['posts', 'hauls', 'lookbook', 'diy', 'grwm'];
-                        const fetchedData = await Promise.all(tables.map(table =>
-                            supabase
-                                .from(table)
-                                .select("*")
-                                .eq("postId", item.postId)
-                        ));
-                        // console.log(fetchedData)
-    
-                        // Check for errors in the fetched data
-                        fetchedData.forEach(({ error }) => {
-                            if (error) throw error;
-                        });
-    
-                        // Combine the data from all tables
-                        const combinedData = fetchedData.reduce((acc, { data }) => [...acc, ...data], []);
-                        allPosts.push(...combinedData);
-
-                    }
-    
-                    setSavedPosts(allPosts);
-                } catch (e) {
-                    setError(e);
-                } finally {
-                    setLoading(false);
-                }
-                
-            };
-
-            const fetchCollection = async () => {
-                try {
-                    setLoading(true);
-                    // Fetch the saved posts
-                    let { data: savedData, error: savedError } = await supabase
-                        .from('saved_post')
-                        .select("*")
-                        .match({ user_id: userId });
-                    if (savedError) throw savedError;
-
-
-
-
-                    let allCollections = { general: [] };
-
-                    for (let item of savedData) {
-                        if (item.coll_name === null) {
-                            allCollections.general.push(item)
-                        } else {
-                            if (Object.keys(allCollections).includes(item.coll_name)) {
-                                allCollections[item.coll_name].push(item)
-
-                            } else {
-                                allCollections[item.coll_name] = []
-                                allCollections[item.coll_name].push(item)
-
-                            }
-                        }
-                    }
-
-                    for (let coll_name of Object.keys(allCollections)) {
-                        let coll_array = []
-                        for (let coll of allCollections[coll_name]) {
-                            console.log(coll)
-                            const tables = ['posts', 'hauls', 'lookbook', 'diy', 'grwm'];
-
-                            const fetchedData = await Promise.all(tables.map(table =>
-                                supabase
-                                    .from(table)
-                                    .select("*")
-                                    .eq("postId", coll.postId)
-                            ));
-
-                            
-                            // Check for errors in the fetched data
-                            fetchedData.forEach(({ error }) => {
-                                if (error) throw error;
-                            });
-
-                            // console.log(fetchedData)
-                            // Combine the data from all tables
-                            const combinedData = fetchedData.reduce((acc, { data }) => [...acc, ...data], []);
-                            coll_array = coll_array.concat(combinedData)
-
-                            
-                            // allCollections[coll_name] = [...combinedData];
-                        }
-                        allCollections[coll_name] = coll_array
-
-                    }
-                    
-
-                    console.log(allCollections)
-                    setCollections(allCollections);
-                } catch (e) {
-                    setError(e);
-                } finally {
-                    setLoading(false);
-                }
-
-            };
-
-            fetchCollection();
-            fetchSavedPosts();
-        }, [userId]);
-    
-        return { savedPosts, loading, error };
     };
 
-    const { savedPosts, loading, error } = useSavedPosts(currentUser.uid);
+    const tables = ["posts", "hauls", "lookbook", "diy", "grwm"];
+    const { data: posts, loading: postLoading } = useFetchMultipleLists(tables);
+
+    
+
+    const { savedPosts, savedCols, savedColNames, loading, error } = useSavedPosts(currentUser.uid);
 
     // console.log(collections);
-    
+
     useEffect(() => {
         getContractDoc();
         getSenderContract();
     }, [userData]);
-    
-    
-    useEffect(() => {
-        if (sentContract) {
-            navigate('/contract', { state: { url: {sentContract} } });
-        }
-    }, [sentContract]);
+
+
+    // useEffect(() => {
+    //     if (sentContract) {
+    //         navigate('/contract', { state: { url: { sentContract } } });
+    //     }
+    // }, [sentContract]);
 
 
     const follow = async () => {
@@ -243,23 +265,23 @@ const Profile = () => {
                     followed_id: userData.uid,
                     follower_id: currentUser.uid,
                 });
-    
+
             const { error: Error } = await supabase
                 .from('following')
                 .insert({
                     followed_id: userData.uid,
                     follower_id: currentUser.uid,
                 });
-    
+
             if (error) throw error;
-    
+
             setFollowed(true);
         } catch (error) {
             console.log(error.message);
-    
+
         }
     };
-    
+
     const unfollow = async () => {
         try {
             const { error } = await supabase
@@ -267,23 +289,23 @@ const Profile = () => {
                 .delete()
                 .eq('follower_id', currentUser.uid)
                 .eq('followed_id', userData.uid);
-    
+
             const { error: Error } = await supabase
                 .from('following')
                 .delete()
                 .eq('follower_id', currentUser.uid)
                 .eq('followed_id', userData.uid);
-            
-            
+
+
             if (error) throw error;
-    
+
             setFollowed(false);
         } catch (error) {
             console.log(error.message);
         }
     };
 
- 
+
     const getContractDoc = async () => {
         if (currentUser && currentUser.role === 'vendor') {
             const { data, error } = await supabase
@@ -291,8 +313,8 @@ const Profile = () => {
                 .select("*")
                 .match({ vendor_id: currentUser.uid })
                 .neq('created_by', currentUser.uid);
-    
-            
+
+
             if (error) throw error;
             setUserContract(data);
 
@@ -303,7 +325,7 @@ const Profile = () => {
                     .from("users")
                     .select("*")
                     .eq("id", item.created_by);
-    
+
                 if (postError && status !== 406) throw postError;
                 if (postData && postData.length > 0) {
                     // Take the first record from the array
@@ -314,8 +336,8 @@ const Profile = () => {
                     console.log('No user found');
                 }
             }
-            
-           
+
+
 
         } else if (currentUser && currentUser.role === 'influencer') {
             const { data, error } = await supabase
@@ -323,7 +345,7 @@ const Profile = () => {
                 .select("*")
                 .match({ influencer_id: currentUser.uid })
                 .neq('created_by', currentUser.uid);
-            
+
             setUserContract(data);
             if (error) throw error;
 
@@ -334,7 +356,7 @@ const Profile = () => {
                     .from("users")
                     .select("*")
                     .eq("id", item.created_by);
-    
+
                 if (postError && status !== 406) throw postError;
                 if (postData && postData.length > 0) {
                     // Take the first record from the array
@@ -345,8 +367,8 @@ const Profile = () => {
                     console.log('No user found');
                 }
             }
-            
-                
+
+
         };
     };
 
@@ -359,25 +381,25 @@ const Profile = () => {
 
             setSenderContract(data);
             if (error) throw error;
-           
+
 
         } else if (currentUser && currentUser.role === 'influencer') {
             const { data, error } = await supabase
                 .from('contract')
                 .select("*")
                 .match({ created_by: currentUser.uid });
-            
+
             setSenderContract(data);
             if (error) throw error;
-                            
+
         };
     };
 
     const userPost = posts && posts.filter(pst => pst.uid === userData?.uid);
-    
 
-    
-  
+
+
+
     // formatting the number of followers
     const formatFollowers = (count) => {
         if (count >= 1000) {
@@ -410,7 +432,7 @@ const Profile = () => {
 
     function TabPanel(props) {
         const { children, value, index, ...other } = props;
-      
+
         return (
             <div
                 role="tabpanel"
@@ -427,13 +449,13 @@ const Profile = () => {
             </div>
         );
     }
-      
+
     TabPanel.propTypes = {
         children: PropTypes.node,
         index: PropTypes.number.isRequired,
         value: PropTypes.number.isRequired,
     };
-      
+
     function a11yProps(index) {
         return {
             id: `full-width-tab-${index}`,
@@ -456,21 +478,21 @@ const Profile = () => {
         const uuid = uuidv4();
         const vendor_id = (userData && currentUser && (currentUser.role === 'vendor' && currentUser.id) || (userData.role === 'vendor' && userData.id));
         const influencer_id = (userData && currentUser && (currentUser.role === 'influencer' && currentUser.id) || (userData.role === 'influencer' && userData.id));
-    
+
         // Check if a contract already exists between the vendor and the influencer
         const { data: existingContract, error: existingContractError } = await supabase
             .from("contract")
             .select("*")
             .eq('vendor_id', vendor_id)
             .eq('influencer_id', influencer_id);
-    
+
         if (existingContractError) throw existingContractError;
-    
+
         if (existingContract.length > 0) {
             toast.error("A contract already exists between this vendor and influencer!");
             return;
         }
-    
+
         // If no existing contract, proceed to create a new one
         const { data, error } = await supabase
             .from("contract")
@@ -502,7 +524,7 @@ const Profile = () => {
                 influencer_email: (userData && currentUser && (currentUser.role === 'influencer' && currentUser.email) || (userData.role === 'influencer' && userData.email))
             })
             .select();
-    
+
         if (error) throw error;
         else {
             console.log("The contract was inserted successfully");
@@ -510,59 +532,61 @@ const Profile = () => {
         refresh();
         setSentContract(data);
         toast.success("Contract Request sent!");
+        redirect('edit', 'contract', data[0].id)
+
     }
-    
+
 
     const handleDeleteContract = async () => {
         const vendor_id = (userData && currentUser && (currentUser.role === 'vendor' && currentUser.id) || (userData.role === 'vendor' && userData.id));
         const influencer_id = (userData && currentUser && (currentUser.role === 'influencer' && currentUser.id) || (userData.role === 'influencer' && userData.id));
-    
+
         // Check if a contract exists between the vendor and the influencer
         const { data: existingContract, error: existingContractError } = await supabase
             .from("contract")
             .select("*")
             .eq('vendor_id', vendor_id)
             .eq('influencer_id', influencer_id);
-    
+
         if (existingContractError) throw existingContractError;
-    
+
         if (existingContract.length === 0) {
             toast.error("No contract exists between this vendor and influencer!");
             return;
         }
-    
+
         // If a contract exists, proceed to delete it
         const { data, error } = await supabase
             .from("contract")
             .delete()
             .eq('vendor_id', vendor_id)
             .eq('influencer_id', influencer_id);
-    
+
         if (error) throw error;
-    
+
         toast.success("Contract deleted successfully!");
     }
-    
- 
-      
-      
+
+
+
+
     return (
         <>
             {userData ? (
                 <>
-                    
+
 
                     {/* user profile section */}
 
                     <div className='profile__body feed--page'>
                         {/* <DHeader /> */}
-                        
+
                         {/* User information */}
                         <div className='user__info'>
                             {/* user image */}
                             <div className='uImage--container'>
                                 <div className='user__image drop-shadow-lg'>
-                                   
+
                                     <Avatar sx={{ width: '120px', height: "120px" }}
                                         src={userData.photoURL}
                                     />
@@ -573,17 +597,17 @@ const Profile = () => {
                             </div>
                             {/* user display name */}
                             <p className='display__name'>{userData.displayName}</p>
-                            
+
                             <div className='username flex items-center justify-center'>
                                 <span className="mr-[10px]">
                                     {userData.role === "vendor" ? (
                                         <img src={AccountType} alt='account' />
                                     ) : userData.role === "influencer" ? (
-                                    
+
                                         <img src={influencerIcon} alt='account' />
-                                   
+
                                     ) : <img src={AccountType} alt='account' />}
-                                    
+
                                 </span>
                                 @{currentUser && userData.username ? userData.username.toLowerCase() : 'username'}
                                 {userData.role === "vendor" ? (
@@ -608,7 +632,7 @@ const Profile = () => {
                                     <img src={divider} alt='divider' style={{ filter: theme === "dark" && "invert(1)" }} className='flex-shrink-0' />
                                 </li>
 
-                                    
+
                                 <li className='flex flex-col gap-y-0 items-center justify-center'>
                                     <span className='font-[700] text-[16px]'>
                                         {formatFollowers(userPost && userPost.length || 0)}
@@ -638,7 +662,7 @@ const Profile = () => {
                                     <div className="min-w-[150px] h-[36px] text-[15px] font-[500] flex items-center justify-center bg-[#222] text-white rounded-[6px] cursor-pointer" onClick={followed ? unfollow : follow} style={{ backgroundColor: theme === 'light' ? '#222' : '#fff', color: theme === 'light' ? '#fff' : '#222', }}>
                                         {followed ? 'Followed' : 'Follow'}
                                     </div>
-                                    
+
 
                                     {(currentUser.role === "vendor" || currentUser.role === "influencer") && (userData.role === "vendor" || userData.role === "influencer") && (
                                         <>
@@ -657,15 +681,15 @@ const Profile = () => {
                                     )}
                                 </div>
                             )}
-                                
+
                         </div>
 
 
-                            
+
 
                         {/* User nested routes  */}
                         <div className='mt-[1.5rem]'>
-                                
+
                             <Grid container justifyContent='center' direction='column' sx={{
                                 width: '100% !important', justifyContent: 'center', padding: '0',
                                 '& .MuiBox-root': {
@@ -676,7 +700,7 @@ const Profile = () => {
                             }}>
                                 <AppBar className='mx-auto' position="static"
                                     sx={{
-                                        maxWidth: { xs: '90vw', sm: '90vw', md: '500px',  },
+                                        maxWidth: { xs: '90vw', sm: '90vw', md: '500px', },
                                         backgroundColor: 'unset',
                                         color: '#333',
                                         boxShadow: 'none',
@@ -695,11 +719,11 @@ const Profile = () => {
                                         filter: theme === "dark" && "invert(1)"
 
                                     }}
-                                    
+
                                 >
                                     <Tabs
                                         sx={{
-                                            
+
                                             justifyContent: 'center',
                                             '& .MuiTab-root': {
                                                 minHeight: '20px',
@@ -713,19 +737,19 @@ const Profile = () => {
                                             }, '& .MuiBox-root': {
                                                 padding: '0'
                                             },
-                                            
-                                                
+
+
                                         }}
-                                            
+
                                         value={tabValue}
                                         onChange={handleChange}
                                         indicatorColor="none"
-                                            
+
                                         variant="scrollable"
                                         aria-label="full width tabs example"
-                                        
+
                                     >
-                                    
+
                                         <Tab
                                             value={0}
                                             icon={<img src={post} alt='post' />}
@@ -762,14 +786,14 @@ const Profile = () => {
                                         )}
                                     </Tabs>
                                 </AppBar>
-                                
+
                                 <SwipeableViews className=" mx-auto"
                                     axis={mytheme.direction === 'rtl' ? 'x-reverse' : 'x'} // Use theme.direction
                                     index={tabValue}
                                     onChangeIndex={setTabValue}
                                 >
-                                   
-                                   
+
+
                                     <TabPanel className="mb-[4rem] mobile:min-w-[90vw] "
                                         value={tabValue} index={0}>
                                         <MakePost
@@ -786,16 +810,16 @@ const Profile = () => {
                                             value={tabValue}
                                             index={1}
                                         >
-                                            <SavedPost userPost={savedPosts} loading={loading} />
+                                            <SavedPost userPost={savedPosts} loading={loading} collections={savedCols} collFilters={savedColNames} />
                                         </TabPanel>
                                     )}
 
                                     {(userData.role === "admin" || userData.role === "vendor" || userData.role === "influencer") && (
                                         <TabPanel className="mb-[4rem]"
                                             value={tabValue} index={2}>
-                                            {userData.role === "vendor" ? 
-                                            <VendorProducts theme={theme} />
-                                                : 
+                                            {userData.role === "vendor" ?
+                                                <VendorProducts theme={theme} />
+                                                :
                                                 <InfluencerProducts theme={theme} />
                                             }
                                         </TabPanel>
@@ -816,26 +840,26 @@ const Profile = () => {
                                                 senderContract={senderContract}
                                                 users={users}
                                             />
-                                            
+
                                         </TabPanel>
                                     )}
                                 </SwipeableViews>
                             </Grid>
-        
+
                         </div>
 
                     </div>
-                            
-                  
+
+
 
                     {/* Settings Container */}
 
-                    
+
                     {/* <Settings settings={settings} closeSettings={closeSettings} userData={userData} formatFollowers={formatFollowers} /> */}
-                    
+
 
                 </>
-            
+
             ) : (
                 <div className='spinner'>
 

@@ -1,13 +1,13 @@
-import React, {  useContext, useEffect } from "react";
-import {  Route, Navigate, BrowserRouter } from "react-router-dom";
-import {  ToastContainer, Zoom } from "react-toastify";
+import React, { useContext, useEffect } from "react";
+import { Route, Navigate, BrowserRouter } from "react-router-dom";
+import { ToastContainer, Zoom } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import AnimationContext from './components/animateContext/AnimationContext';
 import { AuthContext } from "./components/context/AuthContext";
-import { Home, SignIn, SignUp, Reset,  ChatList, Hauls, Lookbook, DIY, GRWM, Search, Cart, OrderHistory,  Vendors, Store, ResetPage, Contract, Influencers, InfluencerStore, InfluencerViewAll, SkillCenter, SkillViewAll, LoginScreen, SignupScreen, ResetScreen, ResetScreenPage, Downloads, History, AdStat, AdSetting, Accessories, Fashion, Beauty, Footwear, Jewelry, Others } from "./pages";
+import { Home, SignIn, SignUp, Reset, ChatList, Hauls, Lookbook, DIY, GRWM, Search, Cart, OrderHistory, Vendors, Store, ResetPage, Contract, Influencers, InfluencerStore, InfluencerViewAll, SkillCenter, SkillViewAll, LoginScreen, SignupScreen, ResetScreen, ResetScreenPage, Downloads, History, AdStat, AdSetting, Accessories, Fashion, Beauty, Footwear, Jewelry, Others } from "./pages";
 import { Admin, Authenticated, CustomRoutes, Resource, } from 'react-admin';
 import { MyLayout } from "./components/layout/MyLayout";
-import { PostCreate, PostEdit, PostList, PostShow} from "./pages/post/_Post/_Post";
+import { PostCreate, PostEdit, PostList, PostShow } from "./pages/post/_Post/_Post";
 import { MyDashboard } from "./pages/dashboard/Dashboard";
 import customTheme from "./components/customTheme/CustomTheme";
 import FileUpload from "./components/inputField/InputField";
@@ -16,10 +16,10 @@ import { DIYCreate, DIYEdit, DIYList, DIYShow } from "./pages/for_You/diy/_diy/_
 import { LookCreate, LookEdit, LookList, LookShow } from "./pages/for_You/lookbook/_lookbook/_Lookbook";
 import { GrwmCreate, GrwmEdit, GrwmList, GrwmShow } from "./pages/for_You/grwm/_grwm/_GRWM";
 import { UsersCreate, UsersEdit, UsersList, UsersShow } from "./pages/users/_users/_User";
-import {  dataProvider } from "./supabase/dataProvider";
+import { dataProvider } from "./supabase/dataProvider";
 import { authProvider } from "./supabase/authProvider";
 import { QueryClient } from "@tanstack/react-query";
-import { CartProvider, MedusaProvider,} from "medusa-react";
+import { CartProvider, MedusaProvider, } from "medusa-react";
 import { StoreCreate, StoreEdit, StoreList, StoreShow } from "./pages/store/_Store";
 import Settings from "./components/profile/Settings";
 import { ContractCreate, ContractEdit, ContractList, ContractShow } from "./pages/contract/_Contract";
@@ -39,30 +39,30 @@ import { AdCreate, AdEdit, AdList, AdShow } from "./pages/ads/AdList";
 const queryClient = new QueryClient()
 
 function App() {
-  const [isAnimationActive, setAnimationActive] = React.useState(false);
-  const { currentUser } = useContext(AuthContext);
-  // const channelName = 'room1';
+	const [isAnimationActive, setAnimationActive] = React.useState(false);
+	const { currentUser } = useContext(AuthContext);
+	// const channelName = 'room1';
 
-  // Use the custom hook to get real-time updates
-  const realtimeData = useSupabaseRealtime();
-  
-      useEffect(() => {
-          if (realtimeData) {
-              console.log('Change received!', realtimeData);
-              // Do something with the real-time data
-          }
-      }, [realtimeData]);
+	// Use the custom hook to get real-time updates
+	const realtimeData = useSupabaseRealtime();
 
-  
+	useEffect(() => {
+		if (realtimeData) {
+			console.log('Change received!', realtimeData);
+			// Do something with the real-time data
+		}
+	}, [realtimeData]);
 
-  const activateAnimation = () => {
-    setAnimationActive(true);
-  };
 
- 
 
-  
-  return (
+	const activateAnimation = () => {
+		setAnimationActive(true);
+	};
+
+
+
+
+	return (
 		<>
 			<MedusaProvider
 				queryClientProviderProps={{ client: queryClient }}
@@ -93,7 +93,7 @@ function App() {
 								title={"Haulway"}
 								layout={MyLayout}
 								dashboard={MyDashboard}
-							  loginPage={SignIn}
+								loginPage={LoginScreen}
 							>
 								<Resource
 									name="posts"
@@ -196,18 +196,18 @@ function App() {
 
 								{/* CustomRoutes  */}
 								<CustomRoutes noLayout>
-									<Route path="/" element={<Home />} />
+									{/* <Route path="/" element={<Home />} />
 									<Route path="/login" element={<SignIn />} />
 									<Route path="/signup" element={<SignUp />} />
 									<Route path="/reset" element={<Reset />} />
 									<Route path="/reset-page" element={<ResetPage />} />
-									<Route path="/onboard" element={<Slider />} />
+									<Route path="/onboard" element={<Slider />} /> */}
 									{/* mobile screens */}
-									{/* <Route path="/onboard" element={<OnboardScreen />} />
+									<Route path="/onboard" element={<OnboardScreen />} />
 									<Route path="/login" element={<LoginScreen />} />
 									<Route path="/signup" element={<SignupScreen />} />
 									<Route path="/reset" element={<ResetScreen />} />
-									<Route path="/reset-page" element={<ResetScreenPage />} /> */}
+									<Route path="/reset-page" element={<ResetScreenPage />} />
 								</CustomRoutes>
 
 								<CustomRoutes>

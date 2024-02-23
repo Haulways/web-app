@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import './postCard.css';
+import './exploreCard.css';
 import { ThemeContext } from '../context/ThemeProvider';
 import { supabase } from '../../supabase/SupabaseConfig';
 import { useRedirect } from 'react-admin';
 
-const PostCard = (props) => {
+const ExploreCard = (props) => {
     const { theme } = React.useContext(ThemeContext);
 
     const { thumbnail, title, subTitle, views, likes, comments, postId } = props;
@@ -31,31 +31,31 @@ const PostCard = (props) => {
                         .from(postId?.split(":")[0])
                         .select("*")
                         .match({ id: postId?.split(":")[1] });
-                        if (savedError) throw savedError;                    
-                    
+                    if (savedError) throw savedError;
+
                     let { data: likes, error: likesError } = await supabase
                         .from('likes')
                         .select("*")
                         .match({ postId: postId?.split(":")[1] });
                     if (likesError) throw likesError;
 
-                    
+
                     let { data: views, error: viewsError } = await supabase
                         .from('viewers')
                         .select("*")
                         .match({ video_id: postId?.split(":")[1] });
                     if (viewsError) throw viewsError;
 
-                    
+
                     let { data: comments, error: commentsError } = await supabase
                         .from('comments')
                         .select("*")
                         .match({ postId: postId?.split(":")[1] });
                     if (commentsError) throw commentsError;
 
-                    
 
-                    setPostData({...data[0], views: views.length, likes: likes.length, comments: comments.length});
+
+                    setPostData({ ...data[0], views: views.length, likes: likes.length, comments: comments.length });
                 } catch (e) {
                     setError(e);
                 } finally {
@@ -72,7 +72,7 @@ const PostCard = (props) => {
 
     const { postData } = useSavedPosts(postId);
 
-    
+
 
     const _thumbnail = postData?.posterUrl ? (postData?.posterUrl) : ("https://cdn.pixabay.com/photo/2022/01/11/21/48/link-6931554_640.png");
 
@@ -89,11 +89,11 @@ const PostCard = (props) => {
 
     return (
         <>
-            <div onClick={() => goToPost(postId)} className="max-w-[300px] mb-[10px] rounded-lg shadow-sm drop-shadow-xl shadow-zinc-500  flex h-[90px] overflow-hidden gap-x-3 items-center cursor-pointer" style={{ backgroundColor: theme === 'light' ? '#fff' : '#222', color: theme === 'light' ? '#222' : '#fff', }}>
-                <a href="#">
-                    <img className=" h-[90px] min-w-[80px]" src=
+            <div onClick={() => goToPost(postId)} className="max-w-[300px] mb-[10px] rounded-lg shadow-sm drop-shadow-xl shadow-zinc-500   overflow-hidden gap-x-3  cursor-pointer p-[16px]" style={{ backgroundColor: theme === 'light' ? '#fff' : '#222', color: theme === 'light' ? '#222' : '#fff', }}>
+                <div className='w-full rounded-lg mb-[10px]'>
+                    <img className="  w-[200px] min-w-[100%] rounded-lg object-cover" src=
                         {_thumbnail} alt="" />
-                </a>
+                </div>
                 <div className="brand">
                     <a href="#">
                         <h5 className=" font-bold tracking-tight pb-[4 px]">{_title} </h5>
@@ -119,4 +119,4 @@ const PostCard = (props) => {
     )
 };
 
-export default PostCard
+export default ExploreCard

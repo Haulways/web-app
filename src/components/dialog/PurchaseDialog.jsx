@@ -31,9 +31,9 @@ import { PaystackButton } from 'react-paystack';
 const medusa = new Medusa({
     maxRetries: 3,
     baseUrl: "https://ecommerce.haulway.co",
-  });
+});
 
-const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentProduct, cart, cart_id, setCartID, custData, setCart, setCustData, theme}) => {
+const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentProduct, cart, cart_id, setCartID, custData, setCart, setCustData, theme }) => {
     const { currentUser } = useContext(AuthContext);
     const [openShipping, setOpenShipping] = React.useState(false);
     const [shipOpts, setShipOpts] = React.useState([]);
@@ -43,21 +43,21 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
     const [finalType, setFinalType] = React.useState(null);
     const [finalData, setFinalData] = useStore("order");
 
-    
+
     React.useEffect(() => {
         if (custData && cart && cart_id) {
             // Check if the item already exists in the cart
             const existingItem = cart.items.find(item => item.variant_id === currentProduct.variants[0].id);
-    
+
             if (existingItem) {
                 // If the item exists and its quantity is more than 1, update it to 1
                 setCart(existingItem)
             }
-  
+
         }
     }, []);
 
-    
+
 
     useEffect(() => {
         if (cart && custData) {
@@ -65,7 +65,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
             console.log(custData);
         }
     }, [cart, custData]);
-   
+
 
     React.useEffect(() => {
         if (cart_id) {
@@ -92,7 +92,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                 amount: cart.payment_session.amount,
                 publicKey: import.meta.env.VITE_PS_PUB_KEY,
             };
-    
+
             console.log(conf);
             setConfig(conf);
         }
@@ -100,15 +100,15 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
 
     const handleRemoveItem = (variantId) => {
         console.log(`Attempting to remove item ${variantId} from cart`);
-      
+
         if (cart && cart_id) {
             medusa.carts.lineItems.delete(cart_id, variantId).then(({ cart }) => {
                 setCart(cart);
             });
         }
-      };
+    };
 
-    
+
     const completeCheckout = () => {
         if (
             custData &&
@@ -126,7 +126,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                     setFinalType(type);
                     console.log(data, type);
                     const lineItem = data.cart.items;
-        
+
                     // Loop through each line item and remove it from the cart
                     lineItem.forEach(item => {
                         medusa.carts.lineItems.delete(cart_id, item.id)
@@ -146,7 +146,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
             toast("Check out failed");
         }
     };
-    
+
     const handlePaystackSuccessAction = (reference) => {
         // Implementation for whatever you want to do with reference and after success call.
         console.log(reference);
@@ -155,20 +155,20 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
         completeCheckout()
         setOpenShipping(false);
     };
-    
+
     // you can call this function anything
     const handlePaystackCloseAction = () => {
         // implementation for  whatever you want to do when the Paystack dialog closed.
         console.log("closed");
     };
-    
+
     const componentProps = {
         ...config,
         text: "Pay with Paystack",
         onSuccess: (reference) => handlePaystackSuccessAction(reference),
         onClose: handlePaystackCloseAction,
     };
-    
+
     const completePayment = (data) => {
         console.log(data);
         UpdateShippingAddress(data);
@@ -187,7 +187,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
 
     useEffect(() => {
         if (cart && cart.region) {
-            
+
             const countries = cart.region.countries.map((country) => (
                 {
                     id: country.iso_2,
@@ -205,8 +205,8 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                 .catch((error) => {
                     console.log(error.message);
                 });
-          
-          
+
+
         }
     }, [cart]);
 
@@ -218,7 +218,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                 console.log(error.message);
             });
     };
-    
+
     const SetPaymentSess = (paymentProviderId) => {
         if (
             custData &&
@@ -258,7 +258,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
             CreatePaymentSess(cart);
         }
     }, [cart])
-    
+
     const SelectShippingMethod = (shippingOptionId) => {
         if (
             custData &&
@@ -281,7 +281,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
             console.log("Please your Shipping Address first");
         }
     };
-    
+
     // update shipping address 
     const UpdateShippingAddress = (address) => {
         // console.log(custData.shipping_addresses);
@@ -309,7 +309,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                 })
         }
         else {
-           
+
             console.log("Shipping Address Already Set");
         }
     };
@@ -325,8 +325,8 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                             textTransform: 'capitalize'
                         }}
                         color="primary" label='Add new address' icon=' '
-                        
-                        
+
+
                         disabled={
                             cart && cart.shipping_address_id && cart.shipping_address
                                 ? true
@@ -344,7 +344,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                                 : true
                         }
                         // fullWidth
-                    
+
                         color="primary"
                         variant="contained"
                         label={"Add Shipping Option"}
@@ -370,7 +370,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                                 : true
                         }
                         // fullWidth
-                    
+
                         color="primary"
                         variant="contained"
                         label={cart && cart.shipping_methods && cart.shipping_methods.length > 0 ? "Updated" : "Add Selected Option"}
@@ -399,7 +399,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                                     : false
                             }
                             // fullWidth
-                    
+
                             color="primary"
                             variant="contained"
                             label="Next"
@@ -412,13 +412,13 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                                     : false
                             }
                         />
-                   
+
                     ) : null}
-                
+
             </Stack>
         </Toolbar>
     );
-    
+
     function toTitleCase(str) {
         return str
             .toLowerCase()
@@ -434,7 +434,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
     const handleConfirm = () => {
         setOpenShipping(false);
     };
-   
+
 
     return (
         <>
@@ -443,7 +443,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                 onClose={cancelPayment}
                 PaperProps={{
                     style: {
-                        borderRadius: '20px', padding: '10px', minWidth: '340px' , boxShadow: 'none', backgroundColor: theme === "light" ? "#fff" : "rgba(68, 68, 68, 1)", color: theme === "light" ? "#222" : "#fff"
+                        borderRadius: '20px', padding: '10px', minWidth: '340px', boxShadow: 'none', backgroundColor: theme === "light" ? "#fff" : "rgba(68, 68, 68, 1)", color: theme === "light" ? "#222" : "#fff"
                     }
                 }}
                 BackdropProps={{ invisible: true }}
@@ -451,9 +451,9 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                 <span className='paymet__details--close cursor-pointer' onClick={cancelPayment}>
                     <CloseIcon sx={{ fontSize: '30px' }} />
                 </span>
-                
+
                 <div className='payment__details'>
-                    
+
 
                     <div className='payment__details--Top'>
                         <h2>Avenue</h2>
@@ -528,7 +528,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                                 onChange={(event, value) => SetPaymentSess(value)}
                             />
                         </Form>
-                        
+
                     </div>
 
 
@@ -553,7 +553,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                         <h2>
                             Order Info
                         </h2>
-                        
+
                         {/* subtotal  */}
                         <div className="order--summation">
                             <span className="sum--name">Subtotal</span>
@@ -582,7 +582,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                             </span>
                         </div>
                     </div>
-                    
+
                 </div>
 
 
@@ -652,7 +652,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                         '& .MuiDialogContent-root': {
                             padding: '0px !important'
                         },
-                                
+
                         '& .MuiToolbar-root': {
                             backgroundColor: '#fff !important',
                             borderTop: '1px solid rgba(0, 0, 0, 0.06)'
@@ -689,8 +689,8 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                                         background:
                                             "#222222 !important",
                                         borderRadius: "6px",
-                                              
-                                                
+
+
                                     },
                                     "& .MuiTabs-indicator": {
                                         background: "none",
@@ -702,15 +702,15 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                                     '& .MuiInputLabel-root': {
                                         color: '#7A7A7A',
                                         fontWeight: '500',
-                                                
-                                                  
+
+
                                     },
                                     '& .MuiFilledInput-input': {
                                         color: '#333',
                                         fontWeight: '500'
                                     },
                                 }}
-                                        
+
                             >
                                 <FormTab label="Address Info">
                                     <span className='delivery-location'>
@@ -721,12 +721,12 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                                         <span className='location-name'>
                                             <img className='w-[30px] h-[30px]' src={location} />
                                             <span>
-                            
+
                                                 <p className='text-[#222] font-[600] text-[12px]'>Select previous delivery location</p>
                                             </span>
                                         </span>
                                         <span className='cursor-pointer '
-                   
+
                                         >
                                             <ExpandMoreIcon className='' width='30px' height='30px' />
                                         </span>
@@ -740,7 +740,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                                                 source="first_name"
                                                 defaultValue={custData ? `${custData.first_name}` : null}
                                                 fullWidth
-                                                variant="outlined" 
+                                                variant="outlined"
                                             />
                                         </Grid>
                                         <Grid item xs={6} md={6}>
@@ -748,28 +748,28 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                                                 source="last_name"
                                                 defaultValue={custData ? `${custData.last_name}` : null}
                                                 fullWidth
-                                                variant="outlined" 
+                                                variant="outlined"
                                             />
                                         </Grid>
                                         <Grid item xs={12}>
                                             <TextInput
                                                 source="address_1"
                                                 label="Address"
-                                                variant="outlined" 
+                                                variant="outlined"
                                                 fullWidth
                                             />
                                         </Grid>
                                         <Grid item xs={6} md={6}>
                                             <TextInput
                                                 source="city"
-                                                variant="outlined" 
+                                                variant="outlined"
                                                 fullWidth
                                             />
                                         </Grid>
                                         <Grid item xs={6} md={6}>
                                             <TextInput
                                                 source="province"
-                                                variant="outlined" 
+                                                variant="outlined"
                                                 fullWidth
                                             />
                                         </Grid>
@@ -777,8 +777,8 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                                             <SelectInput
                                                 source="country_code"
                                                 defaultValue={selectedRegion}
-                                                        variant="outlined" 
-                                                        fullWidth
+                                                variant="outlined"
+                                                fullWidth
                                                 onChange={(e) => setSelectedRegion(e.target.value)}
                                                 choices={
                                                     shipRegs.map((region) => {
@@ -793,21 +793,21 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                                         <Grid item xs={6} md={6}>
                                             <TextInput
                                                 source="postal_code"
-                                                variant="outlined" 
+                                                variant="outlined"
                                                 fullWidth
                                             />
                                         </Grid>
                                         <Grid item xs={6} md={6}>
                                             <TextInput
                                                 source="email"
-                                                variant="outlined" 
+                                                variant="outlined"
                                                 fullWidth
                                             />
                                         </Grid>
                                         <Grid item xs={6} md={6}>
                                             <TextInput
                                                 source="phone"
-                                                variant="outlined" 
+                                                variant="outlined"
                                                 fullWidth
                                             />
                                         </Grid>
@@ -828,7 +828,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                                                 : shipOpts
                                         }
                                     // validate={required()}
-                                               
+
                                     />
                                 </FormTab>
                             </TabbedForm>
@@ -837,7 +837,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                     onConfirm={handleConfirm}
                     onClose={handleDialogClose}
                 />
-       
+
             </Dialog>
         </>
     );
@@ -845,69 +845,102 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
 
 
 
-const ProcessingDialog = ({openProcessing, handleCompleted, theme}) => {
-    
-  
+const ProcessingDialog = ({ openProcessing, handleCompleted, theme }) => {
+
+
     return (
         <div>
-        
+
             <Dialog
                 open={openProcessing}
                 BackdropProps={{ invisible: true }}
-              
-                PaperProps={{ style: { borderRadius: '20px', padding: '10px', minWidth: '340px', boxShadow: 'none',  backgroundColor: theme === "light" ? "#fff" : "rgba(68, 68, 68, 1)", color: theme === "light" ? "#222" : "#fff" } }}
+
+                PaperProps={{ style: { borderRadius: '20px', padding: '10px', minWidth: '340px', boxShadow: 'none', backgroundColor: theme === "light" ? "#fff" : "rgba(68, 68, 68, 1)", color: theme === "light" ? "#222" : "#fff" } }}
             >
-                 <span onClick={handleCompleted}>
-                            <ChevronRightIcon className='w-[30px] h-[36px] absolute' />
+                <span onClick={handleCompleted}>
+                    <ChevronRightIcon className='w-[30px] h-[36px] absolute' />
                 </span>
-                
+
                 <div className='processing'>
                     <img src={processing} alt='processing' />
                     <h2>Processing...</h2>
                     <p>Your request is being Processed</p>
                 </div>
-         
+
             </Dialog>
         </div>
     );
-  }
+}
 
 
-  const CompletedDialog = ({openCompleted, cancelCompleted, theme}) => {
-    
-  
-      return (
-          <div>
-        
-              <Dialog
-                  open={openCompleted}
-                  PaperProps={{ style: { borderRadius: '20px', padding: '10px', minWidth: '340px', boxShadow: 'none',  backgroundColor: theme === "light" ? "#fff" : "rgba(68, 68, 68, 1)", color: theme === "light" ? "#222" : "#fff" } }}
-                  BackdropProps={{ invisible: true }}
-
-              >
-                  <div className='completed'>
-                      <img src={thankYou} alt='processing' />
-                      <h2>Completed</h2>
-                      <p>Your request has been completed</p>
-                  </div>
-
-                  <div className='thank--you'>
-                      <p>Thanks for your purchase</p>
-                      <div className='product__details--Bottom' onClick={cancelCompleted}>
-                          <button>
-                              Back to home
-                          </button>
-                      </div>
-                  </div>
-         
-              </Dialog>
-          </div>
-      );
-  }
+const CompletedDialog = ({ openCompleted, cancelCompleted, theme }) => {
 
 
+    return (
+        <div>
 
-export const PurchaseDialog = ({ openPurchase, handleClosePurchase,  handleClosePurchase1, openPurchase1, setOpenPurchase1,  mediaUrl, product, theme }) => {
+            <Dialog
+                open={openCompleted}
+                PaperProps={{ style: { borderRadius: '20px', padding: '10px', minWidth: '340px', boxShadow: 'none', backgroundColor: theme === "light" ? "#fff" : "rgba(68, 68, 68, 1)", color: theme === "light" ? "#222" : "#fff" } }}
+                BackdropProps={{ invisible: true }}
+
+            >
+                <div className='completed'>
+                    <img src={thankYou} alt='processing' />
+                    <h2>Completed</h2>
+                    <p>Your request has been completed</p>
+                </div>
+
+                <div className='thank--you'>
+                    <p>Thanks for your purchase</p>
+                    <div className='product__details--Bottom' onClick={cancelCompleted}>
+                        <button>
+                            Back to home
+                        </button>
+                    </div>
+                </div>
+
+            </Dialog>
+        </div>
+    );
+}
+
+
+const CollectionsDialog = ({ openCompleted, cancelCompleted, theme }) => {
+
+
+    return (
+        <div>
+
+            <Dialog
+                open={openCompleted}
+                PaperProps={{ style: { borderRadius: '20px', padding: '10px', minWidth: '340px', boxShadow: 'none', backgroundColor: theme === "light" ? "#fff" : "rgba(68, 68, 68, 1)", color: theme === "light" ? "#222" : "#fff" } }}
+                BackdropProps={{ invisible: true }}
+
+            >
+                <div className='completed'>
+                    <img src={thankYou} alt='processing' />
+                    <h2>Completed</h2>
+                    <p>Your request has been completed</p>
+                </div>
+
+                <div className='thank--you'>
+                    <p>Thanks for your purchase</p>
+                    <div className='product__details--Bottom' onClick={cancelCompleted}>
+                        <button>
+                            Back to home
+                        </button>
+                    </div>
+                </div>
+
+            </Dialog>
+        </div>
+    );
+}
+
+
+
+export const PurchaseDialog = ({ openPurchase, handleClosePurchase, handleClosePurchase1, openPurchase1, setOpenPurchase1, mediaUrl, product, theme }) => {
     const [openPayment, setOpenPayment] = React.useState(false);
     const [purchase, setPurchase] = React.useState(true);
     const [openProcessing, setOpenProcessing] = React.useState(false);
@@ -943,49 +976,50 @@ export const PurchaseDialog = ({ openPurchase, handleClosePurchase,  handleClose
 
 
     const addItem2Cart = (variantId, qty) => {
-      
-            if (custData && cart && cart_id) {
-                medusa.carts.lineItems
-                    .create(cart_id, {
-                        variant_id: variantId,
-                        quantity: qty,
-                    })
-                    .then(({ cart }) => {
-                        setCart(cart);
-                        toast(currentProduct.title + " Added to cart")
-                    });
-    
-            }
-       
+        console.log(custData)
+
+        if (custData && cart && cart_id) {
+            medusa.carts.lineItems
+                .create(cart_id, {
+                    variant_id: variantId,
+                    quantity: qty,
+                })
+                .then(({ cart }) => {
+                    setCart(cart);
+                    toast(currentProduct.title + " Added to cart")
+                });
+
+        }
+
     };
- 
+
 
     const add2Cart = async (variantId, qty) => {
-            if (custData && cart && cart_id) {
-                // Check if the item already exists in the cart
-                const existingItem = cart.items.find(item => item.variant_id === variantId);
-        
-                if (existingItem) {
-                    // If the item exists and its quantity is more than 1, update it to 1
-                    if (existingItem.quantity > 1) {
-                        await medusa.carts.lineItems.update(cart_id, existingItem.id, { quantity: 1 });
-                    }
-                } else {
-                    // If the item doesn't exist, add it to the cart
-                    await medusa.carts.lineItems.create(cart_id, { variant_id: variantId, quantity: qty });
-                }
-        
-                // Fetch the updated cart
-                const updatedCart = await medusa.carts.retrieve(cart_id);
-                setCart(updatedCart.cart);
-            }
-            
-       
-    };
-    
-    
+        if (custData && cart && cart_id) {
+            // Check if the item already exists in the cart
+            const existingItem = cart.items.find(item => item.variant_id === variantId);
 
-  
+            if (existingItem) {
+                // If the item exists and its quantity is more than 1, update it to 1
+                if (existingItem.quantity > 1) {
+                    await medusa.carts.lineItems.update(cart_id, existingItem.id, { quantity: 1 });
+                }
+            } else {
+                // If the item doesn't exist, add it to the cart
+                await medusa.carts.lineItems.create(cart_id, { variant_id: variantId, quantity: qty });
+            }
+
+            // Fetch the updated cart
+            const updatedCart = await medusa.carts.retrieve(cart_id);
+            setCart(updatedCart.cart);
+        }
+
+
+    };
+
+
+
+
 
     // console.log(currentProduct);
 
@@ -995,7 +1029,7 @@ export const PurchaseDialog = ({ openPurchase, handleClosePurchase,  handleClose
         setOpenPayment(false)
         setOpenPurchase1(false);
     };
-  
+
 
     const cancelCompleted = () => {
         setOpenCompleted(false);
@@ -1011,7 +1045,7 @@ export const PurchaseDialog = ({ openPurchase, handleClosePurchase,  handleClose
         setOpenPurchase1(false);
 
     };
-  
+
 
     const cancelPayment = () => {
         setOpenPayment(false);
@@ -1022,18 +1056,18 @@ export const PurchaseDialog = ({ openPurchase, handleClosePurchase,  handleClose
         setOpenPayment(true);
         setPurchase(false);
     }
-  
+
     return (
         <div>
             <Dialog
                 fullScreen
                 open={openPurchase}
                 onClose={handleClosePurchase}
-                        BackdropProps={{ invisible: true }}
-                        PaperProps={{ style: { backgroundColor: 'rgba(0, 0, 0, 0.1)' } }}
+                BackdropProps={{ invisible: false }}
+                PaperProps={{ style: { backgroundColor: 'rgba(0, 0, 0, 0.1)' } }}
 
             >
-              
+
 
                 {/* Purchase dialog */}
                 {purchase && (
@@ -1047,7 +1081,7 @@ export const PurchaseDialog = ({ openPurchase, handleClosePurchase,  handleClose
                                 <ArrowBackIosIcon />
                             </span>
 
-                            <span className='product--price' style={{ color: theme === "light" ? "#222" : "#fff"}}>
+                            <span className='product--price' style={{ color: theme === "light" ? "#222" : "#fff" }}>
                                 $150.00
                             </span>
                         </div>
@@ -1095,22 +1129,22 @@ export const PurchaseDialog = ({ openPurchase, handleClosePurchase,  handleClose
                                 </button>
                             </div>
                         </div>
-       
+
                     </Dialog>
                 )}
 
                 {/* Payment dialog */}
                 {openPayment && (
-                    <PaymentDialog openPayment={openPayment} cancelPayment={cancelPayment} handleProcessing={handleProcessing} currentProduct={currentProduct} cart={cart} custData={custData} cart_id={cart_id} setCart={setCart} setCustData={setCustData} setCartID={setCartID} handleCompleted={handleCompleted}  theme={theme}/>
+                    <PaymentDialog openPayment={openPayment} cancelPayment={cancelPayment} handleProcessing={handleProcessing} currentProduct={currentProduct} cart={cart} custData={custData} cart_id={cart_id} setCart={setCart} setCustData={setCustData} setCartID={setCartID} handleCompleted={handleCompleted} theme={theme} />
                 )}
-              
+
                 {/* Processing dialog */}
-                <ProcessingDialog openProcessing={openProcessing} handleCompleted={handleCompleted}  theme={theme}/>
+                <ProcessingDialog openProcessing={openProcessing} handleCompleted={handleCompleted} theme={theme} />
 
                 {/* Completed dialog */}
 
                 <CompletedDialog openCompleted={openCompleted} cancelCompleted={cancelCompleted} theme={theme} />
-       
+
             </Dialog>
         </div>
     );
