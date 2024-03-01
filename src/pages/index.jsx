@@ -16,7 +16,7 @@ import CreatePosts from "./createPost/CreatePosts";
 import Vendors from "./users/Users";
 import Store from "./store/Store";
 import ResetPage from "./auth/ResetPage";
-import SProduct from "./store/SProduct";
+import SProduct from "./product/SProduct";
 import Contract from "./contract/Contract";
 import Influencers from "./users/Influencers";
 import InfluencerStore from "./store/influencerStore/InfluencerStore";

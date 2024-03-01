@@ -5,6 +5,7 @@ import { StoreViewALl, ViewAllDialog } from './ViewAll';
 import userIcon from "../../assets/default-user-image.png";
 import { InfiniteList, Link, WithListContext } from 'react-admin';
 import { ThemeContext } from '../context/ThemeProvider';
+import { GetStoreVendor } from '../../pages/post/Post';
 
 
 
@@ -239,8 +240,11 @@ export const StoreCards = ({ title, subTitle, name, price, product, products }) 
     )
 };
 
+
 // store normal cards 
-export const NormalStoreCards = ({ title,  price, name, subTitle, product }) => {
+export const NormalStoreCards = ({ title,  price, name, subTitle, product, vendor }) => {
+    const { store, vendor:vndr, vendorAcc, loading2, error2 } = GetStoreVendor(product?.store_id);
+
     return (
         <>
             <Card sx={{ minWidth: '100px', width: '100%', maxWidth: '100%', boxShadow: 'none', position: 'relative' }}>
@@ -268,13 +272,13 @@ export const NormalStoreCards = ({ title,  price, name, subTitle, product }) => 
                 <CardHeader sx={{ padding: 0 }} className="normalcard--header"
                     avatar={
                         <Avatar className="tablet:h-[30px] tablet:w-[30px] laptop:h-[30px] laptop:w-[30px]" sx={{ height: '25px', width: '25px', overflow: 'hidden' }} aria-label="recipe">
-                            <img className="object-cover w-full h-full" src={userIcon} alt="avatar" />
+                            <img className="object-cover w-full h-full" src={vendor && vendor.photoURL ? vendor.photoURL : (vndr && vndr.photoURL ? vndr.photoURL : userIcon)} alt="avatar" />
                         </Avatar>
                     }
         
                     title={
                         <Typography className="laptop:text-[14px] tablet:text-[13px]" sx={{ color: '#636363', fontSize: '8px', fontWeight: 600 }}>
-                            {subTitle}
+                            {subTitle ? subTitle : store?.name}
                         </Typography>
                     }
        

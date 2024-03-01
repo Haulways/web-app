@@ -8,6 +8,7 @@ import addIcon from '../../../assets/bottomAppBar/AddIcon.png';
 import chatIcon from '../../../assets/bottomAppBar/chatIcon.png';
 import { Avatar } from '@mui/material';
 import { ThemeContext } from '../../context/ThemeProvider';
+import { useStore } from "react-admin";
 
 
 const activeLink = ({ isActive }) => (isActive ? `${"active"}` : "");
@@ -15,6 +16,7 @@ const activeLink = ({ isActive }) => (isActive ? `${"active"}` : "");
 const DFooter = () => {
   const { currentUser } = useContext(AuthContext);
   const { theme} = useContext(ThemeContext);
+  const [g_user, setG_User] = useStore("user");
 
 
   // console.log(currentUser.user_metadata.avatar_url);
@@ -53,10 +55,10 @@ const DFooter = () => {
 
           {/* User profile */}
           <li>
-            <NavLink to={`/users/${currentUser?.uid}/show`} className={activeLink}>
+            <NavLink to={`/users/${g_user?.id}/show`} className={activeLink}>
               <div className='footerImg'>
                 <Avatar sx={{ width: '25px', height: "25px" }}
-                  src={currentUser?.photoURL}
+                  src={g_user?.photoURL}
                 />
               </div>
             </NavLink>

@@ -42,8 +42,9 @@ const medusa = new Medusa({
 export const CollectionDialog = ({ open, setOpen, col_list, col_names, theme, savePost, post }) => {
     const [currentFilter, setCurrentFilter] = React.useState(null);
     const { currentUser } = useContext(AuthContext);
+    const [g_user, setG_User] = useStore("user");
     const [message, setMessage] = React.useState('');
-    const { savedPost, loading, error } = CheckSavedPost(post.id, currentUser);
+    const { savedPost, loading, error } = CheckSavedPost(post.id, g_user);
 
 
 
@@ -51,15 +52,21 @@ export const CollectionDialog = ({ open, setOpen, col_list, col_names, theme, sa
 
     React.useEffect(() => {
 
-        console.log(col_names)
+        // console.log(col_names)
 
     }, [open]);
 
 
     useEffect(() => {
-        console.log(savedPost)
+        // console.log(savedPost, g_user)
         if (savedPost.length) {
-            setCurrentFilter(savedPost[0].coll_name)
+            if (savedPost[0].coll_name) {
+                setCurrentFilter(savedPost[0].coll_name);
+            }
+            else {
+                setCurrentFilter('general');
+            }
+
         }
 
     }, [savedPost])
@@ -91,21 +98,19 @@ export const CollectionDialog = ({ open, setOpen, col_list, col_names, theme, sa
                         onClose={() => { setOpen(false) }}
                     >
                         <div className='relative w-full flex item-center px-[15px] gap-x-[5px] justify-center mb-4 font-semibold'>
-                            <h4>Save to</h4>
+                            <h4>{savedPost.length ? ('Move') : ('Save')} to</h4>
                         </div>
                         <div className='relative w-full flex item-center px-[10px] gap-x-[5px] mb-2'>
-                            <form className='chatBox w-full flex item-center justify-between' onSubmit={() => { savePost({ filter: message }) }}>
+                            <form className='chatBox w-full flex item-center justify-between'>
                                 <input
-                                    // ref={textareaRef}
-                                    // onKeyDown={handleKeyPress}
-
-                                    style={{ backgroundColor: theme === "light" ? "#fff" : "rgba(68, 68, 68, 1)", color: theme === "light" ? "#222" : "#fff", }}
+                                    style={{ backgroundColor: theme === "light" ? "rgba(0 0 0 / 0.05)" : "rgba(0 0 0 / 0.05)", color: theme === "light" ? "#222" : "#fff", }}
                                     value={message}
                                     onChange={(e) => { setMessage(e.target.value); }}
                                     placeholder='New Collection'
-                                    className='w-full rounded-full px-[10px] py-1 mx-2 text-black'
+                                    className='w-full rounded-full px-[15px] py-2 mx-2 text-black'
+                                    
                                 />
-                                <button type='submit' style={{ filter: theme === "light" ? "invert(0)" : "invert(1)" }}>
+                                <button type='button' onClick={() => { savePost({ filter: message }); setOpen(false); }} style={{ filter: theme === "light" ? "invert(0)" : "invert(1)" }}>
                                     <AddCircleIcon />
                                 </button>
                             </form>
@@ -122,6 +127,8 @@ export const CollectionDialog = ({ open, setOpen, col_list, col_names, theme, sa
                                     else {
                                         savePost({ filter: filter })
                                     }
+                                    setOpen(false);
+
                                 }} className={currentFilter === filter ? 'bg-[#222] w-full px-[12px] py-[5px] rounded-[8px] text-[#fff] text-left' : 'px-[12px]'} style={{ textTransform: filter === 'grwm' || filter === 'diy' ? 'uppercase' : 'capitalize' }}>
                                     <h2>{filter}</h2>
                                 </button>

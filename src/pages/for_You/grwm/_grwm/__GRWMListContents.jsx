@@ -1,4 +1,4 @@
-import { Grid, IconButton } from '@mui/material';
+import { CircularProgress, Grid, IconButton } from '@mui/material';
 import { LiveCard } from '../../../../components/card/LiveCard';
 import { SearchBox } from '../../../../components/search/SearchBox';
 import { WithListContext } from 'react-admin';
@@ -15,6 +15,7 @@ import { useLocation } from 'react-router-dom';
 import { AuthContext } from '../../../../components/context/AuthContext';
 import { LiveScreenDialog } from '../../../../components/dialog/DialogBox';
 import NewMeetingForm from '../../../../components/LiveComponents/joinForm/JoinForm';
+
 
 
 export const GrwmListContents = () => {
@@ -38,7 +39,7 @@ export const GrwmListContents = () => {
     const uuid = uuidv4();
     const [input, setInput] = React.useState('');
     const [result, setResult] = React.useState([]);
-    
+
     React.useEffect(() => {
         if (input.length > 0 && input.trim() !== '') {
             supabase
@@ -62,7 +63,7 @@ export const GrwmListContents = () => {
             peer.roleName === 'broadcaster'
     );
 
-    
+
     async function stopLiveStream() {
         const url = `https://api.100ms.live/v2/live-streams/room/${room?.id}/stop`;
         const options = {
@@ -71,7 +72,7 @@ export const GrwmListContents = () => {
                 'Authorization': `Bearer ${import.meta.env.VITE_AUTH_TOKEN}`
             }
         };
-    
+
         try {
             const response = await fetch(url, options);
             const data = await response.json();
@@ -80,7 +81,7 @@ export const GrwmListContents = () => {
             console.error('Error:', error);
         }
     }
-    
+
 
     const CloseAcseLive = async () => {
         setOpenLive(false);
@@ -101,17 +102,17 @@ export const GrwmListContents = () => {
             }
         }
     };
-    
+
 
 
     const handleOpenLive = () => {
         setOpenLive(true);
     };
-        
+
     const handleCloseLive = () => {
         setOpenLive(false);
     };
-    
+
 
     const handleClickOpen = () => {
         setOpen(false);
@@ -129,11 +130,11 @@ export const GrwmListContents = () => {
                         'Content-Type': 'application/json'
                     }
                 });
-        
+
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-        
+
                 const data = await response.json();
                 setRoomCodes(data)
                 console.log(roomCodes);
@@ -142,7 +143,7 @@ export const GrwmListContents = () => {
             }
         }
     };
-    
+
     useEffect(() => {
         peers.forEach(peer => {
             const matchingData = liveData.find(data => data.created_by_name === peer.name);
@@ -158,20 +159,20 @@ export const GrwmListContents = () => {
     const createRoom = async () => {
         if (currentUser) {
 
-  
+
             const url = "https://api.100ms.live/v2/rooms";
             const headers = {
                 Authorization: `Bearer ${import.meta.env.VITE_AUTH_TOKEN}`,
                 "Content-Type": "application/json",
             };
-      
+
             // Define the request body
             const body = JSON.stringify({
-							"name": `${currentUser?.id}`,
-							"description": "Live Streaming and conferencing",
-							"template_id": `65b50d50cd666ed1654e2184`,
-						});
-      
+                "name": `${currentUser?.id}`,
+                "description": "Live Streaming and conferencing",
+                "template_id": `65b50d50cd666ed1654e2184`,
+            });
+
             // Make the POST request using fetch
             try {
                 const response = await fetch(url, {
@@ -179,15 +180,15 @@ export const GrwmListContents = () => {
                     headers,
                     body,
                 });
-      
+
                 // Check if the response is ok
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-      
+
                 // Parse the response as JSON
                 const data = await response.json();
-      
+
                 // Set the response data to the state variable
                 setRoom(data);
             } catch (error) {
@@ -204,7 +205,7 @@ export const GrwmListContents = () => {
                     await createRoomCode();
                     await createRoom();
                 }
-    
+
                 if (roomCodes && typeof roomCodes === 'object' && roomCodes.hasOwnProperty('data')) {
                     // Assuming the data property is an array in the response
                     let broadcaster = roomCodes.data.find(item => item.role === 'broadcaster');
@@ -220,21 +221,21 @@ export const GrwmListContents = () => {
                 console.error('Error:', error);
             }
         };
-    
+
         fetchData();
     }, [roomCodes, room]);
 
     const [rooms, setRooms] = React.useState([]);
-    
 
 
-    
+
+
     const createStream = async () => {
         if (!currentUser) {
             console.error('currentUser is not defined');
             return;
         }
-    
+
         if (room && roomCodes && cohost && broadcaster && cohost) {
             const { data, error: existingStream } = await supabase
                 .from("liveStream")
@@ -242,13 +243,13 @@ export const GrwmListContents = () => {
                 .eq('created_by_id', currentUser.id)
                 .eq('created_by_name', currentUser.displayName)
                 .eq('URL', pathname);
-    
+
             if (existingStream) throw existingStream;
-    
+
             if (data.length > 0) {
                 return;
             }
-    
+
             try {
                 const { error: streamError } = await supabase
                     .from("liveStream")
@@ -270,14 +271,14 @@ export const GrwmListContents = () => {
                         created_by_photoURL: currentUser.photoURL,
                         created_by_name: currentUser.displayName,
                     });
-    
+
                 if (streamError) throw streamError;
             } catch (error) {
                 console.error('Error:', error);
             }
         }
     };
-    
+
     function itemExists(item, array) {
         return array.some(existingItem => existingItem.id === item.id);
     }
@@ -288,7 +289,7 @@ export const GrwmListContents = () => {
             let { data: initialData, error } = await supabase
                 .from('liveStream')
                 .select('*');
-        
+
             if (error) console.log('Error fetching initial data: ', error);
             else setLiveData(initialData.filter(item => item.hls === true));
         };
@@ -318,7 +319,7 @@ export const GrwmListContents = () => {
         };
     }, [liveData]);
 
-      
+
     console.log(room, broadcasterData);
 
     useEffect(() => {
@@ -328,15 +329,15 @@ export const GrwmListContents = () => {
             }
         };
     }, [hmsActions, isConnected]);
-    
+
     React.useEffect(() => {
         if (isConnected) {
             setOpenAsce(true);
-            
+
         }
-      
+
     }, [isConnected]);
-    
+
     const liveIcon = (
         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" fill="none">
             <circle cx="25" cy="25" r="25" fill="#FF0000" />
@@ -355,7 +356,7 @@ export const GrwmListContents = () => {
             <GrwmDialog handleClickOpen={handleClickOpen} open={open} />
             <div className="feed--page">
                 <div className="relative">
-        
+
                     <div className="pb-[10px] px-[14px] laptop:pt-[3rem]">
 
                         {/* Search box */}
@@ -381,7 +382,7 @@ export const GrwmListContents = () => {
                 </>
 
                 <WithListContext render={({ isLoading, data }) => (
-                    !isLoading && (
+                    !isLoading ? (
                         <>
                             <Grid container spacing='10px' rowGap={{ xs: 2 }} className='pb-[4rem] pt-[.5rem]'>
 
@@ -412,7 +413,10 @@ export const GrwmListContents = () => {
                                 )}
                             </Grid>
                         </>
-                    ))}
+                    ) : (<div className='spinner absolute top-0 bottom-0 left-0 right-0 my-0 mx-0'>
+
+                        <CircularProgress sx={{ filter: theme === "light" ? "invert(0)" : "invert(1)" }} />
+                    </div>))}
                 />
                 <button className="fixed right-[10px] bottom-[135px] w- rounded-full z-[2000]" onClick={() => {
                     handleOpenLive();
@@ -425,7 +429,7 @@ export const GrwmListContents = () => {
                 {isConnected ? (
                     <LiveScreenDialog currentUser={currentUser} open={openAsce} broadcasterImg={broadcasterImg} broadcasterData={broadcasterData} handleClose={CloseAcseLive} room_id={room?.id} rooms={rooms} />
                 ) : (
-                        
+
                     <NewMeetingForm open={openLive} isConnected={isConnected} currentUser={currentUser} broadcaster={broadcaster?.code} room_id={room?.id} handleClose={handleCloseLive} pathname={pathname} />
                 )}
             </div>

@@ -65,23 +65,23 @@
 }
 
 .product__details--Middle{
-  @apply pt-[1rem] pb-[2rem] flex items-center  px-[.5rem]
+  @apply pt-[1rem] pb-[.5rem] flex items-center  px-[.5rem]
 }
 .product__details--Middle .brand--name{
-  @apply font-[600] text-[18px] 
+  @apply font-[600] text-[15px] 
 }
 .product__details--Middle .product--socials{
   @apply flex items-center ml-auto gap-x-2
 }
 .product--socials .share{
-  @apply h-[14px] w-[28px]
+  @apply h-[14px] w-[15px]
 }
 .product--socials .fb-ig{
   @apply h-[28px] w-[28px]
 }
 
 .product__details--MiddleText{
-  @apply font-[600] text-[14px]  pb-[6rem] px-[.5rem]
+  @apply font-[500] text-[13px]  pb-[1rem] px-[.5rem]
 }
 
 .product__details--Bottom {

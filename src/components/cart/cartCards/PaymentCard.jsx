@@ -27,7 +27,7 @@ export const CartPayment = ({ cart, openForm, SetPaymentSess, componentProps }) 
     return (
 
         <>
-            <div className='payment--details'>
+            <div className='payment--details px-3'>
 
                 <span className='delivery-location'>
                     Delivery Location
@@ -37,8 +37,8 @@ export const CartPayment = ({ cart, openForm, SetPaymentSess, componentProps }) 
                     <span className='location-name'>
                         <img className='w-[30px] h-[30px]' src={Location} />
                         <span>
-                            <h3>2, Johnson Akim St.</h3>
-                            <p>Lagos, Nigeria</p>
+                            <h3>{cart && cart.shipping_address && cart.shipping_address.address_1 ? (`${cart.shipping_address.address_1}`) : ('Not Set')}</h3>
+                            <p>{`${cart && cart.shipping_address && cart.shipping_address.country_code ? (`${cart.shipping_address.country_code}`) : ('Not Set')}, ${cart && cart.shipping_address && cart.shipping_address.city ? (`${cart.shipping_address.city}`) : ('Not Set')}`}</p>
                         </span>
                     </span>
                     <span className='cursor-pointer'
@@ -189,6 +189,7 @@ export const CartPayment = ({ cart, openForm, SetPaymentSess, componentProps }) 
                             ) : null}
                         </div>
                     </IconButton>
+                    
 
                 </div>
                     

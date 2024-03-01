@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { CardMedia, CircularProgress, Grid, Skeleton } from '@mui/material';
-import { Button, InfiniteList, WithListContext, useRedirect } from 'react-admin';
+import { Button, InfiniteList, WithListContext, useRedirect, useRecordContext } from 'react-admin';
 import { ProfileCard } from './ProfileCard';
 import { ThemeContext } from '../context/ThemeProvider';
 import '../card/card.css';
+
 
 
 
@@ -45,7 +46,7 @@ const SavedPost = ({ userPost, loading, collections, collFilters }) => {
   }, [collectionsFilter])
 
   useEffect(() => {
-    console.log(filteredCollections);
+    // console.log(filteredCollections);
   }, [filteredCollections])
 
   const downArrow = (
@@ -250,16 +251,18 @@ export default SavedPost
 
 
 export const VendorProducts = (theme) => {
+  const record = useRecordContext();
   const redirect = useRedirect()
 
   const goToStore = () => (
-    redirect("/store")
+    redirect(`/store/${record?.store_id}/show`)
   )
   return (
     <>
-      <InfiniteList
+      {record && record.store_id ? (<InfiniteList
         resource='product'
         title=" "
+        filter={{ store_id: record?.store_id }}
         actions={false}
         sx={{
           maxWidth: '100vw !important',
@@ -311,7 +314,7 @@ export const VendorProducts = (theme) => {
                       }}
                       onClick={goToStore}
                     >
-                      View more
+                      View Store
                     </button>
                   </div>
                 </>
@@ -322,7 +325,7 @@ export const VendorProducts = (theme) => {
           ))}
         />
 
-      </InfiniteList>
+      </InfiniteList>) : (!record.store_id ? ('Store not found') : ('Loading store...'))}
     </>
   );
 };

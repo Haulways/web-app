@@ -28,11 +28,14 @@ import { v4 as uuidv4 } from "uuid";
 import { supabase } from '../../supabase/SupabaseConfig';
 import { CollectionDialog } from '../../components/dialog/CollectionDialog';
 import { useSavedPosts } from '../profile/Profile';
+import { CheckSavedPost } from './Post';
+import BookmarkIcon from "@mui/icons-material/Bookmark";
 
 
 
 
-const MPost = ({ post, id, comments, formatFollowers, following, followers, unfollow, follow, toggleLike, liked, likes, savePost, cart }) => {
+
+const MPost = ({ post, id, comments, formatFollowers, following, followers, unfollow, follow, toggleLike, liked, likes, savePost, cart, products }) => {
     const [showComment, setShowComment] = useState(false);
     const { currentUser } = useContext(AuthContext)
     const [isMuted, setIsMuted] = useState(true);
@@ -46,25 +49,43 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
     const splideRef = React.useRef(); // Create the ref
     const uuid = uuidv4();
     const [openColList, setOpenColList] = useState(false);
-    
+    const [g_user, setG_User] = useStore("user");
 
-    const { savedPosts, savedCols, savedColNames, loading, error } = useSavedPosts(currentUser.uid);
+
+    const { savedPosts, savedCols, savedColNames, loading, error } = useSavedPosts(g_user.id);
     const [savedCol, setSavedCols] = useState([]);
     const [savedColName, setSavedColNames] = useState([]);
+    const { savedPost } = CheckSavedPost(post.id, g_user);
+
+    const convertToDecimal = (amount) => {
+        return Math.floor(amount) / 100
+    }
+
+    const formatPrice = (amount) => {
+        return new Intl.NumberFormat("en-US", {
+            style: "currency",
+            // TODO assuming region is already defined somewhere
+            currency: cart?.region.currency_code,
+        }).format(convertToDecimal(amount))
+    }
+
+    useEffect(() => {
+        // console.log(cart)
+    }, [cart])
 
 
     const handleColList = () => {
         setOpenColList(!openColList);
     }
 
-    useEffect(()=>{
-        if(savedCols){
+    useEffect(() => {
+        if (savedCols) {
             setSavedCols(savedCols)
         }
-        if(savedColNames){
+        if (savedColNames) {
             setSavedColNames(savedColNames)
         }
-    },[savedCols, savedColNames])
+    }, [savedCols, savedColNames])
 
 
 
@@ -78,18 +99,18 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
             );
 
         if (error) {
-            console.error('Error adding/updating viewer:', error);
+            // console.error('Error adding/updating viewer:', error);
         } else {
-            console.log('Viewer added/updated:', data);
+            // console.log('Viewer added/updated:', data);
         }
     };
     // Effect to handle adding a view when the component mounts
     useEffect(() => {
-        if (currentUser && currentUser.id && post && post.id) {
-            addUniqueView(currentUser.id, post.id);
+        if (g_user && g_user.id && post && post.id) {
+            addUniqueView(g_user.id, post.id);
             // fetchTotalViews(record.id);
         }
-    }, [currentUser, post]);
+    }, [g_user, post]);
 
     const options = {
         perPage: 1,
@@ -172,7 +193,7 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
     return (
         <>
             <div className='Mobile__sPost' style={{ backgroundColor: theme === "light" ? "#fff" : "#222", color: theme === "light" ? "#222" : "#fff", }}>
-                <CollectionDialog open={openColList} setOpen={setOpenColList} col_list={savedCol} col_names={savedColName} theme={theme} savePost={savePost} post={post}/>
+                <CollectionDialog open={openColList} setOpen={setOpenColList} col_list={savedCol} col_names={savedColName} theme={theme} savePost={savePost} post={post} />
                 <div className='sPost__container'>
                     {/* top content starts here  */}
                     <div className='top__content'>
@@ -226,7 +247,11 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
 
                         {/* save icon  */}
                         <span className='cursor-pointer' onClick={handleColList}>
-                            <img className='saveIcon' src={saveIcon} alt='save' />
+                            {
+                                savedPost.length ? <BookmarkIcon className='saveIcon' style={{ color: theme === "light" ? "white" : "iwhite" }} /> : <img className='saveIcon' src={saveIcon} alt='save' />
+                            }
+
+
                         </span>
 
                         {/* post file  */}
@@ -337,18 +362,19 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
                 </div>
 
                 {/* Post carousel container */}
-                {post.taggedProducts && post.taggedProducts.length > 0 && (
+                {products && products.length && post.taggedProducts && post.taggedProducts.length > 0 && (
                     <h2 className='mt-[20px] font-[500]  text-[14px] px-[16px]'>Featured products</h2>
                 )}
                 <div className='showCard--post max-w-[92vw]'>
                     <Splide ref={splideRef} options={options} className='w-full' >
-                        {Array.isArray(post.taggedProducts) && post.taggedProducts.map((mediaUrl, index) => (
+                        {Array.isArray(products) && products.map((mediaUrl, index) => (
                             <SplideSlide key={index} className='p-[3px]'>
                                 <ShowPageCarousels_1
                                     index={index}
                                     activeIndex={activeIndex}
                                     post={post}
                                     mediaUrl={mediaUrl}
+                                    price={cart && mediaUrl.variants && mediaUrl.variants.length ? formatPrice(mediaUrl.variants[0].prices.filter((curr) => { return curr.currency_code === cart.region.currency_code })[0].amount) : 0}
                                 />
                             </SplideSlide>
                         ))}
@@ -377,7 +403,7 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
                     <WithListContext render={({ isLoading, data }) => (
                         !isLoading && (
                             <>
-                                <FullScreenDialog liked={liked} post={post} open={open} handleClose={handleClose} postId={id} currentUser={currentUser} savePost={savePost} toggleLike={toggleLike} likes2={data} />
+                                <FullScreenDialog liked={liked} post={post} open={open} handleClose={handleClose} postId={id} currentUser={g_user} savePost={savePost} toggleLike={toggleLike} likes2={data} cart={cart} products={products} />
                             </>
                         ))} />
                 </InfiniteList>

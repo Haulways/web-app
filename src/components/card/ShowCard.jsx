@@ -16,7 +16,7 @@ import { ShortReviews } from '../reviews/ShortReviews';
 
 
 // showpage horizontal carousels 
-export const ShowPageCarousels = ({ mediaUrl, handlePurchase, handleOpenPurchase1, setCurrentMediaUrl }) => {
+export const ShowPageCarousels = ({ mediaUrl, handlePurchase, handleOpenPurchase1, setCurrentMediaUrl, price }) => {
     const handlePurchaseBox = () => {
         handleOpenPurchase1();
         handlePurchase();
@@ -30,7 +30,7 @@ export const ShowPageCarousels = ({ mediaUrl, handlePurchase, handleOpenPurchase
                     {/* product container  */}
                     <div className='showCard__img'>
                        
-                            <img src={mediaUrl.images[0].url} alt={mediaUrl.title} />
+                            <img src={mediaUrl.images && mediaUrl.images.length ? (mediaUrl.images[0].url) : (null)} alt={mediaUrl.title} />
                         
                     </div>
 
@@ -38,7 +38,7 @@ export const ShowPageCarousels = ({ mediaUrl, handlePurchase, handleOpenPurchase
                     <div className='showCard__details'>
                         <div className='info'>
                             <span className='price'>
-                                $150.00
+                                {price}
                             </span>
                             <h2 className='body'>
                                 {mediaUrl.description}
@@ -63,7 +63,7 @@ export const ShowPageCarousels = ({ mediaUrl, handlePurchase, handleOpenPurchase
     )
 };
 
-export const ShowPageCarousels_1 = ({ mediaUrl, activeIndex, index, post }) => {
+export const ShowPageCarousels_1 = ({ mediaUrl, activeIndex, index, post, price }) => {
     const redirect = useRedirect();
     const { theme } = React.useContext(ThemeContext);
 
@@ -91,7 +91,7 @@ export const ShowPageCarousels_1 = ({ mediaUrl, activeIndex, index, post }) => {
                     <div className='showCard__details pr-[8px]' style={{ backgroundColor: activeIndex === index && "#000" }}>
                         <div className='info'>
                             <span className='price' style={{ color: activeIndex === index ? "#fff" : "" }}>
-                                $150.00
+                                {price}
                             </span>
                             <h2 className='body' style={{ color: activeIndex === index ? "#fff" : "" }}>
                                 {mediaUrl.description}
@@ -613,6 +613,13 @@ export const SmallProductCard = ({ handleCloseCard, setThumbnailCarousel, Posts,
 
 
 export const SmallPHorizontalCards = ({ post }) => {
+    const slider1 = React.useRef();
+    const slider2 = React.useRef();
+  
+    React.useEffect(() => {
+      slider1.current.sync(slider2.current.splide);
+    //   slider2.current.sync(slider1.current.splide);
+    }, [slider1, slider2]);
 
     const thumbnailCarouselOptions = {
         type: 'slide',
@@ -626,6 +633,24 @@ export const SmallPHorizontalCards = ({ post }) => {
         perPage: 3,
         pauseOnHover: false,
         arrows: false,
+        direction:'ttb',
+        height: '70vw',
+        autoHeight: true
+        // focus: slideFocus
+    };
+
+    const bigThumbnailCarouselOptions = {
+        type: 'slide',
+        // fixedWidth: 100,
+        isNavigation: true,
+        pagination: false,
+        gap: 5,
+        drag: 'free',
+        snap: true,
+        perPage: 1,
+        pauseOnHover: false,
+        arrows: false,
+        // focus: slideFocus
     };
 
     
@@ -633,17 +658,36 @@ export const SmallPHorizontalCards = ({ post }) => {
 
 
     return (
-        <div className='catalogue__container mx-auto' >
+        <div className='catalogue__container mx-auto flex flex-row-reverse' >
                 
-            <Splide id="thumbnail-carousel" options={thumbnailCarouselOptions}>
+            <Splide id="thumbnail-carousel" className='catalogue__container__big' options={bigThumbnailCarouselOptions} ref={slider1}>
 
-                {Array.isArray(post.media) && post.media.slice(0, 4).map((mediaUrl, index) => {
-                    const isImage = mediaUrl.includes('.jpg') || mediaUrl.includes('.jpeg') || mediaUrl.includes('.png');
+                {Array.isArray(post.images) && post.images.slice(0, 4).map((mediaUrl, index) => {
+                    const isImage = mediaUrl.url.includes('.jpg') || mediaUrl.url.includes('.jpeg') || mediaUrl.url.includes('.png');
                     return (
-                        <SplideSlide key={index} className='w-[60.16px] h-[63.16px] rounded-[8px] overflow-hidden '>
+                        <SplideSlide key={index} className='w-full h-full rounded-[8px] overflow-hidden border'>
                             <div className='catalogueImg'>
                                 {isImage ? (
-                                    <img src={mediaUrl} alt={post.id} />
+                                    <img src={mediaUrl.url} alt={post.id} className="w-full h-full object-cover" style={{height: '70vw'}} />
+                                ) : (
+                                    <video src={mediaUrl} alt={post.id} muted controls={false} playsInline={true} controlsList="nodownload" />
+                                )}
+                            </div>
+                        </SplideSlide>
+                    );
+                })}
+                    
+            </Splide>
+            <div className='px-[1px]'></div>
+            <Splide id="thumbnail-carousel mr-2" options={thumbnailCarouselOptions} ref={slider2 }>
+
+                {Array.isArray(post.images) && post.images.slice(0, 4).map((mediaUrl, index) => {
+                    const isImage = mediaUrl.url.includes('.jpg') || mediaUrl.url.includes('.jpeg') || mediaUrl.url.includes('.png');
+                    return (
+                        <SplideSlide key={index} className='w-[60.16px] h-[63.16px] rounded-[8px] overflow-hidden'>
+                            <div className='catalogueImg'>
+                                {isImage ? (
+                                    <img src={mediaUrl.url} alt={post.id} />
                                 ) : (
                                     <video src={mediaUrl} alt={post.id} muted controls={false} playsInline={true} controlsList="nodownload" />
                                 )}
@@ -658,6 +702,66 @@ export const SmallPHorizontalCards = ({ post }) => {
     );
 };
 
+export const SmallPHorizontalVariantCards = ({ post }) => {
+    // console.log(post);
+    // const slider1 = React.useRef();
+    // const slider2 = React.useRef();
+  
+    // React.useEffect(() => {
+    //   slider1.current.sync(slider2.current.splide);
+    // }, [slider1, slider2]);
+
+    const thumbnailCarouselOptions = {
+        type: 'slide',
+        fixedWidth: 'auto',
+        fixedHeight: 43.16,
+        isNavigation: true,
+        pagination: false,
+        gap: 5,
+        drag: 'free',
+        snap: false,
+        perPage: 3,
+        pauseOnHover: false,
+        arrows: false,
+        // focus: slideFocus
+    };
+
+    
+
+    
+
+
+
+    return (
+        <div className='catalogue__container mx-auto' >
+                
+            
+            
+            <Splide id="thumbnail-carousel" options={thumbnailCarouselOptions}>
+
+                {post && post.variants && Array.isArray(post.variants) && post.variants.slice(0, 4).map((mediaUrl, index) => {
+                    // const isImage = mediaUrl.url.includes('.jpg') || mediaUrl.url.includes('.jpeg') || mediaUrl.url.includes('.png');
+                    return (
+                        <SplideSlide key={index} className='w-auto h-[63.16px] px-2 rounded-[8px] overflow-hidden flex flex-nowrap justify-center items-center bg-[#eee]'>
+                            <div className='catalogueImg'>
+                                {mediaUrl.title}
+                                
+                                {/* {isImage ? (
+                                    <img src={mediaUrl.url} alt={post.id} />
+                                ) : (
+                                    <video src={mediaUrl} alt={post.id} muted controls={false} playsInline={true} controlsList="nodownload" />
+                                )} */}
+                            </div>
+                        </SplideSlide>
+                    );
+                })}
+                    
+            </Splide>
+            <div className='py-2'></div>
+                        
+        </div>
+    );
+};
 
 // showpage horizontal carousels 
 // export const ProductCard = ({ product }) => {

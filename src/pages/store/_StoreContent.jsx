@@ -1,4 +1,4 @@
-import SProduct from "./SProduct";
+import Store from "./Store";
 
 export const StoreListContent = () => ( 
     <></>
@@ -17,7 +17,7 @@ export const StoreShowContent = () => {
     return (
         
         <>
-            <SProduct />
+            <Store />
         </>
     )
 };

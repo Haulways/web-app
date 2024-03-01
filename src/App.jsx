@@ -21,6 +21,7 @@ import { authProvider } from "./supabase/authProvider";
 import { QueryClient } from "@tanstack/react-query";
 import { CartProvider, MedusaProvider, } from "medusa-react";
 import { StoreCreate, StoreEdit, StoreList, StoreShow } from "./pages/store/_Store";
+import { ProductCreate, ProductEdit, ProductList, ProductShow } from "./pages/product/_Product";
 import Settings from "./components/profile/Settings";
 import { ContractCreate, ContractEdit, ContractList, ContractShow } from "./pages/contract/_Contract";
 import { CreateAd, OnboardScreen } from "./components";
@@ -40,7 +41,7 @@ const queryClient = new QueryClient()
 
 function App() {
 	const [isAnimationActive, setAnimationActive] = React.useState(false);
-	const { currentUser } = useContext(AuthContext);
+	// const { currentUser } = useContext(AuthContext);
 	// const channelName = 'room1';
 
 	// Use the custom hook to get real-time updates
@@ -139,6 +140,13 @@ function App() {
 								/>
 								<Resource
 									name="product"
+									list={ProductList}
+									edit={ProductEdit}
+									show={ProductShow}
+									create={ProductCreate}
+								/>
+								<Resource
+									name="store"
 									list={StoreList}
 									edit={StoreEdit}
 									show={StoreShow}
@@ -203,6 +211,7 @@ function App() {
 									<Route path="/reset-page" element={<ResetPage />} />
 									<Route path="/onboard" element={<Slider />} /> */}
 									{/* mobile screens */}
+									<Route path="/" element={<Home />} />
 									<Route path="/onboard" element={<OnboardScreen />} />
 									<Route path="/login" element={<LoginScreen />} />
 									<Route path="/signup" element={<SignupScreen />} />
@@ -224,7 +233,7 @@ function App() {
 									<Route path="/diy" element={<DIY />} />
 									<Route path="/grwm" element={<GRWM />} />
 									<Route path="/vendors" element={<Vendors />} />
-									<Route path="/store" element={<Store />} />
+									{/* <Route path="/store" element={<Store />} /> */}
 									<Route
 										path="/influencerStore"
 										element={<InfluencerStore />}

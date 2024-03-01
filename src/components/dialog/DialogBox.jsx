@@ -3,6 +3,7 @@ import Dialog from "@mui/material/Dialog";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
 import SendIcon from "@mui/icons-material/Send";
 import { AiOutlineComment, AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import "./DialogBox.css";
@@ -23,7 +24,7 @@ import { v4 as uuidv4 } from "uuid";
 import { InfiniteList, WithListContext, useDataProvider, useGetList, useRefresh } from "react-admin";
 import { Avatar, useMediaQuery } from "@mui/material";
 import Conference from "../LiveComponents/conference/Conference";
-import {  selectHLSState, selectHMSMessages, selectPeers, useAVToggle, useHMSActions, useHMSStore } from "@100mslive/react-sdk";
+import { selectHLSState, selectHMSMessages, selectPeers, useAVToggle, useHMSActions, useHMSStore } from "@100mslive/react-sdk";
 import VideocamOffIcon from '@mui/icons-material/VideocamOff';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import MicIcon from '@mui/icons-material/Mic';
@@ -31,12 +32,15 @@ import MicOffIcon from '@mui/icons-material/MicOff';
 import { ThemeContext } from "../context/ThemeProvider";
 import { useEffect } from "react";
 import { Tag2 } from "../productTag/AddTag";
+import { CollectionDialog } from "./CollectionDialog";
+import { useSavedPosts } from "../../pages/profile/Profile";
+import { CheckSavedPost } from "../../pages/post/Post";
 
 
 
 
 
-export const FullScreenDialog = ({ liked, open, handleClose, post, currentUser, toggleLike, savePost, likes2 }) => {
+export const FullScreenDialog = ({ liked, open, handleClose, post, currentUser, toggleLike, savePost, likes2, cart, products }) => {
     const [currentMediaUrl, setCurrentMediaUrl] = useState(null);
     const [openCard, setOpenCard] = React.useState(false);
     const [openActions, setOpenActions] = React.useState(true);
@@ -50,11 +54,54 @@ export const FullScreenDialog = ({ liked, open, handleClose, post, currentUser, 
     const [initialPost, setInitialPost] = React.useState(post);
     const [isMuted, setIsMuted] = React.useState(true);
     const navigate = useNavigate();
- 
-   
+    const { savedPosts, savedCols, savedColNames, loading, err } = useSavedPosts(currentUser.uid);
+
+    const [savedCol, setSavedCols] = useState([]);
+    const [savedColName, setSavedColNames] = useState([]);
+    const [openColList, setOpenColList] = useState(false);
+    const { savedPost } = CheckSavedPost(post.id, currentUser);
+
+    const convertToDecimal = (amount) => {
+        return Math.floor(amount) / 100
+    }
+
+    const formatPrice = (amount) => {
+        return new Intl.NumberFormat("en-US", {
+            style: "currency",
+            // TODO assuming region is already defined somewhere
+            currency: cart?.region.currency_code,
+        }).format(convertToDecimal(amount))
+    }
+
+    // useEffect(() => {
+    //     console.log(cart)
+    // }, [cart])
+
+
+    const handleColList = () => {
+        setOpenColList(!openColList);
+    }
+
+    useEffect(() => {
+        if (savedCols) {
+            setSavedCols(savedCols)
+        }
+        if (savedColNames) {
+            setSavedColNames(savedColNames)
+        }
+    }, [savedCols, savedColNames])
+
+    useEffect(() => {
+        if (post) {
+            // console.log(post)
+            // setInitialPost(post)
+        }
+    }, [post])
+
+
     const { theme } = React.useContext(ThemeContext);
     const isSmall = useMediaQuery((theme) => theme.breakpoints.down("sm"));
-    
+
 
     const toggleMute = () => {
         setIsMuted(!isMuted);
@@ -121,7 +168,7 @@ export const FullScreenDialog = ({ liked, open, handleClose, post, currentUser, 
 
     // console.log(item)
 
-     
+
 
     React.useEffect(() => {
         setInitialPost(post);
@@ -138,7 +185,7 @@ export const FullScreenDialog = ({ liked, open, handleClose, post, currentUser, 
         }
     }, [thumbnailCarousel, mainCarousel]);
 
-    
+
 
 
 
@@ -176,13 +223,13 @@ export const FullScreenDialog = ({ liked, open, handleClose, post, currentUser, 
         setOpenActions(true);
         setOpenCard(false);
     };
-    
-    
+
+
     const goToChat = () => {
         navigate('/chats', { state: { url: `http://haulway-demo-project.web.app${location.pathname}` } });
     };
 
-    
+
 
     const uuid = uuidv4();
 
@@ -242,6 +289,7 @@ export const FullScreenDialog = ({ liked, open, handleClose, post, currentUser, 
 
     return (
         <div>
+
             {isSmall && (
                 <Dialog
                     fullScreen
@@ -394,21 +442,37 @@ export const FullScreenDialog = ({ liked, open, handleClose, post, currentUser, 
                                                                 </IconButton>
                                                             </div>
 
-                                                            <div
-                                                                className="bg-black rounded-full w-[45px] h-[45px]"
-                                                                onClick={savePost}
-                                                            >
-                                                                <IconButton
-                                                                    aria-label="Comment"
+                                                            {savedPost.length ? (
+                                                                <div
                                                                     className="bg-black rounded-full w-[45px] h-[45px]"
+                                                                    onClick={handleColList}
                                                                 >
-                                                                    <img
-                                                                        className=" h-[30px] w-[30px]"
-                                                                        src={save}
-                                                                        alt="cart"
-                                                                    />
-                                                                </IconButton>
-                                                            </div>
+                                                                    <IconButton
+                                                                        aria-label="Comment"
+                                                                        className="bg-black rounded-full w-[45px] h-[45px]"
+                                                                    >
+                                                                        <BookmarkIcon
+                                                                            className="text-white h-[30px] w-[30px]"
+                                                                        />
+                                                                    </IconButton>
+                                                                </div>
+                                                            ) : (
+                                                                <div
+                                                                    className="bg-black rounded-full w-[45px] h-[45px]"
+                                                                    onClick={handleColList}
+                                                                >
+                                                                    <IconButton
+                                                                        aria-label="Comment"
+                                                                        className="bg-black rounded-full w-[45px] h-[45px]"
+                                                                    >
+                                                                        <img
+                                                                            className=" h-[30px] w-[30px]"
+                                                                            src={save}
+                                                                            alt="cart"
+                                                                        />
+                                                                    </IconButton>
+                                                                </div>
+                                                            )}
 
                                                             <div
                                                                 className="bg-black rounded-full w-[45px] h-[45px]"
@@ -540,17 +604,20 @@ export const FullScreenDialog = ({ liked, open, handleClose, post, currentUser, 
                                                 >
                                                     {Array.isArray(initialPost.taggedProducts) &&
                                                         initialPost.taggedProducts.map(
-                                                            (mediaUrl, index) => (
-                                                                <React.Fragment key={index}>
+                                                            (mediaUrl, index) => {
+                                                                // console.log(mediaUrl && products ? (mediaUrl) : (null))
+                                                                return <React.Fragment key={index}>
                                                                     <ShowPageCarousels
                                                                         handlePurchase={handlePurchase}
                                                                         handleOpenPurchase1={handleOpenPurchase1}
                                                                         post={initialPost}
                                                                         mediaUrl={mediaUrl}
                                                                         setCurrentMediaUrl={setCurrentMediaUrl}
+                                                                        price={cart && mediaUrl.variants && mediaUrl.variants.length ? formatPrice(mediaUrl.variants[0].prices.filter((curr) => { return curr.currency_code === cart.region.currency_code })[0].amount) : 0}
                                                                     />
                                                                 </React.Fragment>
-                                                            )
+                                                            }
+
                                                         )}
                                                 </div>
                                             )}
@@ -577,6 +644,10 @@ export const FullScreenDialog = ({ liked, open, handleClose, post, currentUser, 
                                                     )}
                                                 </>
                                             )}
+
+                                            {/* Collection Dialog */}
+                                            <CollectionDialog open={openColList} setOpen={setOpenColList} col_list={savedCol} col_names={savedColName} theme={theme} savePost={savePost} post={post} />
+
 
                                             {/* Purchase dialog box */}
 
@@ -607,6 +678,7 @@ export const FullScreenDialog = ({ liked, open, handleClose, post, currentUser, 
                                                 handleClose={handleClose}
                                                 currentUser={currentUser}
                                                 recommendedAd={item}
+                                                cart={cart}
                                             />
                                         </React.Fragment>
                                     ))}
@@ -615,12 +687,14 @@ export const FullScreenDialog = ({ liked, open, handleClose, post, currentUser, 
                     </InfiniteList>
                 </Dialog>
             )}
+
         </div>
     );
 };
 
-const Recommended = ({ index, postItem, data, handleClose,
-    currentUser, recommendedAd }) => {
+
+
+const Recommended = ({ index, postItem, data, handleClose, currentUser, recommendedAd, cart }) => {
     const [currentMediaUrl, setCurrentMediaUrl] = useState(null);
     const [openCard, setOpenCard] = React.useState(false);
     const [openActions, setOpenActions] = React.useState(true);
@@ -631,10 +705,48 @@ const Recommended = ({ index, postItem, data, handleClose,
     const [openPurchase1, setOpenPurchase1] = React.useState(true);
     const [showComments, setShowComments] = React.useState(true);
     const [showCarousels, setShowCarousels] = React.useState(true);
-    const [isMuted, setIsMuted] = React.useState(true);
+    const [isMuted, setIsMuted] = React.useState(false);
     const [liked2, setLiked2] = React.useState(false);
     const { theme } = React.useContext(ThemeContext);
     const refresh = useRefresh();
+    const navigate = useNavigate();
+    const { savedPosts, savedCols, savedColNames, loading, err } = useSavedPosts(currentUser.uid);
+    const [savedCol, setSavedCols] = useState([]);
+    const [savedColName, setSavedColNames] = useState([]);
+    const [openColList, setOpenColList] = useState(false);
+    const { savedPost } = CheckSavedPost(postItem.id, currentUser);
+
+    const convertToDecimal = (amount) => {
+        return Math.floor(amount) / 100
+    }
+
+    const formatPrice = (amount) => {
+        return new Intl.NumberFormat("en-US", {
+            style: "currency",
+            // TODO assuming region is already defined somewhere
+            currency: cart?.region.currency_code,
+        }).format(convertToDecimal(amount))
+    }
+
+
+    const handleColList = () => {
+        setOpenColList(!openColList);
+    }
+
+    useEffect(() => {
+        if (savedCols) {
+            setSavedCols(savedCols)
+        }
+        if (savedColNames) {
+            setSavedColNames(savedColNames)
+        }
+    }, [savedCols, savedColNames])
+
+
+
+    const goToChat = () => {
+        navigate('/chats', { state: { url: `http://haulway-demo-project.web.app${location.pathname}` } });
+    };
 
 
 
@@ -660,17 +772,24 @@ const Recommended = ({ index, postItem, data, handleClose,
                     if (payload.old.user_id === currentUser.uid) {
                         // Like is removed by the currentUser
                         setLiked2(false);
-            
+
                     }
                 }
             })
             .subscribe();
-      
+
 
         return () => {
             supabase.removeChannel(likesSubscription);
         };
     }, [liked2, data, postItem]);
+
+    React.useEffect(() => {
+        if (postItem) {
+            // console.log(postItem);
+        }
+
+    }, [postItem])
 
 
 
@@ -683,21 +802,21 @@ const Recommended = ({ index, postItem, data, handleClose,
                     user_id: currentUser.uid,
                 }]);
             if (error) throw error;
-         
+
             setLiked2(true);
             refresh()
         } catch (error) {
             console.log(error.message);
         }
     };
-     
+
     const unlike = async () => {
         try {
             const { error } = await supabase
                 .from('likes')
                 .delete()
                 .match({ postId: postItem.postId, user_id: currentUser.uid });
-                
+
             if (error) throw error;
             setLiked2(false);
             refresh()
@@ -705,8 +824,8 @@ const Recommended = ({ index, postItem, data, handleClose,
             console.log(error.message);
         }
     };
-    
-    const savePost = async () => {
+
+    const savePost = async ({ filter }) => {
         try {
             // Check if the post already exists
             let { data: savedPost, error } = await supabase
@@ -714,30 +833,43 @@ const Recommended = ({ index, postItem, data, handleClose,
                 .select('*')
                 .eq('postId', postItem.postId)
                 .eq('user_id', currentUser.uid);
-    
+
             if (error) throw error;
-    
+
             // If the post does not exist, insert it
             if (!savedPost.length) {
                 let { error } = await supabase
                     .from('saved_post')
                     .insert({
-                        postId: postItem.postId,
+                        postId: post.postId,
                         user_id: currentUser.uid,
+                        coll_name: filter && filter === 'general' ? (filter) : (null)
                     })
                     .single();
-    
+
                 if (error) throw error;
-    
+
+
                 toast("Post saved");
             } else {
-                toast("Post already saved");
+                const { data, error } = await supabase
+                    .from('saved_post')
+                    .update({ coll_name: filter && filter !== 'general' ? (filter) : (null) })
+                    .eq('postId', postItem.postId)
+                    .eq('user_id', currentUser.uid)
+                    .select();
+
+
+
+                if (error) throw error;
+                console.log(filter);
+                toast(`Post moved to ${filter} collection.`);
             }
         } catch (error) {
             console.log(error.message);
         }
     }
-     
+
 
     const toggleLike2 = async () => {
         if (liked2) {
@@ -946,23 +1078,53 @@ const Recommended = ({ index, postItem, data, handleClose,
                                         </IconButton>
                                     </div>
 
+                                    {savedPost.length ? (
+                                        <div
+                                            className="bg-black rounded-full w-[45px] h-[45px]"
+                                            onClick={handleColList}
+                                        >
+                                            <IconButton
+                                                aria-label="Comment"
+                                                className="bg-black rounded-full w-[45px] h-[45px]"
+                                            >
+                                                <BookmarkIcon
+                                                    className="text-white h-[30px] w-[30px]"
+                                                />
+                                            </IconButton>
+                                        </div>
+                                    ) : (
+                                        <div
+                                            className="bg-black rounded-full w-[45px] h-[45px]"
+                                            onClick={handleColList}
+                                        >
+                                            <IconButton
+                                                aria-label="Comment"
+                                                className="bg-black rounded-full w-[45px] h-[45px]"
+                                            >
+                                                <img
+                                                    className=" h-[30px] w-[30px]"
+                                                    src={save}
+                                                    alt="cart"
+                                                />
+                                            </IconButton>
+                                        </div>
+                                    )}
+
+
                                     <div
                                         className="bg-black rounded-full w-[45px] h-[45px]"
-                                        onClick={savePost}
+                                        // onClick={handleOpenCard}
+                                        onClick={goToChat}
+
                                     >
                                         <IconButton
                                             aria-label="Comment"
                                             className="bg-black rounded-full w-[45px] h-[45px]"
                                         >
-                                            <img
-                                                className=" h-[30px] w-[30px]"
-                                                src={save}
-                                                alt="cart"
-                                            />
+                                            <SendIcon className="text-white h-[30px] w-[30px]" />
                                         </IconButton>
                                     </div>
-
-                                    <div
+                                    {/* <div
                                         className="bg-black rounded-full w-[45px] h-[45px]"
                                         onClick={handleOpenCard}
                                     >
@@ -972,7 +1134,7 @@ const Recommended = ({ index, postItem, data, handleClose,
                                         >
                                             <ExpandLessIcon className="text-white h-[30px] w-[30px]" />
                                         </IconButton>
-                                    </div>
+                                    </div> */}
                                 </>
                             )}
                         </div>
@@ -1077,6 +1239,7 @@ const Recommended = ({ index, postItem, data, handleClose,
                                             post={postItem}
                                             mediaUrl={mediaUrl}
                                             setCurrentMediaUrl={setCurrentMediaUrl}
+                                            price={cart && mediaUrl.variants && mediaUrl.variants.length ? formatPrice(mediaUrl.variants[0].prices.filter((curr) => { return curr.currency_code === cart.region.currency_code })[0].amount) : 0}
                                         />
                                     </React.Fragment>
                                 ))}
@@ -1104,6 +1267,9 @@ const Recommended = ({ index, postItem, data, handleClose,
                             )}
                         </>
                     )}
+
+                    {/* Collection Dialog */}
+                    <CollectionDialog open={openColList} setOpen={setOpenColList} col_list={savedCol} col_names={savedColName} theme={theme} savePost={savePost} post={postItem} />
 
                     {/* Purchase dialog box */}
 
@@ -1156,7 +1322,7 @@ export const LiveScreenDialog = ({ open, handleClose, rooms, currentUser, user, 
     const [openPurchase1, setOpenPurchase1] = React.useState(false);
     const [openActions, setOpenActions] = React.useState(true);
 
-   // purchase dialog
+    // purchase dialog
     const handlePurchase = () => {
         setOpenPurchase(true);
         setOpenActions(false);
@@ -1193,11 +1359,11 @@ export const LiveScreenDialog = ({ open, handleClose, rooms, currentUser, user, 
         const newUnreadMessages = allMessages?.filter(message => message.read === false);
         setUnreadMessages(newUnreadMessages);
     }, [allMessages]);
-    
+
     const handleInputChange = (e) => {
         setInputValues(e.target.value);
     };
-    
+
     const sendMessage = async () => {
         try {
             await hmsActions.sendBroadcastMessage(inputValues);
@@ -1205,7 +1371,7 @@ export const LiveScreenDialog = ({ open, handleClose, rooms, currentUser, user, 
         } catch (e) {
             console.log(e);
         }
-           
+
     };
 
     let broadcasterExists = false;
@@ -1229,17 +1395,17 @@ export const LiveScreenDialog = ({ open, handleClose, rooms, currentUser, user, 
 
 
 
-    
-    
-    
+
+
+
 
 
 
     // console.log(broadcasterImg);
 
 
-          
-   
+
+
 
     const toggleComments = async () => {
         setShowComments(!showComments);
@@ -1293,16 +1459,16 @@ export const LiveScreenDialog = ({ open, handleClose, rooms, currentUser, user, 
                             options={mainCarouselOptions}
                             onReady={(splide) => setMainCarousel(splide)}
                         >
-                            
+
                             <SplideSlide
-                                                
+
                                 className="w-screen h-full youtube--container"
                             >
-                                              
+
                                 <Conference />
-                                             
+
                             </SplideSlide>
-                                   
+
                         </Splide>
                     </div>
 
@@ -1331,7 +1497,7 @@ export const LiveScreenDialog = ({ open, handleClose, rooms, currentUser, user, 
                                 <>
                                     {/* <Link to={`/users/${post.uid}/show`}> */}
                                     <button aria-label="name" className="brand__name" style={{ border: '2px solid red' }}>
-                                                        
+
                                         <Avatar sx={{ width: '50px', height: "50px" }}
                                             src={broadcasterImg}
                                         />
@@ -1348,7 +1514,7 @@ export const LiveScreenDialog = ({ open, handleClose, rooms, currentUser, user, 
                                 {unreadMessages.length > 0 ? (
                                     <span className="w-[10px] h-[10px] rounded-full bg-[green] absolute top-[8px] left-[7px] z-[50]"></span>
                                 ) : null}
-                            
+
                                 <IconButton
                                     aria-label="Comment"
                                     className="bg-black rounded-full w-[45px] h-[45px]"
@@ -1372,9 +1538,9 @@ export const LiveScreenDialog = ({ open, handleClose, rooms, currentUser, user, 
                                             }
                                         </IconButton>
                                     </div>
-                        
+
                                     <div className="bg-black rounded-full w-[45px] h-[45px] control-bar" >
-                                         
+
                                         <IconButton
                                             aria-label="Comment"
                                             className="bg-black text-[#fff] rounded-full w-[45px] h-[45px]" onClick={toggleAudio}>
@@ -1387,7 +1553,7 @@ export const LiveScreenDialog = ({ open, handleClose, rooms, currentUser, user, 
                                     </div>
 
                                     <div className="bg-black rounded-full w-[45px] h-[45px] control-bar" onClick={openTags}>
-                                         
+
                                         <IconButton
                                             aria-label="Comment"
                                             className="bg-black rounded-full w-[45px] h-[45px]"
@@ -1408,18 +1574,18 @@ export const LiveScreenDialog = ({ open, handleClose, rooms, currentUser, user, 
                             )}
 
                             {peers?.length > 6 ? (
-                        
+
                                 <div className="bg-black rounded-full w-[45px] h-[45px] text-white flex items-center justify-center" >
                                     <p>+ {peers?.length - 6}</p>
-                            
+
                                 </div>
                             ) : null}
 
                         </div>
                     )}
-                    
-                    
-               
+
+
+
 
                     {/* {hlsState?.running && (
                         <> */}
@@ -1457,7 +1623,7 @@ export const LiveScreenDialog = ({ open, handleClose, rooms, currentUser, user, 
                     )}
 
                     {/* post carousel container */}
-                    
+
                     {/* Comments box modal container */}
                     {showComments && (
                         <div className="Showcomment__box">
@@ -1500,9 +1666,9 @@ export const LiveScreenDialog = ({ open, handleClose, rooms, currentUser, user, 
                             )}
                         </>
                     )}
-                    
 
-                    
+
+
 
                     <PurchaseDialog
                         theme={theme}
@@ -1513,7 +1679,7 @@ export const LiveScreenDialog = ({ open, handleClose, rooms, currentUser, user, 
                         setOpenPurchase1={setOpenPurchase1}
                         product={currentMediaUrl}
                     />
-                                       
+
                 </Dialog>
             )}
         </div>

@@ -29,87 +29,88 @@ import WebStoriesIcon from '@mui/icons-material/WebStories';
 import BrushIcon from '@mui/icons-material/Brush';
 
 export const MyMenu = () => {
-    const { currentUser } = useContext(AuthContext);
-    
-    const { theme, toggleTheme } = useContext(ThemeContext);
-    
-    
-    return (
-			<Menu
-				sx={{
-					position: "relative !important",
+	const { currentUser } = useContext(AuthContext);
 
-					"&.RaMenu-closed .on_close": {
-						display: "none",
-					},
-					"&.RaMenu-closed label": {
-						display: "none",
-					},
-					"&.RaMenu-closed .my_menu": {
-						padding: "5rem 0px",
-					},
-				}}
-			>
-				<div className=" px-[5px] pb-[5rem] my_menu">
-					<div className="mt-[3rem] flex items-center flex-col  mb-[2rem] on_close">
-						<Link to={`/users/${currentUser.id}/show`}>
-							<Avatar
-								sx={{ width: "70px", height: "70px" }}
-								src={currentUser.photoURL}
-							/>
-						</Link>
-						<p className="mt-[.5rem] text-[18px] font-[500]">
-							{currentUser.displayName}
-						</p>
-						<span className="text-[12px] text-[#7a7a7a]">
-							@
-							{currentUser && currentUser.username
-								? currentUser.username.toLowerCase()
-								: "username"}
-						</span>
-					</div>
+	const { theme, toggleTheme } = useContext(ThemeContext);
 
-					<span className="mobile:hidden">
-						<Menu.DashboardItem />
+
+	return (
+		<Menu
+			sx={{
+				position: "relative !important",
+
+				"&.RaMenu-closed .on_close": {
+					display: "none",
+				},
+				"&.RaMenu-closed label": {
+					display: "none",
+				},
+				"&.RaMenu-closed .my_menu": {
+					padding: "5rem 0px",
+				},
+			}}
+		>
+			<div className=" px-[5px] pb-[5rem] my_menu">
+				<div className="mt-[3rem] flex items-center flex-col  mb-[2rem] on_close">
+					<Link to={`/users/${currentUser.id}/show`}>
+						<Avatar
+							sx={{ width: "70px", height: "70px" }}
+							src={currentUser.photoURL}
+						/>
+					</Link>
+					<p className="mt-[.5rem] text-[18px] font-[500]">
+						{currentUser.displayName}
+					</p>
+					<span className="text-[12px] text-[#7a7a7a]">
+						@
+						{currentUser && currentUser.username
+							? currentUser.username.toLowerCase()
+							: "username"}
 					</span>
+				</div>
 
-					<span className="laptop:hidden tablet:hidden">
-						<Menu.Item
-							to="/dashboard"
-							primaryText="Feed"
-							leftIcon={<AppsIcon />}
-						/>
-					</span>
+				<span className="mobile:hidden">
+					<Menu.DashboardItem />
+				</span>
 
-					<SubMenu primaryText="Explore" leftIcon={<ChevronRight />}>
-						<Menu.Item
-							to="/hauls"
-							primaryText="Hauls"
-							leftIcon={<BubbleChartIcon />}
-						/>
-						<Menu.Item
-							to="/lookbook"
-							primaryText="LookBook"
-							leftIcon={<DeblurIcon />}
-						/>
-						<Menu.Item
-							to="/grwm"
-							primaryText="GRWM"
-							leftIcon={<DynamicFeedIcon />}
-						/>
-						<Menu.Item
-							to="/diy"
-							primaryText="DIY (Tips and tricks)"
-							leftIcon={<ColorLensIcon />}
-						/>
-						<Menu.Item
-							to="/beauty"
-							primaryText="Beauty"
-							leftIcon={<SpaIcon />}
-						/>
-					</SubMenu>
+				<span className="laptop:hidden tablet:hidden">
+					<Menu.Item
+						to="/dashboard"
+						primaryText="Feed"
+						leftIcon={<AppsIcon />}
+					/>
+				</span>
 
-					<SubMenu primaryText="Shop" leftIcon={<ChevronRight />}>
+				<SubMenu primaryText="Explore" leftIcon={<ChevronRight />}>
+					<Menu.Item
+						to="/hauls"
+						primaryText="Hauls"
+						leftIcon={<BubbleChartIcon />}
+					/>
+					<Menu.Item
+						to="/lookbook"
+						primaryText="LookBook"
+						leftIcon={<DeblurIcon />}
+					/>
+					<Menu.Item
+						to="/grwm"
+						primaryText="GRWM"
+						leftIcon={<DynamicFeedIcon />}
+					/>
+					<Menu.Item
+						to="/diy"
+						primaryText="DIY (Tips and tricks)"
+						leftIcon={<ColorLensIcon />}
+					/>
+					<Menu.Item
+						to="/beauty"
+						primaryText="Beauty"
+						leftIcon={<SpaIcon />}
+					/>
+				</SubMenu>
+
+				<SubMenu primaryText="Shop" leftIcon={<ChevronRight />}>
+					<SubMenu primaryText="Categories" leftIcon={<ChevronRight />}>
 						<Menu.Item
 							to="/fashions"
 							primaryText="Fashion"
@@ -140,89 +141,91 @@ export const MyMenu = () => {
 							primaryText="Others"
 							leftIcon={<DynamicFeedIcon />}
 						/>
-						<Menu.Item
-							to="/cart"
-							primaryText="Cart"
-							leftIcon={<ShoppingCartIcon />}
-						/>
-						<Menu.Item
-							to="/orders"
-							primaryText="Order History"
-							leftIcon={<HistoryIcon />}
-						/>
-						<Menu.Item
-							to="/vendors"
-							primaryText="Vendors"
-							leftIcon={<GroupsIcon />}
-						/>
 					</SubMenu>
 
-					<SubMenu primaryText="Creator center" leftIcon={<ChevronRight />}>
-						<Menu.Item
-							to="/influencers"
-							primaryText="Influencers"
-							leftIcon={<GroupsIcon />}
-						/>
-						<Menu.Item
-							to="/contract"
-							primaryText="Affiliate marketing..."
-							leftIcon={<GiNotebook size={24} />}
-						/>
-						{/* <Menu.Item
+					<Menu.Item
+						to="/cart"
+						primaryText="Cart"
+						leftIcon={<ShoppingCartIcon />}
+					/>
+					<Menu.Item
+						to="/orders"
+						primaryText="Order History"
+						leftIcon={<HistoryIcon />}
+					/>
+					<Menu.Item
+						to="/vendors"
+						primaryText="Vendors"
+						leftIcon={<GroupsIcon />}
+					/>
+				</SubMenu>
+
+				<SubMenu primaryText="Creator center" leftIcon={<ChevronRight />}>
+					<Menu.Item
+						to="/influencers"
+						primaryText="Influencers"
+						leftIcon={<GroupsIcon />}
+					/>
+					<Menu.Item
+						to="/contract"
+						primaryText="Affiliate marketing..."
+						leftIcon={<GiNotebook size={24} />}
+					/>
+					{/* <Menu.Item
 							to="/contract"
 							primaryText="UGC sales"
 							leftIcon={<MonetizationOnIcon size={24} />}
 						/> */}
-					</SubMenu>
+				</SubMenu>
 
-					<SubMenu primaryText="Skill center" leftIcon={<ChevronRight />}>
-						<Menu.Item
-							to="/skill-center"
-							primaryText="All"
-							leftIcon={<AutoAwesomeIcon />}
-						/>
-						<Menu.Item
-							to="/makeup"
-							primaryText="Makeup"
-							leftIcon={<ColorLensIcon />}
-						/>
-						<Menu.Item
-							to="/craft"
-							primaryText="Cafts"
-							leftIcon={<BrushIcon />}
-						/>
-						<Menu.Item
-							to="/fashion"
-							primaryText="Fashion design"
-							leftIcon={<StyleIcon size={24} />}
-						/>
-					</SubMenu>
+				<SubMenu primaryText="Skill center" leftIcon={<ChevronRight />}>
+					<Menu.Item
+						to="/skill-center"
+						primaryText="All"
+						leftIcon={<AutoAwesomeIcon />}
+					/>
+					<Menu.Item
+						to="/makeup"
+						primaryText="Makeup"
+						leftIcon={<ColorLensIcon />}
+					/>
+					<Menu.Item
+						to="/craft"
+						primaryText="Cafts"
+						leftIcon={<BrushIcon />}
+					/>
+					<Menu.Item
+						to="/fashion"
+						primaryText="Fashion design"
+						leftIcon={<StyleIcon size={24} />}
+					/>
+				</SubMenu>
 
-					{/* <Menu.Item
+				{/* <Menu.Item
 						to="/ads"
 						primaryText="Ads"
 						leftIcon={<WebStoriesIcon />}
 					/> */}
-					<Menu.Item
-						to="/settings"
-						primaryText="Settings"
-						leftIcon={<SettingsIcon />}
-					/>
+				<Menu.Item
+					to="/settings"
+					primaryText="Settings"
+					leftIcon={<SettingsIcon />}
+				/>
 
-					<label className="switch mt-[1rem] ml-[3rem]">
-						<input type="checkbox" id="theme-switch" onClick={toggleTheme} />
-						<span className="menuSlide round">
-							<i>
-								<FaMoon />
-							</i>
-							<i>
-								<IoSunny />
-							</i>
-						</span>
-					</label>
-				</div>
+				<label className="switch mt-[1rem] ml-[3rem]">
+					<input type="checkbox" id="theme-switch" onClick={toggleTheme} />
+					<span className="menuSlide round">
+						<i>
+							<FaMoon />
+						</i>
+						<i>
+							<IoSunny />
+						</i>
+					</span>
+				</label>
+			</div>
 
-				{/* {
+			{/* {
             user && user.role === "admin" ? (
                 <>
                     <SubMenu isDropdownOpen={false} primaryText="APIs" leftIcon={<Api />}>
@@ -233,6 +236,6 @@ export const MyMenu = () => {
                 null
             )
         } */}
-			</Menu>
-		);
+		</Menu>
+	);
 };

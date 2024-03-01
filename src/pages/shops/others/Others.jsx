@@ -1,6 +1,6 @@
 import { Grid } from "@mui/material";
 import React, { useContext } from "react";
-import { InfiniteList, WithListContext } from "react-admin";
+import { InfiniteList, WithListContext, useStore } from "react-admin";
 import { NormalStoreCards, StoreCards } from "../../../components/search/SearchCard";
 import { ThemeContext } from "../../../components/context/ThemeProvider";
 import { VendorsCard } from "../../../components/card/LiveCard";
@@ -8,10 +8,119 @@ import { DFooter } from "../../../components";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/splide/dist/css/splide.min.css";
 import { VideoPlay } from "../../../components/videoPlayer/VideoPlayer";
+import Medusa from '@medusajs/medusa-js';
+import { AuthContext } from '../../../components/context/AuthContext';
+
+const medusa = new Medusa({
+	maxRetries: 3,
+	baseUrl: "https://ecommerce.haulway.co",
+});
 
 const Others = () => {
 	const { theme } = useContext(ThemeContext);
 	const [input, setInput] = React.useState("");
+	const { currentUser } = React.useContext(AuthContext)
+	const [custData, setCustData] = React.useState(null);
+	const [products, setProducts] = React.useState(null);
+	const [cart_id, setCartID] = useStore("cart_id");
+	const [cart, setCart] = React.useState(null);
+	const [region, setRegion] = React.useState(null);
+
+	React.useEffect(() => {
+		if (currentUser) {
+
+			medusa.auth
+				.authenticate({
+					email: currentUser.email,
+					password: import.meta.env.VITE_AUTH_PASSWORD,
+				})
+				.then(({ customer }) => {
+					setCustData(customer);
+					if (!cart_id) {
+						medusa.carts.create().then(({ cart }) => {
+							setCartID(cart.id);
+							setCart(cart)
+						});
+					} else {
+						medusa.carts.retrieve(cart_id).then(({ cart }) => setCart(cart));
+					}
+
+
+				});
+		}
+
+	}, []);
+
+	React.useEffect(() => {
+		if (input) {
+			medusa.products.search({
+				q: input
+			})
+				.then(({ hits }) => {
+					if (hits.length && input) {
+						setProducts(hits)
+					}
+					else if (hits.length && !input) {
+						medusa.products.list({
+							expand: "variants",
+							currency_code: region.currency_code,
+						})
+							.then(({ products, limit, offset, count }) => {
+								// console.log(products)
+								setProducts(products)
+
+
+							})
+					}
+				})
+
+		}
+	}, [input])
+
+
+	React.useEffect(() => {
+		if (cart) {
+			//
+			medusa.regions.retrieve(cart.region_id)
+				.then(({ region }) => {
+					console.log(region.id);
+					setRegion(region)
+				})
+		}
+
+	}, [cart])
+	React.useEffect(() => {
+		if (region) {
+			//
+			medusa.products.list({
+				expand: "variants.prices",
+				currency_code: region.currency_code,
+			})
+				.then(({ products, limit, offset, count }) => {
+					console.log(products)
+					setProducts(products)
+
+
+				})
+		}
+
+	}, [region])
+
+
+
+	const convertToDecimal = (amount) => {
+		return Math.floor(amount) / 100
+	}
+
+	const formatPrice = (amount) => {
+		return new Intl.NumberFormat("en-US", {
+			style: "currency",
+			// TODO assuming region is already defined somewhere
+			currency: region.currency_code,
+		}).format(convertToDecimal(amount))
+	}
+
+
 	const mPostCarousel = {
 		type: "slide",
 		pauseOnHover: false,
@@ -92,7 +201,7 @@ const Others = () => {
 					/>
 				</InfiniteList>
 
-				<InfiniteList
+				{/* <InfiniteList
 					title=" "
 					resource="posts"
 					actions={false}
@@ -163,58 +272,36 @@ const Others = () => {
 								}
 							/>
 						</Splide>
-						{/* <AdCard />
-                    <AdCard />
-                    <AdCard /> */}
+						
 					</div>
-				</InfiniteList>
+				</InfiniteList> */}
 
-				<InfiniteList
-					resource="product"
-					title="Shop"
-					actions={false}
-					sx={{
-						"& .MuiToolbar-root": {
-							minHeight: "0px !important",
-						},
-						"& .MuiBox-root": {
-							padding: "0 ",
-						},
-						"& .MuiPaper-root": {
-							backgroundColor:
-								theme === "light" ? "#fff !important" : "#222 !important",
-							color: theme === "light" ? "#222 !important" : "#fff !important",
-						},
-					}}
-				>
-					<WithListContext
-						render={({ isLoading, data }) =>
-							!isLoading && (
-								<>
-									{data && !data.length && <span>No Products</span>}
-									{data && data.length > 0 && (
-										<ul>
-											{data.map((product) => {
-												return (
-													<li key={product.id}>
-														<StoreCards
-															title={product.title}
-															subTitle="Tiannah's Empire"
-															name={product.handle}
-															price="$200.00"
-															product={product}
-															products={data}
-														/>
-													</li>
-												);
-											})}
-										</ul>
-									)}
-								</>
-							)
-						}
-					/>
-				</InfiniteList>
+				{products && products.length && (
+					<>
+						{products && !products.length && <span>No Products</span>}
+						{products && products.length > 0 && (
+							<Grid container spacing="10px" rowGap={{ xs: 2 }}>
+								{products &&
+									products.map((product) => {
+										// console.log(product);
+										// console.log(product.variants[0].id);
+										// console.log(product.variants[0].prices.filter((curr) => { return curr.currency_code === region.currency_code })[0].amount);
+										return (
+											<Grid key={product.id} item xs={4} sm={4} md={4}>
+												<NormalStoreCards
+													title="Others"
+													subTitle={"Shop"}
+													price={formatPrice(product.variants[0].prices.filter((curr) => { return curr.currency_code === region.currency_code })[0].amount)}
+													name={product.title}
+													product={product}
+												/>
+											</Grid>
+										);
+									})}
+							</Grid>
+						)}
+					</>
+				)}
 			</div>
 			<DFooter />
 		</>

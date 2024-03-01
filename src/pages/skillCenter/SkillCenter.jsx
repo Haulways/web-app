@@ -102,7 +102,7 @@ const SkillCenter = () => {
                 }}
              
             >
-                <div className=' max-w-[90vw] laptop:max-w-[1000px]   pb-[3rem]'>
+                <div className=' max-w-[100vw] laptop:max-w-[1000px]   pb-[3rem]'>
                     {/* Search box */}
                     <div className='general search--box mx-auto' style={{ filter: theme === "light" ? "invert(0)" : "invert(1)" }}>
                         <input
@@ -161,7 +161,7 @@ const SkillCenter = () => {
                         
                     </div>
 
-                    <div className='search__card--container shadow-md drop-shadow-md pb-[5px]'>
+                    {/* <div className='search__card--container shadow-md drop-shadow-md pb-[5px]'>
                         <Splide options={mPostCarousel} className='mobile--post-splide overflow-hidden rounded-[10px] card__splide h-[137px] w-full' >
                             <WithListContext render={({ isLoading, data }) => (
                                 !isLoading ? (
@@ -193,10 +193,7 @@ const SkillCenter = () => {
                                 ))}
                             />
                         </Splide>
-                        {/* <AdCard />
-                    <AdCard />
-                    <AdCard /> */}
-                    </div>
+                    </div> */}
 
                     {categories.map((category, index) => (
                         <WithListContext key={index} render={({ isLoading, data }) => (

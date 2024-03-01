@@ -4,13 +4,16 @@
 
 .splide__track--nav>.splide__list>.splide__slide.is-active {
     border-radius: 4px;
-    border: 0px solid #98693b;
+    /* border: 2px solid transparent !important; */
     object-fit: cover;
     overflow: hidden;
 }
-.catalogue__contents .splide__track--nav>.splide__list>.splide__slide.is-active {
+
+
+
+.catalogue__container__big .splide__track--nav>.splide__list>.splide__slide.is-active {
     border-radius: 8px;
-    border: 2px solid #222222;
+    border: 2px solid transparent !important;
     object-fit: cover;
     overflow: hidden;
 }

@@ -7,18 +7,18 @@ import { useStore } from "react-admin";
 
 const auth = supabaseAuthProvider(supabase, {
   getIdentity: async user => {
-      const { data, error } = await supabase
-          .from('users')
-          .select('*')
-          .match({ email: user.email })
-          .single();
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .match({ email: user.email })
+      .single();
 
-      if (!data || error) {
-          throw new Error();
-      }
+    if (!data || error) {
+      throw new Error();
+    }
 
-      return data;
-        
+    return data;
+
   },
 });
 
@@ -33,7 +33,7 @@ export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState({});
-  
+  const [g_user, setG_User] = useStore("user");
   const [user, setUser] = useState(null);
   const [custData, setCustData] = useStore("customer");
   const [cart_id, setCartID] = useStore("cart_id");
@@ -42,11 +42,47 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     // Call your authProvider here and update the state
     auth.getIdentity().then(data => setCurrentUser(data));
-    
+
   }, []);
- 
-  
-  
+
+  useEffect(() => {
+    // console.log(currentUser)
+    if (currentUser) {
+      setG_User(currentUser)
+      medusa.auth
+        .authenticate({
+          email: currentUser.email,
+          password: import.meta.env.VITE_AUTH_PASSWORD,
+        }).then((customer)=>{
+          console.log('Signed into medusa')
+        })
+    }
+    else {
+      if (g_user) {
+        setCurrentUser(g_user)
+        medusa.auth
+          .authenticate({
+            email: currentUser.email,
+            password: import.meta.env.VITE_AUTH_PASSWORD,
+          }).then((customer)=>{
+            console.log('Signed into medusa')
+          })
+      }
+    }
+    if (user) {
+      setG_User(user)
+    }
+    else {
+      if (g_user) {
+        setUser(g_user)
+      }
+    }
+
+
+  }, [currentUser, user, g_user])
+
+
+
 
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
@@ -61,8 +97,8 @@ export const AuthContextProvider = ({ children }) => {
           .select('*')
           .match({ email: userData.email })
           .single();
-        
-    
+
+
         if (!users) {
           // Create the user document
           await supabase
@@ -95,7 +131,7 @@ export const AuthContextProvider = ({ children }) => {
         }
 
 
-        
+
 
         medusa.customers.create({
           email: userData.email,
@@ -121,7 +157,7 @@ export const AuthContextProvider = ({ children }) => {
               });
             }
           });
-        
+
 
 
         console.log('User signed in:', userData);
@@ -132,12 +168,14 @@ export const AuthContextProvider = ({ children }) => {
 
     // Clean up the listener when the component unmounts
     return () => {
-      authListener.unsubscribe();
+      if (authListener) {
+        authListener.unsubscribe();
+      }
     };
   }, []);
 
   return (
-    <AuthContext.Provider value={{ currentUser}}>
+    <AuthContext.Provider value={{ currentUser }}>
       {children}
     </AuthContext.Provider>
   );

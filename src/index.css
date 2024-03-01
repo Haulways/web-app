@@ -20,6 +20,10 @@
   color: var(--text-color);
 }
 
+.Toastify__toast-container {
+  margin-inline: '12px';
+}
+
 
 
 .feed--page, .RaLayout-content, .layout, .RaSidebar-paper{

@@ -16,7 +16,7 @@ const medusa = new Medusa({
   });
 
 export const CartCard = ({ item, DelItemFromCart, increaseQty, decreaseQty, cart }) => {
-console.log(cart);
+// console.log(cart);
     
     return (
         <>

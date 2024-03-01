@@ -8,6 +8,8 @@ import grwmRec from "../../assets/grwm/grwmRec.png";
 import lookRec from "../../assets/lookbook/LookRec.png";
 import diyRec from "../../assets/diy/diyRec.png";
 import { useLocation } from 'react-router-dom';
+import { authProvider } from '../../supabase/authProvider';
+import { useStore } from "react-admin";
 
 
 
@@ -18,8 +20,10 @@ export const MyAppBar = (props) => {
     const { title } = props;
     const [tog, setTog] = React.useState(false);
     const titleRef = React.useRef()
+    const [g_user, setG_User] = useStore("user");
+    authProvider.getIdentity().then(data => setG_User(data));
     
-    console.log(location.pathname.split('/')[1]);
+    // console.log(location.pathname.split('/')[1]);
     
     useEffect(() => {
         // setTog(false);

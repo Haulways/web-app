@@ -8,7 +8,7 @@ import { collection, onSnapshot, orderBy, query, } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { AuthContext } from '../../components/context/AuthContext';
 import { Avatar, Box, CircularProgress, IconButton, Skeleton } from '@mui/material';
-import { useGetIdentity, useGetList, useRecordContext, useRefresh, useStore } from 'react-admin';
+import { useGetIdentity, useGetList, useGetMany, useRecordContext, useRefresh, useStore } from 'react-admin';
 import cartImg from "../../assets/cart.png";
 import backIcon from "../../assets/postImg-Icons/back.png";
 import shareIcon from "../../assets/socials/share.png";
@@ -28,6 +28,7 @@ import useSupabaseRealtime from '../../supabase/realTime';
 import { v4 as uuidv4 } from "uuid";
 import { ShowPageCarousels_1 } from '../../components/card/ShowCard';
 
+
 const medusa = new Medusa({
   baseUrl: "https://ecommerce.haulway.co",
 });
@@ -40,18 +41,19 @@ export const CheckSavedPost = (postId) => {
   const [error, setError] = useState(null);
   // const [user, setUser] = useStore('user');
   const { currentUser } = useContext(AuthContext);
+  const [g_user, setG_User] = useStore("user");
 
 
   useEffect(() => {
     const getPost = async () => {
       try {
-        console.log(currentUser?.uid);
+        // console.log(g_user?.uid);
         // Check if the post already exists
         let { data: savedData, error } = await supabase
           .from('saved_post')
           .select('*')
           .eq('postId', postId)
-          .eq('user_id', currentUser.uid);
+          .eq('user_id', g_user.uid);
 
         if (error) throw error;
 
@@ -62,7 +64,7 @@ export const CheckSavedPost = (postId) => {
         setSavedPost(savedData);
 
 
-        
+
       } catch (error) {
         console.log(error.message);
         setError(error);
@@ -76,6 +78,341 @@ export const CheckSavedPost = (postId) => {
 
   return { savedPost, loading, error };
 };
+
+export const GetStoreVendor = (store_id) => {
+  const record = useRecordContext();
+  const [post, setPost] = useState(null);
+  const [store, setStore] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [vendor, setVendor] = useState(null);
+  const [loading1, setLoading1] = useState(true);
+  const [error1, setError1] = useState(null);
+  const [vendorAcc, setVendorAcc] = useState(null);
+  const [loading2, setLoading2] = useState(true);
+  const [error2, setError2] = useState(null);
+  // const [user, setUser] = useStore('user');
+  const { currentUser } = useContext(AuthContext);
+  const [g_user, setG_User] = useStore("user");
+
+  const getStore = async (store_id) => {
+    try {
+      console.log(store_id);
+      // Check if the post already exists
+      let { data: store_list, error } = await supabase
+        .from('store')
+        .select('*')
+        .eq('id', store_id)
+
+      if (error) throw error;
+
+
+
+
+      if (store_list.length) {
+        setStore(store_list[0]);
+      }
+
+
+
+
+    } catch (error) {
+      console.log(error.message);
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+
+  }
+  const getVendor = async (store_id) => {
+    try {
+      // console.log(currentUser?.uid);
+      // Check if the post already exists
+      let { data: vendor_list, error } = await supabase
+        .from('user')
+        .select('*')
+        .eq('store_id', store_id)
+
+      if (error) throw error;
+
+
+
+      if (vendor_list.length) {
+        setVendor(vendor_list[0]);
+      }
+
+
+
+    } catch (error) {
+      console.log(error.message);
+      setError1(error);
+    } finally {
+      setLoading1(false);
+    }
+
+  }
+
+  const getVendorAcc = async (vendor) => {
+    try {
+      // console.log(currentUser?.uid);
+      // Check if the post already exists
+      let { data: vendorAccList, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('email', vendor.email)
+        .eq('role', 'vendor')
+
+
+      if (error) throw error;
+
+      if (vendorAccList.length) {
+        setVendorAcc(vendorAccList[0]);
+      }
+
+
+
+    } catch (error) {
+      console.log(error.message);
+      setError2(error);
+    } finally {
+      setLoading2(false);
+    }
+
+  }
+
+  useEffect(() => {
+    if (store_id) {
+      getStore(store_id);
+    }
+
+  }, [store_id]);
+
+  useEffect(() => {
+    if (store && store_id) {
+      getVendor(store_id);
+    }
+  }, [store])
+
+  useEffect(() => {
+    if (vendor && vendor.email) {
+      getVendorAcc(vendor);
+    }
+
+  }, [vendor])
+
+
+  return { store, vendor, vendorAcc, loading2, error2 };
+};
+
+export const ListStoreVendors = (store_ids) => {
+  const record = useRecordContext();
+  const [post, setPost] = useState(null);
+  const [results, setResults] = useState([]);
+  const [store, setStore] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [vendor, setVendor] = useState([]);
+  const [loading1, setLoading1] = useState(true);
+  const [error1, setError1] = useState(null);
+  const [vendorAcc, setVendorAcc] = useState([]);
+  const [loading2, setLoading2] = useState(true);
+  const [error2, setError2] = useState(null);
+  // const [user, setUser] = useStore('user');
+  const { currentUser } = useContext(AuthContext);
+  const [g_user, setG_User] = useStore("user");
+
+
+  const getStore = async (store_id) => {
+    try {
+      // console.log(currentUser?.uid);
+      // Check if the post already exists
+      let { data: store_list, error } = await supabase
+        .from('store')
+        .select('*')
+        .eq('id', store_id)
+
+      if (error) throw error;
+
+
+
+
+      if (store_list.length) {
+        // setStore(store_list[0])
+        return store_list[0];
+      }
+
+
+
+
+    } catch (error) {
+      console.log(error.message);
+      // setError(error);
+    } finally {
+      // setLoading(false);
+      // console.log(store)
+
+    }
+
+  }
+  const getVendor = async (store_id) => {
+    try {
+      // console.log(currentUser?.uid);
+      // Check if the post already exists
+      let { data: vendor_list, error } = await supabase
+        .from('user')
+        .select('*')
+        .eq('store_id', store_id)
+
+      if (error) throw error;
+
+
+
+      if (vendor_list.length) {
+        return vendor_list[0];
+      }
+
+
+
+    } catch (error) {
+      console.log(error.message);
+      // setError1(error);
+    } finally {
+      // setLoading1(false);
+    }
+
+  }
+
+  const getVendorAcc = async (vendor) => {
+    try {
+      // console.log(currentUser?.uid);
+      // Check if the post already exists
+      let { data: vendorAccList, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('email', vendor.email)
+        .eq('role', 'vendor')
+
+
+      if (error) throw error;
+
+      if (vendorAccList.length) {
+        // console.log(vendorAccList)
+        return vendorAccList[0];
+      }
+
+
+
+    } catch (error) {
+      console.log(error.message);
+      // setError2(error);
+    } finally {
+      // setLoading2(false);
+    }
+
+  }
+
+
+
+  const getAllAtOnce = async (store_ids) => {
+    const res = await Promise.all(store_ids.map(async (prod) => {
+      let store = prod && prod.metadata && prod.metadata.store ? (prod.metadata.store) : (await getStore(prod.store_id));
+      let vendor = prod && prod.metadata && prod.metadata.vendor ? (prod.metadata.vendor) : (await getVendor(store?.id));
+      let vendorAcc = prod && prod.metadata && prod.metadata.vendorAcc ? (prod.metadata.vendorAcc) : (await getVendorAcc(vendor));
+      
+      await updateProduct({
+        prod_id: prod?.id, payload: {
+          store: store,
+          vendor: vendor,
+          vendorAcc: vendorAcc
+        }
+      })
+
+
+      return {
+        ...prod,
+        store: store,
+        vendor: vendor,
+        vendorAcc: vendorAcc
+      }
+    }));
+
+
+
+    if (res.length) {
+      setResults(res);
+    }
+
+  }
+
+  useEffect(() => {
+    console.log(store_ids?.length);
+    if (store_ids?.length) {
+      getAllAtOnce(store_ids);
+    }
+
+  }, [store_ids]);
+
+
+
+
+  return { results, loading2, error2 };
+};
+
+export const GetFullProdData = (prod) => {
+  // console.log(prod?.map(prd => prd.id));
+  const { data, error } = useGetMany(
+    'product',
+    { ids: prod?.map(prd => prd.id) }
+  );
+  const { results: prods_final, loading } = ListStoreVendors(data);
+
+  useEffect(() => {
+    if (prods_final) {
+      // console.log(prods_final)
+    }
+  }, [prods_final])
+
+  return { prods_final }
+}
+
+export const updateProduct = async ({ prod_id, payload }) => {
+  try {
+    // Check if the product already exists
+    let { data: prod, error } = await supabase
+      .from('product')
+      .select('*')
+      .eq('id', prod_id)
+
+    if (error) throw error;
+
+    // If the product does not exist, ignore it
+    if (!prod.length) {
+      //ignore
+    } else {
+      const { data, error } = await supabase
+        .from('product')
+        .update({ metadata: payload && Object.keys(payload).includes('vendor') ? (payload) : (null) })
+        .eq('id', prod_id)
+        .select();
+
+
+
+      if (error) throw error;
+
+      // console.log();
+
+    }
+  } catch (error) {
+    // console.log(error.message);
+  }
+}
+
+
+
+
+
+
+
 
 
 
@@ -94,12 +431,78 @@ const Signlepost = () => {
   const [isPlaying, setIsPlaying] = useState(true);
   const [cart, setCart] = useState(null);
   const [cart_id, setCartID] = useStore("cart_id");
+  const [gcart, setGCart] = useState(null);
+  const [g_cart_id, setGCartID] = useStore("gcart_id");
   const { theme } = useContext(ThemeContext);
   const realtimeData = useSupabaseRealtime();
   const uuid = uuidv4();
   const [activeIndex, setActiveIndex] = useState(0);
   const splideRef = React.useRef(); // Create the ref
+  const [custData, setCustData] = React.useState(null);
+  const [region, setRegion] = React.useState(null);
+  const [products, setProducts] = React.useState(null);
+  const [g_user, setG_User] = useStore("user");
+  const { prods_final } = GetFullProdData(post?.taggedProducts);
+
+
+
   // Attach an event listener after the Splide instance is mounted
+
+  React.useEffect(() => {
+    if (g_user) {
+      medusa.auth
+        .authenticate({
+          email: g_user.email,
+          password: import.meta.env.VITE_AUTH_PASSWORD,
+        })
+        .then(({ customer }) => {
+          setCustData(customer);
+          if (!g_cart_id) {
+            medusa.carts.create().then(({ cart }) => {
+              setGCartID(cart.id);
+              setGCart(cart)
+            });
+          } else {
+            medusa.carts.retrieve(g_cart_id).then(({ cart }) => setGCart(cart));
+          }
+        });
+    }
+
+
+
+  }, []);
+
+  React.useEffect(() => {
+    if (post) {
+      medusa.products.list({
+        id: post.taggedProducts.map((prd) => prd.id),
+        // expand: 'store'
+      })
+        .then(({ products, limit, offset, count }) => {
+          setPost({ ...post, taggedProducts: products })
+          setProducts(products)
+
+        })
+      // console.log(post);
+    }
+
+  }, [custData, currentUser, post])
+
+  React.useEffect(() => {
+    if (prods_final.length && products && products.length) {
+      // console.log(prods_final);
+      // setPost({ ...post, taggedProducts: prods_final })
+      // setProducts(prods_final)
+    }
+
+  }, [prods_final])
+
+  React.useEffect(() => {
+    if (products) {
+      // console.log(products[0])
+    }
+  }, [products])
+
 
   // Function to add a unique view
   const addUniqueView = async (userId, videoId) => {
@@ -125,7 +528,7 @@ const Signlepost = () => {
   }, [currentUser, record]);
 
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!cart_id) {
       medusa.carts.create().then(({ cart }) => {
         setCartID(cart.id);
@@ -134,8 +537,18 @@ const Signlepost = () => {
     } else {
       medusa.carts.retrieve(cart_id).then(({ cart }) => setCart(cart));
     }
+
     // console.log(cart);
   }, [cart_id, cart]);
+
+  React.useEffect(() => {
+    if (cart) {
+      setRegion(cart.region);
+    }
+
+  }, [cart])
+
+
 
   React.useEffect(() => {
     if (splideRef.current) {
@@ -662,12 +1075,12 @@ const Signlepost = () => {
             </div>
             <div className=''>
               {/* Post carousel container */}
-              {post.taggedProducts && post.taggedProducts.length > 0 && (
+              {products && products.length && post.taggedProducts && post.taggedProducts.length > 0 && (
                 <h2 className='mt-[20px] font-[500]  text-[14px] px-[16px]'>Featured products</h2>
               )}
               <div className='showCard--post max-w-[92vw]'>
                 <Splide ref={splideRef} options={options} className='w-full' >
-                  {Array.isArray(post.taggedProducts) && post.taggedProducts.map((mediaUrl, index) => (
+                  {Array.isArray(products) && products.map((mediaUrl, index) => (
                     <SplideSlide key={index} className='p-[3px]'>
                       <ShowPageCarousels_1
                         index={index}
@@ -684,7 +1097,7 @@ const Signlepost = () => {
 
           </div>
 
-          <MPost post={post} id={id} comments={comments} liked={liked} likes={likes} follow={follow} followers={followers} unfollow={unfollow} toggleLike={toggleLike} formatFollowers={formatFollowers} following={following} savePost={savePost} cart={cart} />
+          <MPost post={post} id={id} comments={comments} liked={liked} likes={likes} follow={follow} followers={followers} unfollow={unfollow} toggleLike={toggleLike} formatFollowers={formatFollowers} following={following} savePost={savePost} cart={gcart} products={products} />
         </>
       ) : (
         <div className='spinner'>

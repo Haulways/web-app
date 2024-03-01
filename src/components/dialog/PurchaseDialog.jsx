@@ -18,7 +18,7 @@ import thankYou from "../../assets/purchase-icons/ThankYou.png";
 import share from "../../assets/socials/share.png";
 import FB from "../../assets/socials/fb.png";
 import IG from "../../assets/socials/ig.png";
-import { Confirm, Form, FormTab, RadioButtonGroupInput, SaveButton, SelectInput, TabbedForm, TextInput, Toolbar, required, useStore } from 'react-admin';
+import { Confirm, Form, FormTab, RadioButtonGroupInput, SaveButton, SelectInput, TabbedForm, TextInput, Toolbar, required, useRedirect, useStore } from 'react-admin';
 import Medusa from '@medusajs/medusa-js';
 import { toast } from 'react-toastify';
 import { AuthContext } from '../context/AuthContext';
@@ -26,6 +26,12 @@ import { Grid, Stack } from '@mui/material';
 import { useEffect } from 'react';
 import { useContext } from 'react';
 import { PaystackButton } from 'react-paystack';
+import { SmallPHorizontalCards, SmallPHorizontalVariantCards } from '../card/ShowCard';
+import { GetStoreVendor, ListStoreVendors } from '../../pages/post/Post';
+import { useLocation } from 'react-router-dom';
+
+
+
 
 
 const medusa = new Medusa({
@@ -33,7 +39,7 @@ const medusa = new Medusa({
     baseUrl: "https://ecommerce.haulway.co",
 });
 
-const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentProduct, cart, cart_id, setCartID, custData, setCart, setCustData, theme }) => {
+const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentProduct, cart, cart_id, setCartID, setCart, custData, setCustData, theme }) => {
     const { currentUser } = useContext(AuthContext);
     const [openShipping, setOpenShipping] = React.useState(false);
     const [shipOpts, setShipOpts] = React.useState([]);
@@ -42,34 +48,71 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
     const [config, setConfig] = React.useState(null);
     const [finalType, setFinalType] = React.useState(null);
     const [finalData, setFinalData] = useStore("order");
+    const [exst_item, setExst_item] = React.useState(null);
+    // const { savedPost, loading, error } = CheckSavedPost(post.id, currentUser);
+    const { store, vendor, vendorAcc } = GetStoreVendor(exst_item?.variant?.product?.store_id)
+    const location = useLocation()
+    const redirect = useRedirect();
+    const [intCart, setIntCart] = useStore("int_carts");
+    const [g_cart_id, setGCartID] = useStore("gcart_id");
+    const [gcart, setGCart] = React.useState(null);
+
+
+
+
+
 
 
     React.useEffect(() => {
+        // console.log(currentProduct);
         if (custData && cart && cart_id) {
             // Check if the item already exists in the cart
             const existingItem = cart.items.find(item => item.variant_id === currentProduct.variants[0].id);
 
             if (existingItem) {
                 // If the item exists and its quantity is more than 1, update it to 1
-                setCart(existingItem)
+                setExst_item(existingItem)
             }
 
         }
     }, []);
 
+    React.useEffect(() => {
+        if (cart) {
+            ListShippingOptions(cart)
+        }
+    }, [cart])
+
 
 
     useEffect(() => {
         if (cart && custData) {
-            console.log(cart);
-            console.log(custData);
+            // console.log(cart);
+            // console.log(custData);
         }
     }, [cart, custData]);
+
+    useEffect(() => {
+        if (exst_item) {
+            // console.log(exst_item);
+        }
+    }, [exst_item]);
+
+    useEffect(() => {
+        if (store) {
+            // console.log(store);
+        }
+    }, [store]);
+
+
 
 
     React.useEffect(() => {
         if (cart_id) {
             medusa.carts.retrieve(cart_id).then(({ cart }) => setCart(cart));
+        }
+        if (g_cart_id) {
+            medusa.carts.retrieve(g_cart_id).then(({ cart }) => setGCart(cart));
         }
     }, []);
 
@@ -101,12 +144,13 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
     const handleRemoveItem = (variantId) => {
         console.log(`Attempting to remove item ${variantId} from cart`);
 
-        if (cart && cart_id) {
-            medusa.carts.lineItems.delete(cart_id, variantId).then(({ cart }) => {
-                setCart(cart);
+        if (cart && cart_id && gcart && g_cart_id) {
+            medusa.carts.lineItems.delete(g_cart_id, variantId).then(({ cart }) => {
+                setGCart(cart);
             });
         }
     };
+
 
 
     const completeCheckout = () => {
@@ -183,6 +227,120 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
             .then(({ shipping_options }) => {
                 setShipOpts(shipping_options);
             });
+    };
+
+    const FetchInternalCart = async (product) => {
+        let cart_id = '';
+        // console.log(product)
+        if (product && product.metadata && product.metadata.store && product.metadata.store.id) {
+            if (intCart && Object.keys(intCart).includes(product.metadata.store.id)) {
+                cart_id = intCart[product.metadata.store.id];
+            }
+            else {
+                cart_id = await medusa.auth
+                    .authenticate({
+                        email: currentUser.email,
+                        password: import.meta.env.VITE_AUTH_PASSWORD,
+                    })
+                    .then(async ({ customer }) => {
+                        if (!cart_id || cart_id === '') {
+                            return await medusa.carts.create().then(async ({ cart }) => {
+                                return await medusa.carts.update(cart.id, {
+                                    context: { ...cart.context, ...product?.metadata },
+                                    customer_id: customer.id
+                                }).then(async ({ cart }) => {
+                                    // console.log(cart)
+                                    let int_crt = intCart ? intCart : {};
+                                    let str_id = product.metadata.store.id;
+                                    int_crt[str_id] = cart.id;
+                                    setIntCart(int_crt);
+                                    return cart.id
+                                })
+                            });
+                        } else {
+                        }
+                    });
+            }
+        }
+
+
+
+        if (!cart_id || cart_id === '') return null
+        return cart_id
+    }
+
+    const RetrieveInternalCart = async (product) => {
+        let updatedCart = null;
+        let cart_id = await FetchInternalCart(product);
+        setCartID(cart_id);
+    }
+
+    const AddItem2InternalCart = async (product, qty) => {
+        let cart_id = await FetchInternalCart(product);
+        let updatedCart = null;
+        // console.log(cart_id)
+        if (cart_id) {
+            updatedCart = await medusa.carts.retrieve(cart_id)
+                .then(async ({ cart }) => {
+                    if (product && product?.variants && product?.variants.length) {
+                        // Check if the item already exists in the cart
+                        const existingItem = cart.items.find(item => item.variant_id === product.variants[0].id);
+
+                        if (existingItem) {
+                            // If the item exists and its quantity is >= 1, update it by one
+                            if (existingItem.quantity >= 1) {
+                                return await toast.promise(
+                                    medusa.carts.lineItems.update(cart.id, existingItem.id, { quantity: existingItem.quantity + 1 }),
+                                    {
+                                        pending: `${product.title} Added to cart`,
+                                        success: 'Cart Updated 👌',
+                                        error: 'Cart Update Failed 🤯'
+                                    }
+                                )
+                            }
+                        } else {
+                            // If the item doesn't exist, add it to the cart
+                            return await toast.promise(
+                                medusa.carts.lineItems.create(cart.id, { variant_id: product.variants[0].id, quantity: qty }),
+                                {
+                                    pending: `${product.title} Added to cart`,
+                                    success: 'Cart Updated 👌',
+                                    error: 'Cart Update Failed 🤯'
+                                }
+                            )
+                        }
+                    }
+                })
+        }
+
+
+
+
+
+        if (!cart_id || cart_id === '') return null
+        return updatedCart.cart;
+    }
+
+
+    const RemoveItemFromInternalCart = async (product, variantId) => {
+        console.log(`Attempting to remove item ${variantId} from cart`);
+        let cart_id = await FetchInternalCart(product);
+        let updatedCart = null;
+
+        if (cart_id) {
+            updatedCart = await toast.promise(
+                medusa.carts.lineItems.delete(cart_id, product.variants[0].id),
+                {
+                    pending: `Removing ${product.title} from cart`,
+                    success: `Removed ${product.title} from cart 👌`,
+                    error: `Removing ${product.title} from cart Failed 🤯`
+                }
+            )
+
+        }
+
+        if (!cart_id || cart_id === '') return null
+        return updatedCart.cart;
     };
 
     useEffect(() => {
@@ -285,7 +443,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
     // update shipping address 
     const UpdateShippingAddress = (address) => {
         // console.log(custData.shipping_addresses);
-        if (custData && cart_id && !cart.shipping_address) {
+        if (custData && cart_id) {
             medusa.carts.update(cart_id, {
                 customer_id: custData.id,
                 shipping_address: {
@@ -314,106 +472,136 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
         }
     };
 
+    const gen_url = (url, nw_pth) => {
+        let base = url.split('/');
+        if (base[base.length - 1] === 'address' || base[base.length - 1] === 'shipping') {
+            base[base.length - 1] = nw_pth;
+        }
+        else if (nw_pth === '' && (base[base.length - 1] === 'address' || base[base.length - 1] === 'shipping')) {
+            base = base.slice(base.length - 1)
+        }
+        else if (base[base.length - 1] === 'show') {
+            base.push(nw_pth)
+        }
+        else if (base[base.length - 1] === '' && base[base.length - 2] === 'show') {
+            base[base.length - 1] = nw_pth;
+        }
+        console.log(base, url, nw_pth)
+        return base.join('/')
+    }
 
     const AutoSaveToolbar = () => (
         <Toolbar>
             <Stack direction={"row"} width={"100%"} justifyContent={"space-between"}>
-                {/* add shipipng address form button */}
-                {cart && cart.shipping_address_id && cart.shipping_address ? null : (
-                    <SaveButton
-                        sx={{
-                            textTransform: 'capitalize'
-                        }}
-                        color="primary" label='Add new address' icon=' '
+                {location && location.pathname.split('/')[location.pathname.split('/').length - 1] === 'address' && (
+                    <>{/* add shipipng address form button */}
+                        {cart && cart.shipping_address_id && cart.shipping_address ? null : (
+                            null
+                        )}
+                        <SaveButton
+                            sx={{
+                                textTransform: 'capitalize'
+                            }}
+                            color="primary" label={cart && cart.shipping_address_id && cart.shipping_address ? ('Update address') : ('Add new address')} icon=' '
 
 
-                        disabled={
-                            cart && cart.shipping_address_id && cart.shipping_address
-                                ? true
-                                : false
-                        }
-                    />
-                )}
+                        // disabled={
+                        //     cart && cart.shipping_address_id && cart.shipping_address
+                        //         ? true
+                        //         : false
+                        // }
+                        />
 
-                {/* add shipipng option form button */}
-                {cart && cart.payment_sessions && cart.payment_sessions.length > 0 ? null : (
-                    <SaveButton
-                        alwaysEnable={
-                            cart && cart.shipping_methods && cart.shipping_methods.length > 0
-                                ? false
-                                : true
-                        }
-                        // fullWidth
-
-                        color="primary"
-                        variant="contained"
-                        label={"Add Shipping Option"}
-                        icon=' '
-                        onClick={() => {
-                            ListShippingOptions(cart);
-                        }}
-                        sx={{ color: "#fff", textTransform: 'capitalize' }}
-                        disabled={
-                            cart && cart.shipping_methods && cart.shipping_methods.length > 0
-                                ? true
-                                : false
-                        }
-                    />
-                )}
-
-                {/* add selected option form button */}
-                {cart && cart.payment_sessions && cart.payment_sessions.length > 0 ? (
-                    <SaveButton
-                        alwaysEnable={
-                            cart && cart.shipping_methods && cart.shipping_methods.length > 0
-                                ? false
-                                : true
-                        }
-                        // fullWidth
-
-                        color="primary"
-                        variant="contained"
-                        label={cart && cart.shipping_methods && cart.shipping_methods.length > 0 ? "Updated" : "Add Selected Option"}
-                        icon=' '
-                        onClick={() => {
-                            ListShippingOptions(cart);
-                        }}
-                        sx={{ color: "#fff", textTransform: 'capitalize' }}
-                        disabled={
-                            cart && cart.shipping_methods && cart.shipping_methods.length > 0
-                                ? true
-                                : false
-                        }
-                    />
-                ) : (
-                    null
-                )}
-
-                {/* Next/close form button */}
-                {cart && cart.shipping_address_id && cart.shipping_address ?
-                    (
+                        {/* add shipipng option form button */}
+                        {cart && cart.payment_sessions && cart.payment_sessions.length > 0 ? null : (
+                            null
+                        )}
                         <SaveButton
                             alwaysEnable={
-                                cart && cart.shipping_methods && cart.shipping_methods.length > 0 && cart.shipping_address_id && cart.shipping_address
-                                    ? true
-                                    : false
+                                cart && cart.shipping_methods && cart.shipping_methods.length > 0
+                                    ? false
+                                    : true
                             }
                             // fullWidth
 
                             color="primary"
                             variant="contained"
-                            label="Next"
+                            label={"Next: Shipping"}
                             icon=' '
-                            onClick={handleConfirm}
-                            sx={{ color: "#fff", textTransform: 'capitalize' }}
-                            disabled={
-                                cart && cart.shipping_methods && cart.shipping_methods.length > 0 && cart.shipping_address_id && cart.shipping_address
-                                    ? true
-                                    : false
-                            }
-                        />
+                            onClick={() => {
 
-                    ) : null}
+                                ListShippingOptions(cart);
+                                redirect(gen_url(location.pathname, 'shipping'))
+                            }}
+                            sx={{ color: "#fff", textTransform: 'capitalize' }}
+                        // disabled={
+                        //     cart && cart.shipping_methods && cart.shipping_methods.length > 0
+                        //         ? true
+                        //         : false
+                        // }
+                        />
+                    </>
+
+                )}
+
+                {location && location.pathname.split('/')[location.pathname.split('/').length - 1] === 'shipping' && (<>{/* add selected option form button */}
+                    {cart && cart.payment_sessions && cart.payment_sessions.length > 0 ? (
+                        null
+                    ) : (
+                        null
+                    )}
+
+                    <SaveButton
+                        alwaysEnable={
+                            cart && cart.shipping_methods && cart.shipping_methods.length > 0
+                                ? false
+                                : true
+                        }
+                        // fullWidth
+
+                        color="primary"
+                        variant="contained"
+                        label={cart && cart.shipping_methods && cart.shipping_methods.length > 0 ? "Update Shipping method" : "Add Shipping method"}
+                        icon=' '
+                        onClick={() => {
+                            ListShippingOptions(cart);
+                        }}
+                        sx={{ color: "#fff", textTransform: 'capitalize' }}
+                    // disabled={
+                    //     cart && cart.shipping_methods && cart.shipping_methods.length > 0
+                    //         ? true
+                    //         : false
+                    // }
+                    />
+
+                    {/* Next/close form button */}
+                    {cart && cart.shipping_address_id && cart.shipping_address ?
+                        (
+                            null
+
+                        ) : null}
+                    <SaveButton
+                        alwaysEnable={
+                            cart && cart.shipping_methods && cart.shipping_methods.length > 0 && cart.shipping_address_id && cart.shipping_address
+                                ? true
+                                : false
+                        }
+                        // fullWidth
+
+                        color="primary"
+                        variant="contained"
+                        label="Next"
+                        icon=' '
+                        onClick={handleConfirm}
+                        sx={{ color: "#fff", textTransform: 'capitalize' }}
+                        disabled={
+                            cart && cart.shipping_methods && cart.shipping_methods.length > 0 && cart.shipping_address_id && cart.shipping_address
+                                ? true
+                                : false
+                        }
+                    />
+                </>)}
+
 
             </Stack>
         </Toolbar>
@@ -429,10 +617,14 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
             .join(" ");
     }
 
-    const handleOpenForm = () => setOpenShipping(true);
+    const handleOpenForm = () => {
+        setOpenShipping(true);
+        redirect(gen_url(location.pathname, 'address'))
+    };
     const handleDialogClose = () => setOpenShipping(false);
     const handleConfirm = () => {
         setOpenShipping(false);
+        redirect(gen_url(location.pathname, ''))
     };
 
 
@@ -456,11 +648,11 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
 
 
                     <div className='payment__details--Top'>
-                        <h2>Avenue</h2>
+                        <h2>{currentProduct && currentProduct.metadata.store && currentProduct.metadata.store.name ? (currentProduct.metadata.store.name) : (store && store?.name ? (store?.name) : (null))}</h2>
                         <span className='sold--by'>
                             <p>Ships and sold by</p>
                             <span>
-                                Avenue
+                                {currentProduct && currentProduct.metadata.store && currentProduct.metadata.store.name ? (currentProduct.metadata.store.name) : (store && store?.name ? (store?.name) : (null))}
                                 <img className='ml-[-.2rem] mt-[-.2rem]' src={yellowLine} alt='avenue' />
                             </span>
                         </span>
@@ -474,8 +666,10 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                         <span className='location--name'>
                             <img className='w-[30px] h-[30px]' src={location} />
                             <span>
-                                <h3>2, Johnson Akim St.</h3>
-                                <p>Lagos, Nigeria</p>
+                                <h3>
+                                    {cart && cart.shipping_address && cart.shipping_address.address_1 ? (`${cart.shipping_address.address_1}`) : ('Not Set')}
+                                </h3>
+                                <p>{`${cart && cart.shipping_address && cart.shipping_address.country_code ? (`${cart.shipping_address.country_code}`) : ('Not Set')}, ${cart && cart.shipping_address && cart.shipping_address.city ? (`${cart.shipping_address.city}`) : ('Not Set')}`}</p>
                             </span>
                         </span>
                         <span>
@@ -663,7 +857,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                             <TabbedForm
                                 toolbar={<AutoSaveToolbar />}
                                 onSubmit={completePayment}
-                                syncWithLocation={false}
+                                syncWithLocation={true}
                                 sx={{
                                     '& .MuiFilledInput-root': {
                                         backgroundColor: "#D9D9D9 !important",
@@ -712,7 +906,8 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                                 }}
 
                             >
-                                <FormTab label="Address Info">
+
+                                <FormTab path='address' label="Address Info">
                                     <span className='delivery-location'>
                                         Previous
                                     </span>
@@ -738,7 +933,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                                         <Grid item xs={6} md={6}>
                                             <TextInput
                                                 source="first_name"
-                                                defaultValue={custData ? `${custData.first_name}` : null}
+                                                defaultValue={cart && cart.shipping_address ? `${cart.shipping_address.first_name}` : null}
                                                 fullWidth
                                                 variant="outlined"
                                             />
@@ -746,7 +941,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                                         <Grid item xs={6} md={6}>
                                             <TextInput
                                                 source="last_name"
-                                                defaultValue={custData ? `${custData.last_name}` : null}
+                                                defaultValue={cart && cart.shipping_address ? `${cart.shipping_address.last_name}` : null}
                                                 fullWidth
                                                 variant="outlined"
                                             />
@@ -756,6 +951,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                                                 source="address_1"
                                                 label="Address"
                                                 variant="outlined"
+                                                defaultValue={cart && cart.shipping_address ? `${cart.shipping_address.address_1}` : null}
                                                 fullWidth
                                             />
                                         </Grid>
@@ -763,6 +959,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                                             <TextInput
                                                 source="city"
                                                 variant="outlined"
+                                                defaultValue={cart && cart.shipping_address ? `${cart.shipping_address.city}` : null}
                                                 fullWidth
                                             />
                                         </Grid>
@@ -770,6 +967,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                                             <TextInput
                                                 source="province"
                                                 variant="outlined"
+                                                defaultValue={cart && cart.shipping_address ? `${cart.shipping_address.province}` : null}
                                                 fullWidth
                                             />
                                         </Grid>
@@ -794,6 +992,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                                             <TextInput
                                                 source="postal_code"
                                                 variant="outlined"
+                                                defaultValue={cart && cart.shipping_address ? `${cart.shipping_address.postal_code}` : null}
                                                 fullWidth
                                             />
                                         </Grid>
@@ -801,6 +1000,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                                             <TextInput
                                                 source="email"
                                                 variant="outlined"
+                                                defaultValue={cart && cart.shipping_address ? `${cart.shipping_address.last_name}` : null}
                                                 fullWidth
                                             />
                                         </Grid>
@@ -808,15 +1008,17 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                                             <TextInput
                                                 source="phone"
                                                 variant="outlined"
+                                                defaultValue={cart && cart.shipping_address ? `${cart.shipping_address.phone}` : null}
                                                 fullWidth
                                             />
                                         </Grid>
                                     </Grid>
                                 </FormTab>
-                                <FormTab label="Shipping option">
+                                <FormTab path='shipping' label="Shipping option">
                                     <RadioButtonGroupInput
                                         source="shipping_option"
                                         row={false}
+                                        defaultValue={cart && cart.shipping_methods && cart.shipping_methods.length ? `${cart.shipping_methods[0].shipping_option.id}` : null}
                                         choices={
                                             shipOpts.length <= 0 && cart && cart.shipping_methods
                                                 ? cart.shipping_methods.map((opt) => {
@@ -949,9 +1151,27 @@ export const PurchaseDialog = ({ openPurchase, handleClosePurchase, handleCloseP
     const [isMuted, setIsMuted] = React.useState(true);
     const [custData, setCustData] = useStore("customer");
     const [cart, setCart] = React.useState(null);
+    const [gcart, setGCart] = React.useState(null);
     const { currentUser } = React.useContext(AuthContext)
     const [cart_id, setCartID] = useStore("cart_id");
+    const [g_cart_id, setGCartID] = useStore("gcart_id");
     const currentProduct = product || mediaUrl;
+    const [currProdVar, setCurrProdVar] = React.useState(null)
+    const { pathname } = useLocation();
+    const redirect = useRedirect();
+    const [intCart, setIntCart] = useStore("int_carts");
+
+    const convertToDecimal = (amount) => {
+        return Math.floor(amount) / 100
+    }
+
+    const formatPrice = (amount) => {
+        return new Intl.NumberFormat("en-US", {
+            style: "currency",
+            // TODO assuming region is already defined somewhere
+            currency: cart?.region.currency_code,
+        }).format(convertToDecimal(amount))
+    }
 
     React.useEffect(() => {
 
@@ -962,32 +1182,166 @@ export const PurchaseDialog = ({ openPurchase, handleClosePurchase, handleCloseP
             })
             .then(({ customer }) => {
                 setCustData(customer);
-                if (!cart_id) {
+                RetrieveInternalCart(currentProduct);
+                if (!g_cart_id) {
                     medusa.carts.create().then(({ cart }) => {
-                        setCartID(cart.id);
-                        setCart(cart)
+                        setGCartID(cart.id);
+                        setGCart(cart)
                     });
                 } else {
-                    medusa.carts.retrieve(cart_id).then(({ cart }) => setCart(cart));
+                    medusa.carts.retrieve(g_cart_id).then(({ cart }) => setGCart(cart));
                 }
             });
 
     }, []);
 
+    React.useEffect(() => {
+        if (currentProduct) {
+            RetrieveInternalCart(currentProduct);
+        }
+    }, [currentProduct])
+
+    React.useEffect(() => {
+        if (cart_id) {
+            medusa.carts.retrieve(cart_id).then(({ cart }) => setCart(cart));
+        }
+    }, [cart_id]);
+
+    const RetrieveInternalCart = async (product) => {
+        let updatedCart = null;
+        let cart_id = await FetchInternalCart(product);
+        setCartID(cart_id);
+        if (cart_id) {
+            medusa.carts.retrieve(cart_id).then(({ cart }) => {
+                console.log(cart);
+                setCart(cart)
+            });
+        }
+    }
+
+    const FetchInternalCart = async (product) => {
+        let cart_id = '';
+        // console.log(product)
+        if (product && product.metadata && product.metadata.store && product.metadata.store.id) {
+            if (intCart && Object.keys(intCart).includes(product.metadata.store.id)) {
+                cart_id = intCart[product.metadata.store.id];
+            }
+            else {
+                cart_id = await medusa.auth
+                    .authenticate({
+                        email: currentUser.email,
+                        password: import.meta.env.VITE_AUTH_PASSWORD,
+                    })
+                    .then(async ({ customer }) => {
+                        if (!cart_id || cart_id === '') {
+                            return await medusa.carts.create().then(async ({ cart }) => {
+                                return await medusa.carts.update(cart.id, {
+                                    context: { ...cart.context, ...product?.metadata },
+                                    customer_id: customer.id
+                                }).then(async ({ cart }) => {
+                                    // console.log(cart)
+                                    let int_crt = intCart ? intCart : {};
+                                    let str_id = product.metadata.store.id;
+                                    int_crt[str_id] = cart.id;
+                                    setIntCart(int_crt);
+                                    return cart.id
+                                })
+                            });
+                        } else {
+                        }
+                    });
+            }
+        }
+
+
+
+        if (!cart_id || cart_id === '') return null
+        return cart_id
+    }
+
+    const AddItem2InternalCart = async (product, qty) => {
+        let cart_id = await FetchInternalCart(product);
+        let updatedCart = null;
+        // console.log(cart_id)
+        if (cart_id) {
+            updatedCart = await medusa.carts.retrieve(cart_id)
+                .then(async ({ cart }) => {
+                    if (product && product?.variants && product?.variants.length) {
+                        // Check if the item already exists in the cart
+                        const existingItem = cart.items.find(item => item.variant_id === product.variants[0].id);
+
+                        if (existingItem) {
+                            // If the item exists and its quantity is >= 1, update it by one
+                            if (existingItem.quantity >= 1) {
+                                return await toast.promise(
+                                    medusa.carts.lineItems.update(cart.id, existingItem.id, { quantity: existingItem.quantity + 1 }),
+                                    {
+                                        pending: `${product.title} Added to cart`,
+                                        success: 'Cart Updated 👌',
+                                        error: 'Cart Update Failed 🤯'
+                                    }
+                                )
+                            }
+                        } else {
+                            // If the item doesn't exist, add it to the cart
+                            return await toast.promise(
+                                medusa.carts.lineItems.create(cart.id, { variant_id: product.variants[0].id, quantity: qty }),
+                                {
+                                    pending: `${product.title} Added to cart`,
+                                    success: 'Cart Updated 👌',
+                                    error: 'Cart Update Failed 🤯'
+                                }
+                            )
+                        }
+                    }
+                })
+            setCart(updatedCart.cart)
+        }
+
+
+
+
+
+        if (!cart_id || cart_id === '') return null
+        return updatedCart.cart;
+    }
+
+
+    const RemoveItemFromInternalCart = async (product, variantId) => {
+        console.log(`Attempting to remove item ${variantId} from cart`);
+        let cart_id = await FetchInternalCart(product);
+        let updatedCart = null;
+
+        if (cart_id) {
+            updatedCart = await toast.promise(
+                medusa.carts.lineItems.delete(cart_id, product.variants[0].id),
+                {
+                    pending: `Removing ${product.title} from cart`,
+                    success: `Removed ${product.title} from cart 👌`,
+                    error: `Removing ${product.title} from cart Failed 🤯`
+                }
+            )
+            setCart(updatedCart.cart)
+
+        }
+
+        if (!cart_id || cart_id === '') return null
+        return updatedCart.cart;
+    };
+
 
     const addItem2Cart = (variantId, qty) => {
-        console.log(custData)
-
-        if (custData && cart && cart_id) {
-            medusa.carts.lineItems
-                .create(cart_id, {
-                    variant_id: variantId,
-                    quantity: qty,
-                })
-                .then(({ cart }) => {
-                    setCart(cart);
-                    toast(currentProduct.title + " Added to cart")
-                });
+        // console.log(custData)
+        AddItem2InternalCart(currentProduct, qty);
+        if (custData && cart && cart_id && gcart && g_cart_id) {
+            toast.promise(
+                medusa.carts.lineItems.create(g_cart_id, { variant_id: variantId, quantity: qty }),
+                {
+                    pending: `${currentProduct.title} Added to cart"`,
+                    success: 'Cart Updated 👌',
+                    error: 'Cart Update Failed 🤯'
+                }
+            )
 
         }
 
@@ -995,23 +1349,43 @@ export const PurchaseDialog = ({ openPurchase, handleClosePurchase, handleCloseP
 
 
     const add2Cart = async (variantId, qty) => {
-        if (custData && cart && cart_id) {
+        if (custData && cart && cart_id && gcart && g_cart_id) {
             // Check if the item already exists in the cart
-            const existingItem = cart.items.find(item => item.variant_id === variantId);
+            console.log(gcart)
+            const existingItem = gcart.items.find(item => item.variant_id === variantId);
+
+            const in_cart = await AddItem2InternalCart(currentProduct, qty);
+
 
             if (existingItem) {
                 // If the item exists and its quantity is more than 1, update it to 1
-                if (existingItem.quantity > 1) {
-                    await medusa.carts.lineItems.update(cart_id, existingItem.id, { quantity: 1 });
+                if (existingItem.quantity >= 1) {
+                    medusa.carts.lineItems.update(g_cart_id, existingItem.id, { quantity: existingItem.quantity + 1 });
+                    // await toast.promise(
+                    //     medusa.carts.lineItems.update(g_cart_id, existingItem.id, { quantity: 1 }),
+                    //     {
+                    //         pending: `${currentProduct.title} Added to cart`,
+                    //         success: 'Cart Updated 👌',
+                    //         error: 'Cart Update Failed 🤯'
+                    //     }
+                    // )
                 }
             } else {
                 // If the item doesn't exist, add it to the cart
-                await medusa.carts.lineItems.create(cart_id, { variant_id: variantId, quantity: qty });
+                medusa.carts.lineItems.create(g_cart_id, { variant_id: variantId, quantity: qty });
+                // await toast.promise(
+                //     medusa.carts.lineItems.create(g_cart_id, { variant_id: variantId, quantity: qty }),
+                //     {
+                //         pending: `${currentProduct.title} Added to cart`,
+                //         success: 'Cart Updated 👌',
+                //         error: 'Cart Update Failed 🤯'
+                //     }
+                // )
             }
 
             // Fetch the updated cart
-            const updatedCart = await medusa.carts.retrieve(cart_id);
-            setCart(updatedCart.cart);
+            const updatedCart = await medusa.carts.retrieve(g_cart_id);
+            setGCart(updatedCart.cart);
         }
 
 
@@ -1082,14 +1456,14 @@ export const PurchaseDialog = ({ openPurchase, handleClosePurchase, handleCloseP
                             </span>
 
                             <span className='product--price' style={{ color: theme === "light" ? "#222" : "#fff" }}>
-                                $150.00
+                                {cart && product ? formatPrice(product.variants[0].prices.filter((curr) => { return curr.currency_code === cart.region.currency_code })[0].amount) : 0}
                             </span>
                         </div>
 
-                        {/* <div className='mx-auto pt-[1rem]'>
-                            <SmallPHorizontalCards post={post}/>
-                        </div> */}
-                        <div className='product__details--Middle mt-[60px]'>
+                        <div className='mx-auto pt-[1rem]'>
+                            <SmallPHorizontalCards post={product} />
+                        </div>
+                        <div className='product__details--Middle mt-[2px]'>
                             <span className="brand--name">
                                 {currentProduct?.title}
                             </span>
@@ -1099,9 +1473,9 @@ export const PurchaseDialog = ({ openPurchase, handleClosePurchase, handleCloseP
                                     <img src={share} />
                                 </span>
 
-                                <span className="fb-ig">
+                                {/* <span className="fb-ig">
                                     <img src={FB} />
-                                </span>
+                                </span> */}
 
                                 <span className="fb-ig">
                                     <img src={IG} />
@@ -1112,6 +1486,11 @@ export const PurchaseDialog = ({ openPurchase, handleClosePurchase, handleCloseP
                         <div className='product__details--MiddleText'>
                             {currentProduct?.description}
                         </div>
+
+                        <div className='mx-auto pb-[1rem]'>
+                            <SmallPHorizontalVariantCards post={product} />
+                        </div>
+
 
                         <div className='flex items-center justify-center gap-x-[23px]'>
                             <button onClick={() => {
@@ -1149,5 +1528,6 @@ export const PurchaseDialog = ({ openPurchase, handleClosePurchase, handleCloseP
         </div>
     );
 };
+
 
 

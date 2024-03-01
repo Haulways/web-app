@@ -69,7 +69,7 @@ const Downloads = () => {
                                 }
                             </div>
 
-                            <div className='py-[.7rem] w-screen tablet:w-full laptop:w-full mx-[-8px] px-[1rem] flex gap-x-6 items-center border-t-[6px] border-t-zinc-700 border-b-[2px] border-b-zinc-700'>
+                            <div className='py-[.7rem] w-screen tablet:w-full laptop:w-full mx-[-8px] px-[1rem] flex gap-x-6 items-center' style={{borderBlock: theme === "light" ? '6px solid rgba(0 0 0 / 0.05)' : '6px solid rgba(0 0 0 / 0.05)'}}>
                                 <div className={` cursor-pointer   ${selectedTab === "downloads" ? " text-[#fff]" : "text-zinc-400"}`} onClick={() => handleTabClick("downloads")} style={{ filter: theme === "light" ? "invert(1)" : "invert(0)" }}>All</div>
                                 <div className={`cursor-pointer   ${selectedTab === "local" ? "text-[#fff] " : "text-zinc-400"}`} onClick={() => handleTabClick("local")} style={{ filter: theme === "light" ? "invert(1)" : "invert(0)" }}>Categories</div>
                             </div>

@@ -18,7 +18,7 @@ export const authProvider = supabaseAuthProvider(supabase, {
             throw new Error();
         }
 
-        console.log(data);
+        // console.log(data);
         // setUser(data);
 
         return data;

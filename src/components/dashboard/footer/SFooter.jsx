@@ -5,12 +5,14 @@ import { NavLink, useMatch, useResolvedPath } from 'react-router-dom';
 import homeIcon from '../../../assets/bottomAppBar/homeIcon.png';
 import { Avatar } from '@mui/material';
 import { ThemeContext } from '../../context/ThemeProvider';
+import { useStore } from "react-admin";
 
 const activeLink = ({ isActive }) => (isActive ? `${"active"}` : "");
 
 const SFooter = () => {
   const { currentUser } = useContext(AuthContext);
   const { theme} = useContext(ThemeContext);
+  
 
   const resolved = useResolvedPath('/downloads');
   const match = useMatch({ path: resolved.pathname, end: true });
