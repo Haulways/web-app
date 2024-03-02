@@ -1221,7 +1221,7 @@ const Landing = () => {
                   scrollTo(contact_us);
                 }}
               >
-                Join us Today
+                Join the Waitlist
               </button>
             </div>
             <img
