@@ -18,6 +18,7 @@ import { useEffect } from 'react';
 import { DFooter } from '../../components';
 import { ThemeContext } from '../../components/context/ThemeProvider';
 import { useGetIdentity, useGetOne } from 'react-admin';
+import { supabase } from '../../supabase/SupabaseConfig';
 
 
 
@@ -56,6 +57,30 @@ const Cart = () => {
 
     };
 
+    async function filterContractDocuments(vendorEmail, influencerEmail) {
+        try {
+            // Query contract documents table
+            const { data, error } = await supabase
+                .from("contract")
+                .select("*")
+                .eq('vendor_email', vendorEmail)
+                .eq('influencer_email', influencerEmail);
+
+            if (error) {
+                throw error;
+            }
+
+            // Return filtered contract documents
+            return data;
+        } catch (error) {
+            console.error('Error filtering contract documents:', error.message);
+            return null;
+        }
+    }
+
+
+    
+
 
     React.useEffect(() => {
         if (identity) {
@@ -77,6 +102,10 @@ const Cart = () => {
     useEffect(() => {
         LoadCarts();
     }, [intCart, cart])
+
+    // useEffect(() => {
+        
+    // }, [cart])
 
     useEffect(() => {
         if (cart_id) {

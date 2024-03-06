@@ -18,7 +18,7 @@ import thankYou from "../../assets/purchase-icons/ThankYou.png";
 import share from "../../assets/socials/share.png";
 import FB from "../../assets/socials/fb.png";
 import IG from "../../assets/socials/ig.png";
-import { Confirm, Form, FormTab, RadioButtonGroupInput, SaveButton, SelectInput, TabbedForm, TextInput, Toolbar, required, useRedirect, useStore } from 'react-admin';
+import { Confirm, Form, FormTab, RadioButtonGroupInput, SaveButton, SelectInput, TabbedForm, TextInput, Toolbar, required, useRecordContext, useRedirect, useStore } from 'react-admin';
 import Medusa from '@medusajs/medusa-js';
 import { toast } from 'react-toastify';
 import { AuthContext } from '../context/AuthContext';
@@ -31,6 +31,7 @@ import { GetStoreVendor, ListStoreVendors } from '../../pages/post/Post';
 import { useLocation } from 'react-router-dom';
 import { ThemeContext } from '../context/ThemeProvider';
 import { useGetIdentity, useGetOne } from 'react-admin';
+import { supabase } from '../../supabase/SupabaseConfig';
 
 
 
@@ -1184,7 +1185,8 @@ const CollectionsDialog = ({ openCompleted, cancelCompleted, theme }) => {
 
 
 
-export const PurchaseDialog = ({ openPurchase, handleClosePurchase, handleClosePurchase1, openPurchase1, setOpenPurchase1, mediaUrl, product, theme }) => {
+
+export const PurchaseDialog = ({ openPurchase, handleClosePurchase, handleClosePurchase1, openPurchase1, post, setOpenPurchase1, mediaUrl, product, theme }) => {
     const [openPayment, setOpenPayment] = React.useState(false);
     const [purchase, setPurchase] = React.useState(true);
     const [openProcessing, setOpenProcessing] = React.useState(false);
@@ -1203,7 +1205,42 @@ export const PurchaseDialog = ({ openPurchase, handleClosePurchase, handleCloseP
     const redirect = useRedirect();
     const [intCart, setIntCart] = useStore("int_carts");
     const { data: identity, isLoading: identityLoading } = useGetIdentity();
+    const record = useRecordContext();
+    const { data: poster_data, isLoading, error } = useGetOne('users', { id: record.uid });
     
+
+    useEffect(()=> {
+        if(poster_data && cart_id && cart){
+            console.log(poster_data, cart)
+            // filterContractDocuments(cart.context?.vendor?.email, poster_data?.email)
+        }
+    },[poster_data, cart_id, cart])
+
+    async function filterContractDocuments(vendorEmail, influencerEmail) {
+        try {
+            // Query contract documents table
+            const { data, error } = await supabase
+                .from("contract")
+                .select("*")
+                .eq('vendor_email', vendorEmail)
+                .eq('influencer_email', influencerEmail);
+
+            if (error) {
+                throw error;
+            }
+
+            // Return filtered contract documents
+            if(data && data.length && data[0].ps_split_doc && data[0].agreed_at){
+                medusa.carts.update(cart_id, {
+                    context: { ...cart.context, ...{influencer: poster_data && poster_data.role === 'influencer' ? (poster_data) : (null), split_doc: data[0].ps_split_doc } },
+                })
+            }
+            return data;
+        } catch (error) {
+            console.error('Error filtering contract documents:', error.message);
+            return null;
+        }
+    }
 
     const convertToDecimal = (amount) => {
         return Math.floor(amount) / 100

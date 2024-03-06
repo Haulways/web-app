@@ -97,7 +97,8 @@ function VideoTrimmer({ selectedfiles, activeFile, collectionName, taggedData, s
 
     const load = async () => {
         // Check if FFmpeg is already available in the window
-        if (window.FFmpeg) {
+        if (window.ffmpeg) {
+            ffmpegRef.current = window.ffmpeg;
             setLoaded(true);
             handleChange();
             handleTrim();
@@ -121,7 +122,7 @@ function VideoTrimmer({ selectedfiles, activeFile, collectionName, taggedData, s
             });
     
             // Store FFmpeg instance in the window to reuse it later
-            window.FFmpeg = ffmpeg;
+            window.ffmpeg = ffmpeg;
     
             setLoaded(true);
             handleChange();
@@ -164,7 +165,7 @@ function VideoTrimmer({ selectedfiles, activeFile, collectionName, taggedData, s
    
 
     const getThumbnails = async ({ duration }) => {
-        if (!window.FFmpeg) {
+        if (!window.ffmpeg) {
             await load();
         }
         const ffmpeg = ffmpegRef.current;
@@ -209,7 +210,7 @@ function VideoTrimmer({ selectedfiles, activeFile, collectionName, taggedData, s
     };
 
     const handleTrim = async () => {
-        if (!window.FFmpeg) {
+        if (!window.ffmpeg) {
             await load();
         }
         if (loaded) {
@@ -437,7 +438,8 @@ export const CoverPhoto = ({ coverPhoto, closeCoverPhoto, selectedfiles, activeF
 
     const load = async () => {
         // Check if FFmpeg is already available in the window
-        if (window.FFmpeg) {
+        if (window.ffmpeg) {
+            ffmpegRef.current = window.ffmpeg;
             setLoaded(true);
             handleChange();
             return;
@@ -460,7 +462,7 @@ export const CoverPhoto = ({ coverPhoto, closeCoverPhoto, selectedfiles, activeF
             });
     
             // Store FFmpeg instance in the window to reuse it later
-            window.FFmpeg = ffmpeg;
+            window.ffmpeg = ffmpeg;
     
             setLoaded(true);
             handleChange();
