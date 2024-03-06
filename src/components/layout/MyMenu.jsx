@@ -102,11 +102,11 @@ export const MyMenu = () => {
 						primaryText="DIY (Tips and tricks)"
 						leftIcon={<ColorLensIcon />}
 					/>
-					<Menu.Item
+					{/* <Menu.Item
 						to="/beauty"
 						primaryText="Beauty"
 						leftIcon={<SpaIcon />}
-					/>
+					/> */}
 				</SubMenu>
 
 				<SubMenu primaryText="Shop" leftIcon={<ChevronRight />}>
@@ -178,7 +178,7 @@ export const MyMenu = () => {
 						/> */}
 				</SubMenu>
 
-				<SubMenu primaryText="Skill center" leftIcon={<ChevronRight />}>
+				{/* <SubMenu primaryText="Skill center" leftIcon={<ChevronRight />}>
 					<Menu.Item
 						to="/skill-center"
 						primaryText="All"
@@ -199,7 +199,7 @@ export const MyMenu = () => {
 						primaryText="Fashion design"
 						leftIcon={<StyleIcon size={24} />}
 					/>
-				</SubMenu>
+				</SubMenu> */}
 
 				{/* <Menu.Item
 						to="/ads"
@@ -212,7 +212,7 @@ export const MyMenu = () => {
 					leftIcon={<SettingsIcon />}
 				/>
 
-				<label className="switch mt-[1rem] ml-[3rem]">
+				{/* <label className="switch mt-[1rem] ml-[3rem]">
 					<input type="checkbox" id="theme-switch" onClick={toggleTheme} />
 					<span className="menuSlide round">
 						<i>
@@ -222,7 +222,7 @@ export const MyMenu = () => {
 							<IoSunny />
 						</i>
 					</span>
-				</label>
+				</label> */}
 			</div>
 
 			{/* {

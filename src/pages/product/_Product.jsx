@@ -1,5 +1,9 @@
 import { Show } from "react-admin";
-import { ProductEditContent, ProductListContent, ProductShowContent } from "./_ProductContent";
+import { ProductEditContent, ProductCreateContent, ProductListContent, ProductShowContent } from "./_ProductContent";
+import { ThemeContext } from "../../components/context/ThemeProvider";
+import * as React from 'react';
+import CreateProduct from "../products/ProductList/CreateProduct";
+
 
 export const ProductList = () => {
 
@@ -15,9 +19,9 @@ export const ProductList = () => {
 
 
 export const ProductCreate = () => { 
-    return (
-        <></>
-    )
+    <>
+        <ProductCreateContent />
+    </>
 };
 
 export const ProductEdit = () => (
@@ -27,12 +31,17 @@ export const ProductEdit = () => (
 );
 
 export const ProductShow = () => {
+    const { theme } = React.useContext(ThemeContext);
    
     return (
         <Show title=' ' actions={false}
             sx={{
                 '& .RaLayout-content': {
                     padding: '0px !important'
+                },
+                '& .RaShow-card': {
+                    background: theme === 'light' ? '#fff' : '#222',
+                    color: theme === 'light' ? '#222' : '#fff',
                 }
             }}
         >

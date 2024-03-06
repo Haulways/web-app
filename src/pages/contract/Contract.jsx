@@ -1,13 +1,14 @@
 import * as React from 'react'
 import { ThemeContext } from '../../components/context/ThemeProvider';
 import { AuthContext } from '../../components/context/AuthContext';
-import { InfiniteList, WithListContext, useGetList } from 'react-admin';
+import { InfiniteList, WithListContext, useGetList, useRefresh } from 'react-admin';
 import { Avatar, Card, CardHeader, Fab, Typography } from '@mui/material';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { supabase } from '../../supabase/SupabaseConfig';
 import { DFooter } from '../../components';
 import Add from '@mui/icons-material/Add';
 import CreateContract from './CreateContract';
+
 
 
 const Contract = () => {
@@ -19,6 +20,14 @@ const Contract = () => {
   const location = useLocation();
   const [sharedData, setSharedData] = React.useState(location?.state?.url);
   const navigate = useNavigate();
+  const refresh = useRefresh();
+
+
+  React.useEffect(() => {
+    if (currentUser) {
+      refresh()
+    }
+  }, [currentUser])
 
 
   const handleTabClick = (tab) => {

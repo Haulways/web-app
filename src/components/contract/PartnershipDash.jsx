@@ -4,7 +4,7 @@ import backIcon from "../../assets/hauls/backIcon.png";
 import { IconButton } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DFooter from '../dashboard/footer/DFooter';
-import { useRecordContext, useRedirect } from 'react-admin';
+import { useRecordContext, useRedirect, useUpdate } from 'react-admin';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { supabase } from '../../supabase/SupabaseConfig';
@@ -15,40 +15,39 @@ import { ThemeContext } from '../context/ThemeProvider';
 
 
 
-
 // ReadMore Fn
 const ReadMore = ({ children, maxCharCnt = 200 }) => {
     const text = children;
     const [isTruncated, setIsTruncated] = useState(true);
-  
+
     const resultString = isTruncated ? text.slice(0, maxCharCnt) : text;
-  
+
     function toggleIsTruncated() {
-      setIsTruncated(!isTruncated);
+        setIsTruncated(!isTruncated);
     }
-  
+
     return (
-      <p>
-        {resultString}
-        <span onClick={toggleIsTruncated} style={{color: '#c9c9c9', cursor: 'pointer'}}>
-          {isTruncated ? '... Read more' : ' show less'}
-        </span>
-      </p>
+        <p>
+            {resultString}
+            <span onClick={toggleIsTruncated} style={{ color: '#c9c9c9', cursor: 'pointer' }}>
+                {isTruncated ? '... Read more' : ' show less'}
+            </span>
+        </p>
     );
-  };
+};
 
 //   Accordion
-const Accordion = ({ options, handleSelect, selectedOption, currentUser, record}) => {
+const Accordion = ({ options, handleSelect, selectedOption, currentUser, record }) => {
     const [isOpen, setIsOpen] = useState(false);
     const { theme } = useContext(ThemeContext);
 
     const handleOptionSelect = (option) => {
         handleSelect(option);
     };
-  
+
     return (
         <div className="accordion" onClick={() => setIsOpen(!isOpen)}>
-            <div className={`selected-option ${isOpen ? 'option-open' : ''}`} style={{backgroundColor: theme === 'light' ? '#d9d9d9' : 'rgba(68, 68, 68, 0.2)'}} >
+            <div className={`selected-option ${isOpen ? 'option-open' : ''}`} style={{ backgroundColor: theme === 'light' ? '#d9d9d9' : 'rgba(68, 68, 68, 0.2)' }} >
 
                 {currentUser ?
                     (currentUser.role === 'influencer' ?
@@ -57,7 +56,7 @@ const Accordion = ({ options, handleSelect, selectedOption, currentUser, record}
                         currentUser.role === 'vendor' ?
                             (options.includes(record.vendor_unit) ? record.vendor_unit : options.includes(record.vendor_time_frame) ? record.vendor_time_frame : selectedOption) : selectedOption)
                     : selectedOption}
-                
+
 
                 {currentUser && (
                     currentUser.role === 'vendor' ? (
@@ -68,9 +67,9 @@ const Accordion = ({ options, handleSelect, selectedOption, currentUser, record}
                         <span className='text-[10px] font-[600] ml-[.5rem]'>
                             (Influencer's choice)
                         </span>
-                    ) 
+                    )
                 )}
-                
+
                 <span className={`icon ${isOpen ? 'open' : ''}`}>
                     <ExpandMoreIcon />
                 </span>
@@ -105,7 +104,7 @@ const Accordion = ({ options, handleSelect, selectedOption, currentUser, record}
         </div>
     );
 };
-  
+
 
 // Partnership docs 
 export const Partnership = () => {
@@ -133,6 +132,9 @@ export const Partnership = () => {
     const [tags, setTags] = React.useState(false);
     const [vtags, setVtags] = React.useState(false);
     const { theme } = useContext(ThemeContext);
+    const [update, { isLoading, error: upd_err }] = useUpdate();
+
+
 
 
     const openTags = () => {
@@ -150,7 +152,7 @@ export const Partnership = () => {
     const handleCloseVTags = () => {
         setVtags(false);
     }
-    
+
 
     const handleChangeVendor = (name) => (event) => {
         setValues({ ...values, [name]: event.target.value });
@@ -162,6 +164,25 @@ export const Partnership = () => {
 
     const handleSaveForm = async () => {
         if (currentUser && currentUser.role === 'vendor') {
+            // const res = await update('contract', {
+            //     id: record.id, 
+            //     data: {
+            //         vendor_name: values.vendor_name,
+            //         vendor_address: values.address,
+            //         vendor_email: values.email,
+            //         vendor_phone: values.phone,
+            //         vendor_time_frame: selectedDay,
+            //         vendor_unit: selectedUnit,
+            //         vendor_last_updated: new Date(),
+            //         agreed_at: record && ((record?.vendor_unit === record?.influencer_unit && record?.vendor_time_frame === record?.influencer_time_frame && record.vendor_unit !== null && record?.vendor_time_frame !== null) ? new Date() : null),
+            //         products: [taggedData]
+            //     }
+            // })
+
+            // console.log(res);
+
+            
+          
             const { data, error } = await supabase
                 .from('contract')
                 .update({
@@ -175,12 +196,14 @@ export const Partnership = () => {
                     agreed_at: record && ((record?.vendor_unit === record?.influencer_unit && record?.vendor_time_frame === record?.influencer_time_frame && record.vendor_unit !== null && record?.vendor_time_frame !== null) ? new Date() : null),
                     products: [taggedData]
                 })
-                .eq('id', record.id);
+                .eq('id', record.id)
+                .select();
 
             if (error) {
                 console.error('Error updating contract:', error);
             } else {
                 console.log('Contract updated:', data);
+                handleSend();
 
             }
         } else if (currentUser && currentUser.role === 'influencer') {
@@ -197,12 +220,14 @@ export const Partnership = () => {
                     agreed_at: record && ((record?.vendor_unit === record?.influencer_unit && record?.vendor_time_frame === record?.influencer_time_frame && record.vendor_unit !== null && record?.vendor_time_frame !== null) ? new Date() : null),
                     videos: [taggedDataVideo]
                 })
-                .eq('id', record.id);
+                .eq('id', record.id)
+                .select();
 
             if (error) {
                 console.error('Error updating contract:', error);
             } else {
                 console.log('Contract updated:', data);
+                handleSend();
             }
         }
     };
@@ -213,11 +238,11 @@ export const Partnership = () => {
             .from('contract')
             .select('agreed_at')
             .eq('id', record.id);
-    
+
         // If there's no error and agreed_at is not set
         if (currentData && !currentData[0].agreed_at) {
             // Check if vendor_unit equals influencer_unit and vendor_time_frame equals influencer_time_frame
-            if (record && record.vendor_unit === record.influencer_unit && record.vendor_time_frame === record.influencer_time_frame && record.products !== null && (record.influencer_time_frame !== null && record.vendor_time_frame !== null) && (record.record.influencer_unit !== null && record.vendor_unit !== null) ) {
+            if (record && record.vendor_unit === record.influencer_unit && record.vendor_time_frame === record.influencer_time_frame && record.products !== null && (record.influencer_time_frame !== null && record.vendor_time_frame !== null) && (record.record.influencer_unit !== null && record.vendor_unit !== null)) {
                 // If they are equal, update agreed_at
                 const { data, error } = await supabase
                     .from('contract')
@@ -231,7 +256,7 @@ export const Partnership = () => {
             }
         }
     };
-    
+
 
     useEffect(() => {
         if (record) {
@@ -239,12 +264,12 @@ export const Partnership = () => {
         }
     }, [currentUser, record]);
 
-    
-
-    console.log(record);
 
 
-    
+    // console.log(record);
+
+
+
 
     const goToProfile = () => (
         redirect(`/contract`)
@@ -259,7 +284,7 @@ export const Partnership = () => {
         }
     };
 
-    
+
     const handleCheckboxChange = (index, value) => {
         const newIsCheckedList = [...isCheckedList];
         newIsCheckedList[index] = value;
@@ -270,8 +295,8 @@ export const Partnership = () => {
         if (currentTab < tabs.length - 1 && isCheckedList[currentTab]) {
             setCurrentTab(currentTab + 1);
         } if (currentTab === tabs.length - 1 && isCheckedList[currentTab]) {
-            handleSend();
             handleSaveForm();
+            // handleSend();
         }
     };
 
@@ -280,7 +305,7 @@ export const Partnership = () => {
             setCurrentTab(currentTab - 1);
         }
     };
-    
+
     const handleUnitSelect = (unit) => {
         setSelectedUnit(unit);
     };
@@ -288,15 +313,15 @@ export const Partnership = () => {
     const handleDaySelect = (day) => {
         setSelectedDay(day);
     };
-  
+
     const tabs = [
         <Terms isChecked={isCheckedList[0]} setIsChecked={(value) => handleCheckboxChange(0, value)} values={values} handleChangeVendor={handleChangeVendor} handleChangeInfluencer={handleChangeInfluencer} values1={values1} currentUser={currentUser} record={record} theme={theme} />,
 
         <ProductTab isChecked={isCheckedList[1]} setIsChecked={(value) => handleCheckboxChange(1, value)} openTags={openTags} openvTags={openvTags} taggedData={taggedData} taggedDataVideo={taggedDataVideo} currentUser={currentUser} record={record} />,
 
-        <ProductUnit isChecked={isCheckedList[2]} setIsChecked={(value) => handleCheckboxChange(2, value)} handleUnitSelect={handleUnitSelect} taggedDataVideo={taggedDataVideo} selectedUnit={selectedUnit} currentUser={currentUser} record={record} taggedData={taggedData}  />,
+        <ProductUnit isChecked={isCheckedList[2]} setIsChecked={(value) => handleCheckboxChange(2, value)} handleUnitSelect={handleUnitSelect} taggedDataVideo={taggedDataVideo} selectedUnit={selectedUnit} currentUser={currentUser} record={record} taggedData={taggedData} />,
 
-        <TimeFrame isChecked={isCheckedList[3]} setIsChecked={(value) => handleCheckboxChange(3, value)} selectedDay={selectedDay} handleDaySelect={handleDaySelect} selectedUnit={selectedUnit} handleUnitSelect={handleUnitSelect} currentUser={currentUser}  record={record} taggedDataVideo={taggedDataVideo} taggedData={taggedData} />,
+        <TimeFrame isChecked={isCheckedList[3]} setIsChecked={(value) => handleCheckboxChange(3, value)} selectedDay={selectedDay} handleDaySelect={handleDaySelect} selectedUnit={selectedUnit} handleUnitSelect={handleUnitSelect} currentUser={currentUser} record={record} taggedDataVideo={taggedDataVideo} taggedData={taggedData} />,
 
         <Termination isChecked={isCheckedList[4]} setIsChecked={(value) => handleCheckboxChange(4, value)} />
     ];
@@ -311,7 +336,7 @@ export const Partnership = () => {
                     className='absolute top-[70px] left-[.5rem]'
                     sx={{
                         position: 'absolute',
-   
+
                     }}
                 >
                     <img className='w-[10.63px] h-[15.34px] invert' style={{ filter: theme === "light" ? "invert(1)" : "invert(0)" }} src={backIcon} alt='back' />
@@ -367,8 +392,8 @@ export const Partnership = () => {
 };
 
 // Terms 
-const Terms = ({isChecked, setIsChecked, values, handleChangeVendor, handleChangeInfluencer, values1, currentUser, record, theme}) => {
-    
+const Terms = ({ isChecked, setIsChecked, values, handleChangeVendor, handleChangeInfluencer, values1, currentUser, record, theme }) => {
+
 
     const handleCheckboxChange = () => {
         setIsChecked(!isChecked);
@@ -391,27 +416,27 @@ const Terms = ({isChecked, setIsChecked, values, handleChangeVendor, handleChang
                     </p>
 
                     <h3 className='text-[14px] font-[600]  mb-[-.8rem] mt-[15px]'>Vendor</h3>
-                    
+
                     <p>
-                        Name of Vendor: <input type="text" placeholder="e.g Tonia Mendie - @Tmendie" className='w-[70%] mb-[1px]' value={values.vendor_name} onChange={handleChangeVendor('vendor_name')} disabled style={currentUser && currentUser.role !== 'vendor' ? { backgroundColor: theme === 'light' ? '#fff' : '#222' } : {backgroundColor: theme === 'light' ? '#fff' : '#222'}} />
+                        Name of Vendor: <input type="text" placeholder="e.g Tonia Mendie - @Tmendie" className='w-[70%] mb-[1px]' value={values.vendor_name} onChange={handleChangeVendor('vendor_name')} disabled style={currentUser && currentUser.role !== 'vendor' ? { backgroundColor: theme === 'light' ? '#fff' : '#222' } : { backgroundColor: theme === 'light' ? '#fff' : '#222' }} />
                         <br />
-                        Address: <input type="text" placeholder="e.g 12, Tosin Street, Ikeja, Lagos State" className='w-[50%] pl-[4px] mb-[1px]' value={values.address} onChange={handleChangeVendor('address')} disabled={currentUser && currentUser.role !== 'vendor' || (currentUser.role === 'vendor' && record.agreed_at !== null) } style={currentUser && currentUser.role !== 'vendor' || (currentUser.role === 'vendor' && record.agreed_at !== null) ? { backgroundColor: theme === 'light' ? '#fff' : '#222' } : {outline: theme === 'light' ? '#222 1px solid' : '#fff 1px solid', borderRadius: '3px', backgroundColor: theme === 'light' ? '#fff' : '#222'}} />
+                        Address: <input type="text" placeholder="e.g 12, Tosin Street, Ikeja, Lagos State" className='w-[50%] pl-[4px] mb-[1px]' value={values.address} onChange={handleChangeVendor('address')} disabled={currentUser && currentUser.role !== 'vendor' || (currentUser.role === 'vendor' && record.agreed_at !== null)} style={currentUser && currentUser.role !== 'vendor' || (currentUser.role === 'vendor' && record.agreed_at !== null) ? { backgroundColor: theme === 'light' ? '#fff' : '#222' } : { outline: theme === 'light' ? '#222 1px solid' : '#fff 1px solid', borderRadius: '3px', backgroundColor: theme === 'light' ? '#fff' : '#222' }} />
                         <br />
-                        Email: <input type="text" placeholder="e.g toniamendie@gmail.com" className='w-[70%] mb-[1px]' value={values.email} onChange={handleChangeVendor('email')} disabled style={currentUser && currentUser.role !== 'vendor' ? { backgroundColor: theme === 'light' ? '#fff' : '#222' } : {backgroundColor: theme === 'light' ? '#fff' : '#222'}} />
+                        Email: <input type="text" placeholder="e.g toniamendie@gmail.com" className='w-[70%] mb-[1px]' value={values.email} onChange={handleChangeVendor('email')} disabled style={currentUser && currentUser.role !== 'vendor' ? { backgroundColor: theme === 'light' ? '#fff' : '#222' } : { backgroundColor: theme === 'light' ? '#fff' : '#222' }} />
                         <br />
-                        Phone: <input type="text" placeholder="e.g +234 456 789 1011" className='w-[50%] pl-[4px] mb-[1px]' value={values.phone} onChange={handleChangeVendor('phone')} disabled={currentUser && currentUser.role !== 'vendor' || (currentUser.role === 'vendor' && record.agreed_at !== null)} style={currentUser && currentUser.role !== 'vendor' || (currentUser.role === 'vendor' && record.agreed_at !== null) ? {backgroundColor: theme === 'light' ? '#fff' : '#222'} : {outline: theme === 'light' ? '#222 1px solid' : '#fff 1px solid', borderRadius: '3px', backgroundColor: theme === 'light' ? '#fff' : '#222'}} />
+                        Phone: <input type="text" placeholder="e.g +234 456 789 1011" className='w-[50%] pl-[4px] mb-[1px]' value={values.phone} onChange={handleChangeVendor('phone')} disabled={currentUser && currentUser.role !== 'vendor' || (currentUser.role === 'vendor' && record.agreed_at !== null)} style={currentUser && currentUser.role !== 'vendor' || (currentUser.role === 'vendor' && record.agreed_at !== null) ? { backgroundColor: theme === 'light' ? '#fff' : '#222' } : { outline: theme === 'light' ? '#222 1px solid' : '#fff 1px solid', borderRadius: '3px', backgroundColor: theme === 'light' ? '#fff' : '#222' }} />
                     </p>
-                    
+
 
                     <h3 className='text-[14px] font-[600]  mb-[-.8rem] mt-[15px]'>Influencer</h3>
                     <p>
-                        Name of Influencer: <input type="text" placeholder="e.g Tonia Mendie - @Tmendie" className='w-[60%] mb-[1px]' value={values1.influencer_name} onChange={handleChangeInfluencer('influencer_name')} disabled style={currentUser && currentUser.role !== 'influencer' ? { backgroundColor: theme === 'light' ? '#fff' : '#222' } : {backgroundColor: theme === 'light' ? '#fff' : '#222'}} />
+                        Name of Influencer: <input type="text" placeholder="e.g Tonia Mendie - @Tmendie" className='w-[60%] mb-[1px]' value={values1.influencer_name} onChange={handleChangeInfluencer('influencer_name')} disabled style={currentUser && currentUser.role !== 'influencer' ? { backgroundColor: theme === 'light' ? '#fff' : '#222' } : { backgroundColor: theme === 'light' ? '#fff' : '#222' }} />
                         <br />
-                        Address: <input type="text" placeholder="e.g 12, Tosin Street, Ikeja, Lagos State" className='w-[50%] pl-[4px] mb-[1px]' value={values1.address} onChange={handleChangeInfluencer('address')} disabled={currentUser && currentUser.role !== 'influencer' || (currentUser.role === 'influencer' && record.agreed_at !== null)} style={currentUser && currentUser.role !== 'influencer' || (currentUser.role === 'influencer' && record.agreed_at !== null) ? { backgroundColor: theme === 'light' ? '#fff' : '#222' } : {outline: theme === 'light' ? '#222 1px solid' : '#fff 1px solid', borderRadius: '3px', backgroundColor: theme === 'light' ? '#fff' : '#222'}} />
+                        Address: <input type="text" placeholder="e.g 12, Tosin Street, Ikeja, Lagos State" className='w-[50%] pl-[4px] mb-[1px]' value={values1.address} onChange={handleChangeInfluencer('address')} disabled={currentUser && currentUser.role !== 'influencer' || (currentUser.role === 'influencer' && record.agreed_at !== null)} style={currentUser && currentUser.role !== 'influencer' || (currentUser.role === 'influencer' && record.agreed_at !== null) ? { backgroundColor: theme === 'light' ? '#fff' : '#222' } : { outline: theme === 'light' ? '#222 1px solid' : '#fff 1px solid', borderRadius: '3px', backgroundColor: theme === 'light' ? '#fff' : '#222' }} />
                         <br />
-                        Email: <input type="text" placeholder="e.g toniamendie@gmail.com" className='w-[70%] mb-[1px]' value={values1.email} onChange={handleChangeInfluencer('email')} disabled style={currentUser && currentUser.role !== 'influencer' ? { backgroundColor: theme === 'light' ? '#fff' : '#222' } : {backgroundColor: theme === 'light' ? '#fff' : '#222'}} />
+                        Email: <input type="text" placeholder="e.g toniamendie@gmail.com" className='w-[70%] mb-[1px]' value={values1.email} onChange={handleChangeInfluencer('email')} disabled style={currentUser && currentUser.role !== 'influencer' ? { backgroundColor: theme === 'light' ? '#fff' : '#222' } : { backgroundColor: theme === 'light' ? '#fff' : '#222' }} />
                         <br />
-                        Phone: <input type="text" placeholder="e.g +234 456 789 1011" className='w-[50%] pl-[4px] mb-[1px]' value={values1.phone} onChange={handleChangeInfluencer('phone')} disabled={currentUser && currentUser.role !== 'influencer' || (currentUser.role === 'influencer' && record.agreed_at !== null)} style={currentUser && currentUser.role !== 'influencer' || (currentUser.role === 'influencer' && record.agreed_at !== null) ? {backgroundColor: theme === 'light' ? '#fff' : '#222' } : {borderRadius: '3px', backgroundColor: theme === 'light' ? '#fff' : '#222', outline: theme === 'light' ? '#222 1px solid' : '#fff 1px solid'}} />
+                        Phone: <input type="text" placeholder="e.g +234 456 789 1011" className='w-[50%] pl-[4px] mb-[1px]' value={values1.phone} onChange={handleChangeInfluencer('phone')} disabled={currentUser && currentUser.role !== 'influencer' || (currentUser.role === 'influencer' && record.agreed_at !== null)} style={currentUser && currentUser.role !== 'influencer' || (currentUser.role === 'influencer' && record.agreed_at !== null) ? { backgroundColor: theme === 'light' ? '#fff' : '#222' } : { borderRadius: '3px', backgroundColor: theme === 'light' ? '#fff' : '#222', outline: theme === 'light' ? '#222 1px solid' : '#fff 1px solid' }} />
                     </p>
 
                     <h3 className='text-[14px] font-[600]  mb-[-.8rem] mt-[15px]'>Purpose of Agreement:
@@ -548,8 +573,8 @@ const ProductTab = ({ isChecked, setIsChecked, openTags, taggedData, currentUser
                     ) : (
                         <p className='text-[12px]  font-[500]'>No product selected by the vendor</p>
                     )}
-                    
-                   
+
+
                 </div>
 
                 <h2 className="mt-[30px]">Video type</h2>
@@ -579,11 +604,11 @@ const ProductTab = ({ isChecked, setIsChecked, openTags, taggedData, currentUser
                             {taggedDataVideo && taggedDataVideo.map((product, index) => {
                                 return (
                                     <div key={index} className="min-w-[70px] h-[70px] overflow-hidden rounded-[6px] relative">
-                                        
+
                                         <div className='absolute w-full h-full top-0 bottom-0 right-0 left-0  backdrop-blur-[1px] z-[40] mx-auto my-auto' style={{ background: 'rgba(0, 0, 0, 0.50)' }} />
                                         <video className='w-full h-full object-cover' src={product.media[0]} autoPlay={false} controls={false} playsInline={true} nodownload='true' />
                                         <div className='absolute w-[30px] h-[30px] top-0 bottom-0 right-0 left-0 mx-auto my-auto z-[50]'>{playButton}</div>
-   
+
                                     </div>
 
                                 )
@@ -592,8 +617,8 @@ const ProductTab = ({ isChecked, setIsChecked, openTags, taggedData, currentUser
                     ) : (
                         <p className='text-[12px]   font-[500]'>No video selected</p>
                     )}
-                    
-                   
+
+
                 </div>
 
                 <div className='terms--docs'>
@@ -638,12 +663,12 @@ const ProductUnit = ({ isChecked, setIsChecked, handleUnitSelect, selectedUnit, 
                 <p className='text-[12px] font-[400]  w-[75%]'>This section specifies the products involved in this agreement, as selected by the registered vendor. It provides detailed information about the product, including its category or class, and pricing. All parties must agree on the product details before proceeding..</p>
 
                 <div className='product--images store__card'>
-                {record && record.products[0] && record.products[0].length && record.products[0].length > 0 ? (
+                    {record && record.products[0] && record.products[0].length && record.products[0].length > 0 ? (
                         <>
                             {Array.isArray(record?.products[0]) && record.products[0].map((product, index) => {
                                 return (
                                     <div key={index} className="min-w-[70px] h-[70px] overflow-hidden rounded-[6px]">
-                                        <img  src={product.images[0].url} alt={product.title} className="object-cover h-full w-full" />
+                                        <img src={product.images[0].url} alt={product.title} className="object-cover h-full w-full" />
                                     </div>
 
                                 )
@@ -669,7 +694,7 @@ const ProductUnit = ({ isChecked, setIsChecked, handleUnitSelect, selectedUnit, 
                 <p className='text-[12px] font-[400]  w-[75%]'>This section specifies the videos involved in this agreement, as selected by the registered influencer. It provides detailed information about the video, including its category or class, and pricing. All parties must agree on the product details before proceeding.</p>
 
                 <div className='product--images store__card'>
-    
+
                     {record && record?.videos[0] && record?.videos[0]?.length && record?.videos[0]?.length > 0 ? (
                         <>
                             {Array.isArray(record?.videos[0]) && record?.videos[0]?.map((product, index) => {
@@ -686,11 +711,11 @@ const ProductUnit = ({ isChecked, setIsChecked, handleUnitSelect, selectedUnit, 
                             {taggedDataVideo && taggedDataVideo.map((product, index) => {
                                 return (
                                     <div key={index} className="min-w-[70px] h-[70px] overflow-hidden rounded-[6px] relative">
-                                        
+
                                         <div className='absolute w-full h-full top-0 bottom-0 right-0 left-0  backdrop-blur-[1px] z-[40] mx-auto my-auto' style={{ background: 'rgba(0, 0, 0, 0.50)' }} />
                                         <video className='w-full h-full object-cover' src={product.media[0]} autoPlay={false} controls={false} playsInline={true} nodownload='true' />
                                         <div className='absolute w-[30px] h-[30px] top-0 bottom-0 right-0 left-0 mx-auto my-auto z-[50]'>{playButton}</div>
-   
+
                                     </div>
 
                                 )
@@ -699,17 +724,17 @@ const ProductUnit = ({ isChecked, setIsChecked, handleUnitSelect, selectedUnit, 
                     ) : (
                         <p className='text-[12px]   font-[500]'>No video selected</p>
                     )}
-                    
-                   
+
+
                 </div>
 
                 <div className='terms--docs'>
                     <ReadMore maxCharCnt={150}>
-                       
+
                         The Influencer agrees to create and post content, including photos, videos, and captions, related to the products and/or services offered by the Vendor. This content shall be comprehensive, ensuring it includes not only visually appealing and engaging elements but also a meticulous description of the Vendor's products and/or services.
-                            
+
                         The Influencer shall diligently incorporate all relevant information and details provided by the Vendor, guaranteeing that the content effectively captures the essence, features, and unique selling points of the products and/or services. This encompasses any specifications, benefits, or additional context that the Vendor deems essential for a thorough presentation.
-                   
+
                     </ReadMore>
                 </div>
 
@@ -722,7 +747,7 @@ const ProductUnit = ({ isChecked, setIsChecked, handleUnitSelect, selectedUnit, 
                 <div className='terms--docs'>
                     <p>The parties mutually agree to define the quantity of units, referred to as "Target Sales," that must be achieved before the Influencer becomes eligible to receive the agreed-upon percentage of the proceeds. In this section, the Vendor specifies their preferred Target Sales figure, and the Influencer has the opportunity to engage in negotiations regarding this quantity.
                     </p>
-                    
+
                     <p>The Influencer's entitlement to the agreed percentage of proceeds, derived from the designated sales, is contingent solely upon the successful attainment of the mutually agreed-upon Target Sales figure.
 
                     </p>
@@ -767,12 +792,12 @@ const TimeFrame = ({ isChecked, setIsChecked, selectedDay, handleDaySelect, sele
                 <p className='text-[12px] font-[400]  w-[75%]'>This section specifies the products involved in this agreement, as selected by the registered vendor. It provides detailed information about the product, including its category or class, and pricing. All parties must agree on the product details before proceeding</p>
 
                 <div className='product--images store__card'>
-                {record && record.products[0] && record.products[0].length && record.products[0].length > 0 ? (
+                    {record && record.products[0] && record.products[0].length && record.products[0].length > 0 ? (
                         <>
                             {Array.isArray(record?.products[0]) && record.products[0].map((product, index) => {
                                 return (
                                     <div key={index} className="min-w-[70px] h-[70px] overflow-hidden rounded-[6px]">
-                                        <img  src={product.images[0].url} alt={product.title} className="object-cover h-full w-full" />
+                                        <img src={product.images[0].url} alt={product.title} className="object-cover h-full w-full" />
                                     </div>
 
                                 )
@@ -798,7 +823,7 @@ const TimeFrame = ({ isChecked, setIsChecked, selectedDay, handleDaySelect, sele
                 <p className='text-[12px] font-[400]  w-[75%]'>This section specifies the videos involved in this agreement, as selected by the registered influencer. It provides detailed information about the video, including its category or class, and pricing. All parties must agree on the product details before proceeding.</p>
 
                 <div className='product--images store__card'>
-                    
+
                     {record && record?.videos[0] && record?.videos[0]?.length && record?.videos[0]?.length > 0 ? (
                         <>
                             {Array.isArray(record?.videos[0]) && record?.videos[0]?.map((product, index) => {
@@ -815,11 +840,11 @@ const TimeFrame = ({ isChecked, setIsChecked, selectedDay, handleDaySelect, sele
                             {taggedDataVideo && taggedDataVideo.map((product, index) => {
                                 return (
                                     <div key={index} className="min-w-[70px] h-[70px] overflow-hidden rounded-[6px] relative">
-                                        
+
                                         <div className='absolute w-full h-full top-0 bottom-0 right-0 left-0  backdrop-blur-[1px] z-[40] mx-auto my-auto' style={{ background: 'rgba(0, 0, 0, 0.50)' }} />
                                         <video className='w-full h-full object-cover' src={product.media[0]} autoPlay={false} controls={false} playsInline={true} nodownload='true' />
                                         <div className='absolute w-[30px] h-[30px] top-0 bottom-0 right-0 left-0 mx-auto my-auto z-[50]'>{playButton}</div>
-   
+
                                     </div>
 
                                 )
@@ -828,17 +853,17 @@ const TimeFrame = ({ isChecked, setIsChecked, selectedDay, handleDaySelect, sele
                     ) : (
                         <p className='text-[12px]   font-[500]'>No video selected by the Influencer</p>
                     )}
-                    
-                   
+
+
                 </div>
 
                 <div className='terms--docs'>
                     <ReadMore maxCharCnt={150}>
-                       
+
                         The Influencer agrees to create and post content, including photos, videos, and captions, related to the products and/or services offered by the Vendor. This content shall be comprehensive, ensuring it includes not only visually appealing and engaging elements but also a meticulous description of the Vendor's products and/or services.
-                            
+
                         The Influencer shall diligently incorporate all relevant information and details provided by the Vendor, guaranteeing that the content effectively captures the essence, features, and unique selling points of the products and/or services. This encompasses any specifications, benefits, or additional context that the Vendor deems essential for a thorough presentation.
-                   
+
                     </ReadMore>
                 </div>
 
@@ -851,8 +876,8 @@ const TimeFrame = ({ isChecked, setIsChecked, selectedDay, handleDaySelect, sele
                 <div className='terms--docs'>
                     <ReadMore maxCharCnt={100}>
                         The parties mutually agree to define the quantity of units, referred to as "Target Sales," that must be achieved before the Influencer becomes eligible to receive the agreed-upon percentage of the proceeds. In this section, the Vendor specifies their preferred Target Sales figure, and the Influencer has the opportunity to engage in negotiations regarding this quantity.
-                    
-                    
+
+
                         The Influencer's entitlement to the agreed percentage of proceeds, derived from the designated sales, is contingent solely upon the successful attainment of the mutually agreed-upon Target Sales figure.
 
 
@@ -893,8 +918,8 @@ const TimeFrame = ({ isChecked, setIsChecked, selectedDay, handleDaySelect, sele
 
 
 // Termination 
-const Termination = ({isChecked, setIsChecked}) => {
-  
+const Termination = ({ isChecked, setIsChecked }) => {
+
     const handleCheckboxChange = () => {
         setIsChecked(!isChecked);
     };
@@ -940,7 +965,7 @@ const Termination = ({isChecked, setIsChecked}) => {
                     <div className='units--container mb-[-10px]'>
                         <h3>Post Termination</h3>
                     </div>
-                    
+
                     <p className='text-[5px] '>
                         In the event of termination, this section explains how Haulway, as the intermediary and rights holder to digital content, may continue to use the content even after the partnership concludes. It provides clarity on the post-termination use of content.. You'll also ensure this contract complies with all relevant laws and regulations, considering the unique role of haulway as the intermediary connecting influencers and vendors.
                     </p>
@@ -960,12 +985,12 @@ const Termination = ({isChecked, setIsChecked}) => {
 
                     <p>
                         <b>Confidentiality and Non-Disparagement:</b> Both parties commit to maintaining the confidentiality of sensitive information and refrain from making disparaging remarks or actions towards each other, post-termination.
- 
+
                     </p>
 
                     <p>
                         <b>Survival of Terms:</b> Termination shall not affect the survival of terms that, by their nature, should continue beyond termination, including but not limited to confidentiality and dispute resolution clauses.
- 
+
                     </p>
 
                     <div className='check--container'>

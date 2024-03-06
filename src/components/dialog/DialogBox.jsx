@@ -34,7 +34,7 @@ import { useEffect } from "react";
 import { Tag2 } from "../productTag/AddTag";
 import { CollectionDialog } from "./CollectionDialog";
 import { useSavedPosts } from "../../pages/profile/Profile";
-import { CheckSavedPost } from "../../pages/post/Post";
+import { CheckSavedPost, GetFullProdData } from "../../pages/post/Post";
 
 
 
@@ -54,7 +54,7 @@ export const FullScreenDialog = ({ liked, open, handleClose, post, currentUser, 
     const [initialPost, setInitialPost] = React.useState(post);
     const [isMuted, setIsMuted] = React.useState(true);
     const navigate = useNavigate();
-    const { savedPosts, savedCols, savedColNames, loading, err } = useSavedPosts(currentUser.uid);
+    const { savedPosts, savedCols, savedColNames, loading, err } = useSavedPosts(currentUser?.uid);
 
     const [savedCol, setSavedCols] = useState([]);
     const [savedColName, setSavedColNames] = useState([]);
@@ -679,6 +679,7 @@ export const FullScreenDialog = ({ liked, open, handleClose, post, currentUser, 
                                                 currentUser={currentUser}
                                                 recommendedAd={item}
                                                 cart={cart}
+                                                
                                             />
                                         </React.Fragment>
                                     ))}
@@ -715,6 +716,8 @@ const Recommended = ({ index, postItem, data, handleClose, currentUser, recommen
     const [savedColName, setSavedColNames] = useState([]);
     const [openColList, setOpenColList] = useState(false);
     const { savedPost } = CheckSavedPost(postItem.id, currentUser);
+    const { prods_final} = GetFullProdData(postItem?.taggedProducts)
+    const [prods, setProds] = React.useState(postItem?.taggedProducts);
 
     const convertToDecimal = (amount) => {
         return Math.floor(amount) / 100
@@ -741,6 +744,12 @@ const Recommended = ({ index, postItem, data, handleClose, currentUser, recommen
             setSavedColNames(savedColNames)
         }
     }, [savedCols, savedColNames])
+
+    useEffect(()=>{
+        if(prods_final && prods_final.length){
+            setProds(prods_final)
+        }
+    },[prods_final])
 
 
 
@@ -787,6 +796,7 @@ const Recommended = ({ index, postItem, data, handleClose, currentUser, recommen
     React.useEffect(() => {
         if (postItem) {
             // console.log(postItem);
+            
         }
 
     }, [postItem])
@@ -1230,8 +1240,8 @@ const Recommended = ({ index, postItem, data, handleClose, currentUser, recommen
                                     : "showCard bottom-[1.2rem]"
                             }
                         >
-                            {Array.isArray(postItem.taggedProducts) &&
-                                postItem.taggedProducts.map((mediaUrl, index) => (
+                            {Array.isArray(prods) &&
+                                prods.map((mediaUrl, index) => (
                                     <React.Fragment key={index}>
                                         <ShowPageCarousels
                                             handlePurchase={handlePurchase}

@@ -30,12 +30,12 @@ import { CollectionDialog } from '../../components/dialog/CollectionDialog';
 import { useSavedPosts } from '../profile/Profile';
 import { CheckSavedPost } from './Post';
 import BookmarkIcon from "@mui/icons-material/Bookmark";
+import { useGetIdentity, useGetOne } from 'react-admin';
 
 
 
 
-
-const MPost = ({ post, id, comments, formatFollowers, following, followers, unfollow, follow, toggleLike, liked, likes, savePost, cart, products }) => {
+const MPost = ({ post, id, comments, formatFollowers, following, followers, unfollow, follow, toggleLike, liked, likes, savePost, cart, products, GetFullProdData }) => {
     const [showComment, setShowComment] = useState(false);
     const { currentUser } = useContext(AuthContext)
     const [isMuted, setIsMuted] = useState(true);
@@ -50,12 +50,13 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
     const uuid = uuidv4();
     const [openColList, setOpenColList] = useState(false);
     const [g_user, setG_User] = useStore("user");
+    const { data: identity, isLoading: identityLoading } = useGetIdentity();
 
 
-    const { savedPosts, savedCols, savedColNames, loading, error } = useSavedPosts(g_user.id);
+    const { savedPosts, savedCols, savedColNames, loading, error } = useSavedPosts(identity?.id);
     const [savedCol, setSavedCols] = useState([]);
     const [savedColName, setSavedColNames] = useState([]);
-    const { savedPost } = CheckSavedPost(post.id, g_user);
+    const { savedPost } = CheckSavedPost(post.id, identity);
 
     const convertToDecimal = (amount) => {
         return Math.floor(amount) / 100
@@ -106,11 +107,11 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
     };
     // Effect to handle adding a view when the component mounts
     useEffect(() => {
-        if (g_user && g_user.id && post && post.id) {
-            addUniqueView(g_user.id, post.id);
+        if (identity && identity.id && post && post.id) {
+            addUniqueView(identity.id, post.id);
             // fetchTotalViews(record.id);
         }
-    }, [g_user, post]);
+    }, [identity, post]);
 
     const options = {
         perPage: 1,
@@ -403,7 +404,7 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
                     <WithListContext render={({ isLoading, data }) => (
                         !isLoading && (
                             <>
-                                <FullScreenDialog liked={liked} post={post} open={open} handleClose={handleClose} postId={id} currentUser={g_user} savePost={savePost} toggleLike={toggleLike} likes2={data} cart={cart} products={products} />
+                                <FullScreenDialog liked={liked} post={post} open={open} handleClose={handleClose} postId={id} currentUser={identity} savePost={savePost} toggleLike={toggleLike} likes2={data} cart={cart} products={products} GetFullProdData={GetFullProdData}/>
                             </>
                         ))} />
                 </InfiniteList>

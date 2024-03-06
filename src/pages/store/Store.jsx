@@ -1,15 +1,20 @@
 import * as React from 'react';
 import { NormalStoreCards, StoreCards } from '../../components/search/SearchCard';
-import { Grid, IconButton } from '@mui/material';
+import { Grid, IconButton, TextField } from '@mui/material';
 import backIcon from '../../assets/hauls/backIcon.png';
 import { useProducts } from 'medusa-react';
 import { ThemeContext } from '../../components/context/ThemeProvider';
 import { DFooter } from '../../components';
 import { useNavigate, useParams } from 'react-router-dom';
-import { InfiniteList, WithListContext, useGetList, useRecordContext, useStore } from 'react-admin';
+import { InfiniteList, TabbedShowLayout, WithListContext, useGetList, useRecordContext, useStore } from 'react-admin';
 import { AuthContext } from '../../components/context/AuthContext';
 import { GetStoreVendor } from '../post/Post';
 import Medusa from '@medusajs/medusa-js';
+import { useGetIdentity, useGetOne } from 'react-admin';
+import StoreDetails from '../store-details';
+import ProductList from '../products/ProductList';
+import OrderList from '../orders/OrderList';
+
 
 
 
@@ -45,6 +50,7 @@ const Store = () => {
 		"product",
 		{ filter: { store_id: store?.id }, },
 	);
+	const { data: identity, isLoading: identityLoading } = useGetIdentity();
 
 	React.useEffect(() => {
 		if (record) {
@@ -55,6 +61,12 @@ const Store = () => {
 
 		}
 	}, [record, id]);
+
+	React.useEffect(() => {
+		if (identity) {
+			console.log(identity)
+		}
+	}, [identity])
 
 
 	React.useEffect(() => {
@@ -73,10 +85,10 @@ const Store = () => {
 
 
 	React.useEffect(() => {
-		if (g_user) {
+		if (identity) {
 			medusa.auth
 				.authenticate({
-					email: g_user.email,
+					email: identity.email,
 					password: import.meta.env.VITE_AUTH_PASSWORD,
 				})
 				.then(({ customer }) => {
@@ -94,7 +106,7 @@ const Store = () => {
 				});
 		}
 
-	}, []);
+	}, [identity]);
 
 	React.useEffect(() => {
 		if (input) {
@@ -246,57 +258,86 @@ const Store = () => {
 			</div>
 
 
+			<TabbedShowLayout sx={{
+				backgroundColor: theme === 'light' ? '#fff' : '#222',
+				color: theme === 'light' ? '#222' : '#fff',
+				'& .RaTabbedShowLayout-content': {
+					padding: '2px 0px'
+				}
 
-			<div className="pt-[1rem] pb-[4rem]">
-				<div className="mb-[1.5rem]">
+			}}>
+				{/* <TabbedShowLayout.Tab label="Products">
+					<div className="pt-[0rem] pb-[4rem]">
+						<div className="mb-[1.5rem]">
 
-					{/* Search box */}
-					<div
-						className="general search--box my-[1rem]"
-						style={{ filter: theme === "light" ? "invert(0)" : "invert(1)" }}
-					>
-						<input
-							className="search--input"
-							type="search"
-							placeholder={`Search ${store && store.name ? (store.name) : "Store"}`}
-							value={input}
-							onChange={(e) => setInput(e.target.value)}
-						/>
-						{search}
-					</div>
-				</div>
-
-
-
-
+							Search box
+							<div
+								className="general search--box my-[1rem]"
+								style={{ filter: theme === "light" ? "invert(0)" : "invert(1)" }}
+							>
+								<input
+									className="search--input"
+									type="search"
+									placeholder={`Search ${store && store.name ? (store.name) : "Store"}`}
+									value={input}
+									onChange={(e) => setInput(e.target.value)}
+								/>
+								{search}
+							</div>
+						</div>
 
 
 
-				{products && products.length && (
-					<>
-						{products && !products.length && <span>No Products</span>}
-						{products && products.length > 0 && (
-							<Grid container spacing="10px" rowGap={{ xs: 2 }}>
-								{products &&
-									products.map((product) => {
-										return (
-											<Grid key={product.id} item xs={4} sm={4} md={4}>
-												<NormalStoreCards
-													title=""
-													subTitle={store && store.name ? (store.name) : ('Shop')}
-													price={product && region && product.variants ? (formatPrice(product.variants[0].prices.filter((curr) => { return curr.currency_code === region.currency_code })[0].amount)) : (null)}
-													name={product.title}
-													product={product}
-													vendor={vendorAcc}
-												/>
-											</Grid>
-										);
-									})}
-							</Grid>
+
+
+
+
+						{products && products.length && (
+							<>
+								{products && !products.length && <span>No Products</span>}
+								{products && products.length > 0 && (
+									<Grid container spacing="10px" rowGap={{ xs: 2 }} style={{
+										backgroundColor: theme === 'light' ? '#fff' : '#222',
+										color: theme === 'light' ? '#222' : '#fff',
+									}}>
+										{products &&
+											products.map((product) => {
+												return (
+													<Grid key={product.id} item xs={4} sm={4} md={4} style={{
+														backgroundColor: theme === 'light' ? '#fff' : '#222',
+														color: theme === 'light' ? '#222' : '#fff',
+													}}>
+														<NormalStoreCards
+															title=""
+															subTitle={store && store.name ? (store.name) : ('Shop')}
+															price={product && region && product.variants ? (formatPrice(product.variants[0].prices.filter((curr) => { return curr.currency_code === region.currency_code })[0].amount)) : (null)}
+															name={product.title}
+															product={product}
+															vendor={vendorAcc}
+														/>
+													</Grid>
+												);
+											})}
+									</Grid>
+								)}
+							</>
 						)}
-					</>
-				)}
-			</div>
+					</div>
+				</TabbedShowLayout.Tab> */}
+				<TabbedShowLayout.Tab label="Store Details">
+					<StoreDetails />
+				</TabbedShowLayout.Tab>
+				<TabbedShowLayout.Tab label='Products' >
+					<ProductList />
+				</TabbedShowLayout.Tab>
+				<TabbedShowLayout.Tab label='Orders' >
+					<OrderList />
+				</TabbedShowLayout.Tab>
+
+			</TabbedShowLayout>
+
+
+
 			<DFooter />
 
 		</>

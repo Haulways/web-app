@@ -3,6 +3,7 @@ import { supabase } from "../../supabase/SupabaseConfig";
 import { supabaseAuthProvider } from "ra-supabase";
 import Medusa from "@medusajs/medusa-js";
 import { useStore } from "react-admin";
+import { useGetIdentity, useGetOne } from 'react-admin';
 
 
 const auth = supabaseAuthProvider(supabase, {

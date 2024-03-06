@@ -1,6 +1,6 @@
 import { CardMedia, CircularProgress, Dialog, Grid, IconButton, Skeleton } from '@mui/material';
 import * as React from 'react';
-import { InfiniteList, Link, WithListContext, useDataProvider, useRecordContext, useStore } from 'react-admin';
+import { InfiniteList, Link, TabbedShowLayout, WithListContext, useDataProvider, useRecordContext, useStore } from 'react-admin';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ThemeContext } from '../../components/context/ThemeProvider';
 import { ShortReviews } from '../../components/reviews/ShortReviews';
@@ -10,12 +10,16 @@ import { AuthContext } from '../../components/context/AuthContext'; import { Sma
 import share from "../../assets/socials/share.png";
 import IG from "../../assets/socials/ig.png";
 import { GetStoreVendor } from '../post/Post';
+import { useGetIdentity, useGetOne } from 'react-admin';
+import ProductShow from '../products/ProductShow';
 
 
 const medusa = new Medusa({
 	maxRetries: 3,
 	baseUrl: "https://ecommerce.haulway.co",
 });
+
+
 
 const SProduct = () => {
 	const record = useRecordContext();
@@ -32,12 +36,13 @@ const SProduct = () => {
 	const [region, setRegion] = React.useState(null);
 	const [g_user, setG_User] = useStore("user");
 	const { store, vendor, vendorAcc, loading2, error2 } = GetStoreVendor(record?.store_id);
+	const { data: identity, isLoading: identityLoading } = useGetIdentity();
 
 	React.useEffect(() => {
-		if (g_user) {
+		if (identity) {
 			medusa.auth
 				.authenticate({
-					email: g_user.email,
+					email: identity.email,
 					password: import.meta.env.VITE_AUTH_PASSWORD,
 				})
 				.then(({ customer }) => {
@@ -56,7 +61,7 @@ const SProduct = () => {
 		}
 
 
-	}, []);
+	}, [identity]);
 
 
 
@@ -72,12 +77,13 @@ const SProduct = () => {
 		}
 
 	}, [cart])
+
 	React.useEffect(() => {
 		if (record && region && id) {
 			//
-			medusa.products.retrieve(id, { expand: 'store' })
+			medusa.products.retrieve(id, { expand: 'store, sales_channels' })
 				.then(({ product }) => {
-					// console.log({...product, store_id: record.store_id})
+					console.log({...product})
 					setProduct({ ...product, store_id: record.store_id })
 
 				})
@@ -177,91 +183,69 @@ const SProduct = () => {
 					</div>
 				</div>
 
-				<InfiniteList
-					resource="posts"
-					title=" "
-					actions={false}
-					sx={{
-						"& .MuiToolbar-root": {
-							minHeight: "0px !important",
-						},
-						"& .MuiBox-root": {
-							padding: "0 ",
-						},
-						"& .MuiPaper-root": {
-							backgroundColor:
-								theme === "light" ? "#fff !important" : "#222 !important",
-							color:
-								theme === "light" ? "#222 !important" : "#fff !important",
-						},
-					}}
-					className="store__card"
-				>
-					<WithListContext
-						render={({ isLoading, data }) =>
-							!isLoading ? (
-								<>
-									<ul className="flex  mx-auto max-w-[95vw] gap-x-2 mb-[2rem] overflow-x-scroll store__card font-[500]">
-										<li
-											className={`cursor-pointer min-w-fit py-[5px] px-[1rem] rounded-[30px] ${selectedTab === "details"
-												? theme === "light"
-													? "text-[#fff] bg-[#222]"
-													: "text-[#222] bg-[#fff]"
-												: "text-zinc-400"
-												}`}
-											onClick={() => {
-												handleTabClick("details");
-											}}
-										>
-											Product details
-										</li>
+				<TabbedShowLayout sx={{
+					backgroundColor: theme === 'light' ? '#fff' : '#222',
+					color: theme === 'light' ? '#222' : '#fff',
+					'& .RaTabbedShowLayout-content': {
+						paddingInline: '2px'
+					},
+					'& .MuiTab-root': {
+						backgroundColor: theme === 'light' ? '#fff' : '#222',
+						color: theme === 'light' ? '#222' : '#fff',
+					},
+					'& .MuiTabs-indicator': {
+						backgroundColor: theme === 'light' ? '#222' : '#fff',
+					},
+					'& .Mui-selected': {
+						color: theme === 'light' ? '#222' : '#fff',
+					}
+				}}>
+					<TabbedShowLayout.Tab label="Product Details">
+						<PDetails theme={theme} product={product} />
+					</TabbedShowLayout.Tab>
 
-										<li
-											className={` cursor-pointer min-w-fit py-[5px] px-[1rem] rounded-[30px]  ${selectedTab === "related"
-												? theme === "light"
-													? "text-[#fff] bg-[#222]"
-													: "text-[#222] bg-[#fff]"
-												: "text-zinc-400"
-												}`}
-											onClick={() => {
-												handleTabClick("related");
-											}}
-										>
-											Related videos
-										</li>
-										<li
-											className={` cursor-pointer min-w-fit py-[5px] px-[1rem] rounded-[30px]  ${selectedTab === "reviews"
-												? theme === "light"
-													? "text-[#fff] bg-[#222]"
-													: "text-[#222] bg-[#fff]"
-												: "text-zinc-400"
-												}`}
-											onClick={() => {
-												handleTabClick("reviews");
-											}}
-										>
-											Reviews
-										</li>
-									</ul>
+					<TabbedShowLayout.Tab label="Related videos">
+						<InfiniteList
+							resource="posts"
+							title=" "
+							actions={false}
+							sx={{
+								"& .MuiToolbar-root": {
+									minHeight: "0px !important",
+								},
+								"& .MuiBox-root": {
+									padding: "0 ",
+								},
+								"& .MuiPaper-root": {
+									backgroundColor:
+										theme === "light" ? "#fff !important" : "#222 !important",
+									color:
+										theme === "light" ? "#222 !important" : "#fff !important",
+								},
+							}}
+							className="store__card"
+						>
+							<WithListContext
+								render={({ isLoading, data }) =>
+									!isLoading ? (
+										<RVideos data={data} product={product} id={id} theme={theme} />
+									) : (
+										<p className="font-[500] text-[#222] flex items-center justify-center">
+											Loading...
+										</p>
+									)
+								}
+							/>
+						</InfiniteList>
 
-									<div className="mt-[2rem]">
-										{selectedTab === "details" ? (
-											<PDetails theme={theme} product={product} />
-										) : selectedTab === "related" ? (
-											<RVideos data={data} product={product} id={id} theme={theme} />
-										) : selectedTab === "reviews" ? (
-											<Reviews product={product} theme={theme} />
-										) : null}
-									</div>
-								</>
-							) : (
-								<p className="font-[500] text-[#222] flex items-center justify-center">
-									Loading...
-								</p>
-							)
-						}
-					/>
-				</InfiniteList>
+					</TabbedShowLayout.Tab>
+
+					<TabbedShowLayout.Tab label="Reviews">
+						<Reviews product={product} theme={theme} />
+					</TabbedShowLayout.Tab>
+
+				</TabbedShowLayout>
+
 			</Dialog>
 		</>
 	);
@@ -452,38 +436,41 @@ const PDetails = ({ theme, product }) => {
 	// console.log(product);
 	return (
 		<>{
-			product && product.variants ? (<div className='mx-5'>
-				<div className='mx-auto pt-[1rem]'>
-					<SmallPHorizontalCards post={product} />
-				</div>
-				<div className='product__details--Middle mt-[2px]'>
-					<span className="brand--name">
-						{product?.title}
-					</span>
+			product && product.variants ? (
+			// <div className='mx-5'>
+			// 	<div className='mx-auto pt-[1rem]'>
+			// 		<SmallPHorizontalCards post={product} />
+			// 	</div>
+			// 	<div className='product__details--Middle mt-[2px]'>
+			// 		<span className="brand--name">
+			// 			{product?.title}
+			// 		</span>
 
-					<span className="product--socials">
-						<span className="share">
-							<img src={share} />
-						</span>
+			// 		<span className="product--socials">
+			// 			<span className="share">
+			// 				<img src={share} />
+			// 			</span>
 
-						{/* <span className="fb-ig">
-							<img src={FB} />
-						</span> */}
+			// 			{/* <span className="fb-ig">
+			// 				<img src={FB} />
+			// 			</span> */}
 
-						<span className="fb-ig">
-							<img src={IG} />
-						</span>
-					</span>
-				</div>
+			// 			<span className="fb-ig">
+			// 				<img src={IG} />
+			// 			</span>
+			// 		</span>
+			// 	</div>
 
-				<div className='product__details--MiddleText'>
-					{product?.description}
-				</div>
+			// 	<div className='product__details--MiddleText'>
+			// 		{product?.description}
+			// 	</div>
 
-				<div className='mx-auto pb-[1rem]'>
-					<SmallPHorizontalVariantCards post={product} />
-				</div>
-			</div>) : (<div className='spinner absolute top-0 bottom-0 left-0 right-0 my-0 mx-0'>
+			// 	<div className='mx-auto pb-[1rem]'>
+			// 		<SmallPHorizontalVariantCards post={product} />
+			// 	</div>
+			// </div>
+			<ProductShow product={product}/>
+			) : (<div className='spinner absolute top-0 bottom-0 left-0 right-0 my-0 mx-0'>
 
 				<CircularProgress sx={{ filter: theme === "light" ? "invert(0)" : "invert(1)" }} />
 			</div>)}</>

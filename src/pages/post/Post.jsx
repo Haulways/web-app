@@ -29,6 +29,7 @@ import { v4 as uuidv4 } from "uuid";
 import { ShowPageCarousels_1 } from '../../components/card/ShowCard';
 
 
+
 const medusa = new Medusa({
   baseUrl: "https://ecommerce.haulway.co",
 });
@@ -443,16 +444,17 @@ const Signlepost = () => {
   const [products, setProducts] = React.useState(null);
   const [g_user, setG_User] = useStore("user");
   const { prods_final } = GetFullProdData(post?.taggedProducts);
+  const { data: identity, isLoading: identityLoading } = useGetIdentity();
 
 
 
   // Attach an event listener after the Splide instance is mounted
 
   React.useEffect(() => {
-    if (g_user) {
+    if (identity) {
       medusa.auth
         .authenticate({
-          email: g_user.email,
+          email: identity.email,
           password: import.meta.env.VITE_AUTH_PASSWORD,
         })
         .then(({ customer }) => {
@@ -470,7 +472,7 @@ const Signlepost = () => {
 
 
 
-  }, []);
+  }, [identity]);
 
   React.useEffect(() => {
     if (post) {
@@ -1097,7 +1099,7 @@ const Signlepost = () => {
 
           </div>
 
-          <MPost post={post} id={id} comments={comments} liked={liked} likes={likes} follow={follow} followers={followers} unfollow={unfollow} toggleLike={toggleLike} formatFollowers={formatFollowers} following={following} savePost={savePost} cart={gcart} products={products} />
+          <MPost post={post} id={id} comments={comments} liked={liked} likes={likes} follow={follow} followers={followers} unfollow={unfollow} toggleLike={toggleLike} formatFollowers={formatFollowers} following={following} savePost={savePost} cart={gcart} products={products} GetFullProdData={GetFullProdData} />
         </>
       ) : (
         <div className='spinner'>

@@ -3,7 +3,7 @@ import './profile.css';
 import { AuthContext } from '../../components/context/AuthContext';
 import { DFooter, MakePost, SavedPost } from '../../components';
 import { Avatar, CircularProgress, Grid, Skeleton, useTheme } from '@mui/material';
-import { useDataProvider, useGetList, useRecordContext, useRedirect, useRefresh, useStore } from 'react-admin';
+import { useCreate, useDataProvider, useGetList, useRecordContext, useRedirect, useRefresh, useStore } from 'react-admin';
 import divider from "../../assets/profileIcons/divider.png";
 import post from "../../assets/profileIcons/post.png";
 import AccountType from "../../assets/profileIcons/AccType.png";
@@ -25,6 +25,7 @@ import { v4 as uuidv4 } from "uuid";
 import { toast } from 'react-toastify';
 import { ThemeContext } from '../../components/context/ThemeProvider';
 import useSupabaseRealtime from '../../supabase/realTime';
+import axios, { isCancel, AxiosError } from 'axios';
 
 
 
@@ -192,6 +193,7 @@ const Profile = () => {
     const redirect = useRedirect()
     const refresh = useRefresh();
     const navigate = useNavigate();
+    const [create, { isLoading: createLoading, error: createErr }] = useCreate();
 
     const { data: followers, total: totalFollowers, isLoading } = useGetList(
         'followers', { filter: { followed_id: userData?.uid } }
@@ -238,7 +240,7 @@ const Profile = () => {
     const tables = ["posts", "hauls", "lookbook", "diy", "grwm"];
     const { data: posts, loading: postLoading } = useFetchMultipleLists(tables);
 
-    
+
 
     const { savedPosts, savedCols, savedColNames, loading, error } = useSavedPosts(currentUser.uid);
 
@@ -493,6 +495,55 @@ const Profile = () => {
             return;
         }
 
+        console.log(!userData.ps_sub_account || !currentUser.ps_sub_account)
+
+        const createSplit = async (sub_accs_shares) => {
+            const split = await axios({
+                method: 'post',
+                baseURL: 'https://api.paystack.co',
+                url: '/split',
+                headers: {
+                    Authorization: `Bearer ${import.meta.env.VITE_PS_SCRT_KEY}`,
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify({
+                    "name": `${userData.ps_sub_account.business_name} x ${currentUser.ps_sub_account.business_name} : ${uuid.slice(-8)}`,
+                    "type": "percentage",
+                    "currency": userData && currentUser && (currentUser.role === 'vendor' && currentUser.ps_sub_account.currency) || (userData.role === 'vendor' && userData.ps_sub_account.currency),
+                    "subaccounts": sub_accs_shares,
+                    "bearer_type": "subaccount",
+                    "bearer_subaccount": sub_accs_shares[0].subaccount
+                })
+            });
+
+            if (split && split.data && split.data.status) {
+                // toast.success(sub_acc.data.data.message);
+                return split.data.data
+            }
+            else {
+                return null
+            }
+            // return banks
+        }
+
+
+
+        let split = await createSplit([
+            {
+                "subaccount": userData && currentUser && (currentUser.role === 'vendor' && currentUser.ps_sub_account.subaccount_code) || (userData.role === 'vendor' && userData.ps_sub_account.subaccount_code),
+                "share": userData && currentUser && (currentUser.role === 'vendor' && 90) || (userData.role === 'vendor' && 90)
+            },
+            {
+                "subaccount": userData && currentUser && (currentUser.role === 'influencer' && currentUser.ps_sub_account.subaccount_code) || (userData.role === 'influencer' && userData.ps_sub_account.subaccount_code),
+                "share": userData && currentUser && (currentUser.role === 'influencer' && 10) || (userData.role === 'influencer' && 10)
+            }
+        ])
+
+
+
+
+
+
         // If no existing contract, proceed to create a new one
         const { data, error } = await supabase
             .from("contract")
@@ -521,7 +572,8 @@ const Profile = () => {
                 influencer_phone: null,
                 vendor_phone: null,
                 vendor_email: (userData && currentUser && (currentUser.role === 'vendor' && currentUser.email) || (userData.role === 'vendor' && userData.email)),
-                influencer_email: (userData && currentUser && (currentUser.role === 'influencer' && currentUser.email) || (userData.role === 'influencer' && userData.email))
+                influencer_email: (userData && currentUser && (currentUser.role === 'influencer' && currentUser.email) || (userData.role === 'influencer' && userData.email)),
+                ps_split_doc: split
             })
             .select();
 
@@ -673,6 +725,7 @@ const Profile = () => {
                                                     backgroundColor: theme === 'light' ? '#222' : '#fff',
                                                     color: theme === 'light' ? '#fff' : '#222',
                                                 }}
+                                                disabled={!userData.ps_sub_account || !currentUser.ps_sub_account ? true : false}
                                             >
                                                 {senderContract && senderContract.some(contract => contract.created_by === currentUser.uid && contract.created_for === userData.uid) ? 'Cancel request' : 'Send request'}
                                             </button>

@@ -11,11 +11,12 @@ import Medusa from '@medusajs/medusa-js';
 import { AuthContext } from '../../components/context/AuthContext';
 import { DFooter } from '../../components';
 import { ThemeContext } from '../../components/context/ThemeProvider';
+import { useGetIdentity, useGetOne } from 'react-admin';
 
 
 const medusa = new Medusa({
     baseUrl: "https://ecommerce.haulway.co",
-  });
+});
 
 
 const OrderHistory = () => {
@@ -25,27 +26,31 @@ const OrderHistory = () => {
     const [cart, setCart] = React.useState(null);
     const [custOrders, setCustOrders] = React.useState([]);
     const [custData, setCustData] = useStore("customer");
-    const { theme} = React.useContext(ThemeContext);
+    const { theme } = React.useContext(ThemeContext);
+    const { data: identity, isLoading: identityLoading } = useGetIdentity();
 
-    
+
     React.useEffect(() => {
-        medusa.auth
-            .authenticate({
-                email: currentUser.email,
-                password: import.meta.env.VITE_AUTH_PASSWORD,
-            })
-            .then(({ customer }) => {
-                setCustData(customer);
-                console.log(customer);
-                medusa.customers.listOrders()
-                    .then(({ orders, limit, offset, count }) => {
-                        setCustOrders(orders);
-                        // console.log(orders)
-                    })
-            });
-        
-    }, []);
-  
+        if (identity) {
+            medusa.auth
+                .authenticate({
+                    email: identity.email,
+                    password: import.meta.env.VITE_AUTH_PASSWORD,
+                })
+                .then(({ customer }) => {
+                    setCustData(customer);
+                    console.log(customer);
+                    medusa.customers.listOrders()
+                        .then(({ orders, limit, offset, count }) => {
+                            setCustOrders(orders);
+                            // console.log(orders)
+                        })
+                });
+        }
+
+
+    }, [identity]);
+
     const cellStyle = {
         fontSize: '10px',
         padding: '10px',
@@ -61,7 +66,7 @@ const OrderHistory = () => {
         borderBottom: 'none',
     };
 
-    
+
 
 
     function formatDate(isoString) {
@@ -69,7 +74,7 @@ const OrderHistory = () => {
         const day = date.getDate();
         const month = date.getMonth() + 1; // Months are zero indexed
         const year = date.getFullYear().toString().substr(-2); // Get last two digits of year
-    
+
         return `${month}/${day}/${year}`;
     }
 
@@ -100,7 +105,7 @@ const OrderHistory = () => {
         </div>
     );
 
-    const TotalCard = ({order}) => (
+    const TotalCard = ({ order }) => (
         <div className="history--card flex flex-col gap-y-[20px]">
             <div className="history--summation">
                 <div>Subtotal</div>
@@ -138,16 +143,16 @@ const OrderHistory = () => {
     return (
         <>
             <div className='feed--page'>
-                
+
                 <div className='my--orders'>
                     <h3 className='header'>Order History</h3>
                     <p className='para'>Here you can manage your orders</p>
-                
+
                     <div className='mb-[30.78px]'>
                         <SearchBox placeholder='Search' />
                     </div>
                 </div>
-        
+
                 <TableContainer component={Paper}
                     sx={{
                         borderRadius: '0',
@@ -158,7 +163,7 @@ const OrderHistory = () => {
                         },
                         '& .MuiPaper-elevation': {
                             background: 'none !important'
-                            }
+                        }
                     }}
                 >
                     <Table sx={{ minWidth: '320px' }} aria-label="simple table">
@@ -173,7 +178,7 @@ const OrderHistory = () => {
                         </TableHead>
                     </Table>
                     {custOrders && custOrders.map((order, index) => (
-                                
+
                         <React.Fragment key={index}>
                             <Table sx={{ minWidth: '320px' }} aria-label="simple table">
                                 <TableBody>
@@ -221,7 +226,7 @@ const OrderHistory = () => {
                                                     Pending
                                                 </span>
                                             )}
-                                            
+
                                             {order.status === "canceled" && (
 
                                                 <span className="bg-[#FF4040] text-white rounded-[6px] py-[5px] px-[6px]">
@@ -234,7 +239,7 @@ const OrderHistory = () => {
 
                             </Table>
                             <Collapse in={openStates[index]} timeout='auto' unmountOnExit>
-            
+
                                 {/* table header  */}
                                 <div className="flex bg-black">
                                     <div className="w-[40%] tablet:w-[25%] laptop:w-[25%]" style={cellStyle}>Product</div>
@@ -242,18 +247,18 @@ const OrderHistory = () => {
                                     <div align="right" className="w-[15%] tablet:w-[20%] " style={cellStyle}>Price</div>
                                     <div align="right" className="w-[17%] tablet:w-[20%] laptop:w-[25%]" style={cellStyle}>Total</div>
                                 </div>
-            
+
                                 {/* table body  */}
                                 <div className="px-[10px] pt-[10px]">
                                     {/* table rows  */}
                                     {order.items && order.items.length > 0 && order.items.map((item, index) => (
-                                        <HistoryCard key={index} item={item} order={order}/>
+                                        <HistoryCard key={index} item={item} order={order} />
                                     ))}
-                                    
+
 
                                     <TotalCard order={order} />
                                 </div>
-           
+
                                 {/* bottom table  */}
                                 <Table style={{ minWidth: '320px', marginTop: '20px', borderBottom: '1px solid #666' }} aria-label="simple table">
                                     <tr className="bg-black">
@@ -267,10 +272,10 @@ const OrderHistory = () => {
                                                 {order.shipping_address.address_1}, {order.shipping_address.city}.
                                             </TableCell>
                                             <TableCell align="center" sx={cellBody}>
-                                            {order.shipping_methods[0].shipping_option.name}
+                                                {order.shipping_methods[0].shipping_option.name}
                                             </TableCell>
                                             <TableCell align="center" sx={cellBody} className='capitalize'>
-                                            {order.payments[0].provider_id}
+                                                {order.payments[0].provider_id}
                                             </TableCell>
                                         </TableRow>
                                     </TableBody>
@@ -279,14 +284,14 @@ const OrderHistory = () => {
                             </Collapse>
                         </React.Fragment>
                     ))}
-                                
+
                 </TableContainer>
 
                 {custOrders && custOrders.length === 0 && (
                     <p className=' font-[500] flex items-center justify-center'>No Orders Yet</p>
                 )}
             </div>
-            <DFooter/>
+            <DFooter />
         </>
     );
 };

@@ -17,7 +17,7 @@ export const SearchCards = ({ title, subTitle, type }) => {
     const { theme } = React.useContext(ThemeContext);
 
     const handleCanPlay = () => {
-      setIsReady(true);
+        setIsReady(true);
     };
     const handleViewAll = () => {
         setOpenView(true);
@@ -27,7 +27,7 @@ export const SearchCards = ({ title, subTitle, type }) => {
         setOpenView(false);
     };
 
-    
+
 
     const SearchCard = ({ post, mediaUrl }) => (
         <div className="search--card">
@@ -57,13 +57,13 @@ export const SearchCards = ({ title, subTitle, type }) => {
                     <span>{subTitle} - {type}</span>
                 </div>
 
-               
+
                 <div className='view--all' onClick={handleViewAll}>
                     <IconButton sx={{ color: '#222', fontSize: '10px', fontWeight: '600' }}>
                         View All
                     </IconButton>
                 </div>
-               
+
             </div>
 
             <InfiniteList
@@ -80,11 +80,11 @@ export const SearchCards = ({ title, subTitle, type }) => {
                     '& .MuiPaper-root': {
                         backgroundColor: theme === "light" ? "#fff !important" : "#222 !important",
                         color: theme === "light" ? "#222 !important" : "#fff !important",
-                      },
+                    },
                 }}
             >
                 <WithListContext render={({ isLoading, data }) => (
-                    
+
                     !isLoading ? (
                         <>
                             {data && !data.length && <span>No Posts</span>}
@@ -106,7 +106,7 @@ export const SearchCards = ({ title, subTitle, type }) => {
                         <p className='font-[500] text-[#222] flex items-center justify-center'>Loading...</p>
                     ))}
                 />
-                                
+
             </InfiniteList>
 
             <ViewAllDialog openView={openView} closeViewAll={closeViewAll} title={title} subTitle={subTitle} type={type} />
@@ -120,29 +120,29 @@ export const SearchCards = ({ title, subTitle, type }) => {
 export const NormalSearchCards = ({ title, subTitle, type, post, mediaUrl }) => {
     const [isReady, setIsReady] = React.useState(false);
     const handleCanPlay = () => {
-      setIsReady(true);
+        setIsReady(true);
     };
-   
+
     return (
         <>
             <Card sx={{ minWidth: '150px', width: '100%', maxWidth: '100%', boxShadow: 'none', position: 'relative' }}>
 
                 <CardActionArea className="normalCard--bg" >
-                <Link to={`/${post.URL}/${post.id}/show`}>
-                    {!isReady && <Skeleton variant="rectangular" width="100%" height='100%' />}
-                    <CardMedia
-                        component="video"
-                        src={mediaUrl}
-                        playsInline={true}
-                        className="object-cover h-full w-full"
-                        loop
-                        autoPlay
-                        muted={true}
-                        controls={false}
-                        poster={post.posterUrl ? post.posterUrl : null}
-                        onCanPlay={handleCanPlay}
-                        style={{ display: isReady ? 'block' : 'none' }}
-                    />
+                    <Link to={`/${post.URL}/${post.id}/show`}>
+                        {!isReady && <Skeleton variant="rectangular" width="100%" height='100%' />}
+                        <CardMedia
+                            component="video"
+                            src={mediaUrl}
+                            playsInline={true}
+                            className="object-cover h-full w-full"
+                            loop
+                            autoPlay
+                            muted={true}
+                            controls={false}
+                            poster={post.posterUrl ? post.posterUrl : null}
+                            onCanPlay={handleCanPlay}
+                            style={{ display: isReady ? 'block' : 'none' }}
+                        />
                     </Link>
                 </CardActionArea>
                 <CardContent sx={{ paddingLeft: 0, paddingTop: '10px', paddingBottom: '10px' }} >
@@ -152,25 +152,25 @@ export const NormalSearchCards = ({ title, subTitle, type, post, mediaUrl }) => 
                     <Typography className="normalSearchCard--text tablet:text-[16px] laptop:text-[16px]" variant='h2' sx={{ fontSize: '10px', fontWeight: 600 }}>
                         {subTitle} - {type}
                     </Typography>
-                    
+
                 </CardContent>
 
                 <CardHeader sx={{ padding: 0 }} className="normalcard--header"
                     avatar={
-                        <Avatar className="tablet:h-[30px] tablet:w-[30px] laptop:h-[30px] laptop:w-[30px] drop-shadow" sx={{ height: '25px', width: '25px', overflow: 'hidden' }} 
-                            src={post.photoURL} 
+                        <Avatar className="tablet:h-[30px] tablet:w-[30px] laptop:h-[30px] laptop:w-[30px] drop-shadow" sx={{ height: '25px', width: '25px', overflow: 'hidden' }}
+                            src={post.photoURL}
                         />
                     }
-        
+
                     title={
                         <Typography className="laptop:text-[14px] tablet:text-[13px]" sx={{ color: '#636363', fontSize: '10px', fontWeight: 600 }}>
                             {post.name}
                         </Typography>
                     }
-       
+
                 />
             </Card>
-        
+
         </>
     );
 };
@@ -189,7 +189,7 @@ export const StoreCards = ({ title, subTitle, name, price, product, products }) 
         setOpenView(false);
     };
 
-    
+
 
     const SearchCard = ({ product }) => (
         <div className="search--card">
@@ -205,34 +205,34 @@ export const StoreCards = ({ title, subTitle, name, price, product, products }) 
                     <h2>{title}</h2>
                 </div>
 
-               
+
                 <div onClick={handleViewAll}>
-                    <IconButton sx={{  fontSize: '10px', fontWeight: '600', filter: theme === "light" ? "invert(0)" : "invert(1)" }}>
+                    <IconButton sx={{ fontSize: '10px', fontWeight: '600', filter: theme === "light" ? "invert(0)" : "invert(1)" }}>
                         View All
                     </IconButton>
                 </div>
-               
+
             </div>
-                
+
             {products && !products.length && <span>No Products</span>}
             {products && products.length > 0 && (
                 <div className='search__card--container'>
-                  
+
                     {products.map((product) => {
                         // console.log(product);
                         // console.log(product.variants[0].id);
 
                         return (
-                                
+
                             <SearchCard key={product.id} product={product} />
-                               
+
                         )
                     })
                     }
-                    
+
                 </div>
             )}
-            
+
 
             <StoreViewALl openView={openView} closeViewAll={closeViewAll} title={title} subTitle={subTitle} name={name} price={price} product={product} products={products} />
 
@@ -242,12 +242,16 @@ export const StoreCards = ({ title, subTitle, name, price, product, products }) 
 
 
 // store normal cards 
-export const NormalStoreCards = ({ title,  price, name, subTitle, product, vendor }) => {
-    const { store, vendor:vndr, vendorAcc, loading2, error2 } = GetStoreVendor(product?.store_id);
+export const NormalStoreCards = ({ title, price, name, subTitle, product, vendor }) => {
+    const { theme } = React.useContext(ThemeContext);
+    const { store, vendor: vndr, vendorAcc, loading2, error2 } = GetStoreVendor(product?.store_id);
 
     return (
         <>
-            <Card sx={{ minWidth: '100px', width: '100%', maxWidth: '100%', boxShadow: 'none', position: 'relative' }}>
+            <Card sx={{ minWidth: '100px', width: '100%', maxWidth: '100%', boxShadow: 'none', position: 'relative' }} style={{
+                background: theme === 'light' ? '#fff' : '#222',
+                color: theme === 'light' ? '#222' : '#fff',
+            }}>
 
                 <CardActionArea className="h-[100px] w-full relative laptop:h-[320px] tablet:h-[280px]">
                     <Link to={`/product/${product.id}/show`}>
@@ -263,7 +267,7 @@ export const NormalStoreCards = ({ title,  price, name, subTitle, product, vendo
                     <Typography className="normalSearchCard--text tablet:text-[16px] laptop:text-[16px]" variant='h2' sx={{ fontSize: '12px', fontWeight: 600, paddingBottom: '5px' }}>
                         {name}
                     </Typography>
-                    
+
                     <Typography className='font-[600] ' sx={{ fontWeight: 700, fontSize: '10px' }}>
                         {price}
                     </Typography>
@@ -275,16 +279,16 @@ export const NormalStoreCards = ({ title,  price, name, subTitle, product, vendo
                             <img className="object-cover w-full h-full" src={vendor && vendor.photoURL ? vendor.photoURL : (vndr && vndr.photoURL ? vndr.photoURL : userIcon)} alt="avatar" />
                         </Avatar>
                     }
-        
+
                     title={
                         <Typography className="laptop:text-[14px] tablet:text-[13px]" sx={{ color: '#636363', fontSize: '8px', fontWeight: 600 }}>
                             {subTitle ? subTitle : store?.name}
                         </Typography>
                     }
-       
+
                 />
             </Card>
-        
+
         </>
     );
 };

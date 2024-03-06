@@ -9,18 +9,25 @@ import { useStore } from 'react-admin';
 import Medusa from '@medusajs/medusa-js';
 import { useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
+import { ThemeContext } from '../../context/ThemeProvider';
+
 
 const medusa = new Medusa({
     maxRetries: 3,
     baseUrl: "https://ecommerce.haulway.co",
-  });
+});
 
 export const CartCard = ({ item, DelItemFromCart, increaseQty, decreaseQty, cart }) => {
-// console.log(cart);
-    
+    const { theme } = React.useContext(ThemeContext);
+
+    // console.log(cart);
+
     return (
         <>
-            <div className='product--card'>
+            <div className='product--card' style={{
+                backgroundColor: theme === 'light' ? '#fff' : '#222',
+                color: theme === 'light' ? '#222 !important' : '#fff !important',
+            }}>
                 <div className='card--left'>
                     <div className='card--img'>
                         <img src={item.thumbnail} alt='product' />
@@ -35,7 +42,7 @@ export const CartCard = ({ item, DelItemFromCart, increaseQty, decreaseQty, cart
                         <div className='increment--drecrement'>
                             <IconButton sx={{ padding: 0 }} onClick={() => increaseQty(item.id, item.quantity)}>
                                 <img src={addImage} alt='add'
-                                    
+
                                 />
                             </IconButton>
                             <span>
@@ -43,7 +50,7 @@ export const CartCard = ({ item, DelItemFromCart, increaseQty, decreaseQty, cart
                             </span>
                             <IconButton sx={{ padding: 0 }} onClick={() => decreaseQty(item.id, item.quantity)}>
                                 <img src={removeIcon} alt='remove'
-                                    
+
                                 />
                             </IconButton>
                         </div>
@@ -67,7 +74,7 @@ export const CartCard = ({ item, DelItemFromCart, increaseQty, decreaseQty, cart
                     </IconButton>
                 </div>
             </div>
-        
+
         </>
     );
 };

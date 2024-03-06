@@ -703,6 +703,8 @@ export const SmallPHorizontalCards = ({ post }) => {
 };
 
 export const SmallPHorizontalVariantCards = ({ post }) => {
+    const { theme } = React.useContext(ThemeContext);
+
     // console.log(post);
     // const slider1 = React.useRef();
     // const slider2 = React.useRef();
@@ -742,7 +744,11 @@ export const SmallPHorizontalVariantCards = ({ post }) => {
                 {post && post.variants && Array.isArray(post.variants) && post.variants.slice(0, 4).map((mediaUrl, index) => {
                     // const isImage = mediaUrl.url.includes('.jpg') || mediaUrl.url.includes('.jpeg') || mediaUrl.url.includes('.png');
                     return (
-                        <SplideSlide key={index} className='w-auto h-[63.16px] px-2 rounded-[8px] overflow-hidden flex flex-nowrap justify-center items-center bg-[#eee]'>
+                        <SplideSlide key={index} className='w-auto h-[63.16px] px-2 rounded-[8px] overflow-hidden flex flex-nowrap justify-center items-center bg-[#eee]' style={{
+                            backgroundColor: theme === 'light' ? '#fff' : 'rgba(68, 68, 68, 0.2)',
+                            color: theme === 'light' ? '#222' : '#fff',
+                            boxShadow: theme === 'light' ? '0 5px 4px rgba(0, 0, 0, 0.01)!important' : '0 5px 4px rgba(0, 0, 0, 0.01)!important',
+                        }}>
                             <div className='catalogueImg'>
                                 {mediaUrl.title}
                                 

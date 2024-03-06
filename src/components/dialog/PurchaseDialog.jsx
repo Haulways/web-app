@@ -22,13 +22,17 @@ import { Confirm, Form, FormTab, RadioButtonGroupInput, SaveButton, SelectInput,
 import Medusa from '@medusajs/medusa-js';
 import { toast } from 'react-toastify';
 import { AuthContext } from '../context/AuthContext';
-import { Grid, Stack } from '@mui/material';
+import { CircularProgress, Grid, Stack } from '@mui/material';
 import { useEffect } from 'react';
 import { useContext } from 'react';
 import { PaystackButton } from 'react-paystack';
 import { SmallPHorizontalCards, SmallPHorizontalVariantCards } from '../card/ShowCard';
 import { GetStoreVendor, ListStoreVendors } from '../../pages/post/Post';
 import { useLocation } from 'react-router-dom';
+import { ThemeContext } from '../context/ThemeProvider';
+import { useGetIdentity, useGetOne } from 'react-admin';
+
+
 
 
 
@@ -56,6 +60,9 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
     const [intCart, setIntCart] = useStore("int_carts");
     const [g_cart_id, setGCartID] = useStore("gcart_id");
     const [gcart, setGCart] = React.useState(null);
+    const { data: identity, isLoading: identityLoading } = useGetIdentity();
+
+
 
 
 
@@ -239,7 +246,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
             else {
                 cart_id = await medusa.auth
                     .authenticate({
-                        email: currentUser.email,
+                        email: identity.email,
                         password: import.meta.env.VITE_AUTH_PASSWORD,
                     })
                     .then(async ({ customer }) => {
@@ -627,6 +634,42 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
         redirect(gen_url(location.pathname, ''))
     };
 
+    const renderPaymentButton = (cart, componentProps) => {
+        switch (cart?.payment_session?.provider_id) {
+            case 'paystack': return <PaystackButton
+                {...componentProps}
+                alwaysEnable={
+                    cart &&
+                        cart.shipping_methods &&
+                        cart.payment_session &&
+                        cart.shipping_methods.length > 0
+                        ? false
+                        : true
+                }
+                // fullWidth
+                color="primary"
+                variant="contained"
+                // label="Shipping Option"
+                // onClick={() => {
+                //   // ListShippingOptions(cart);
+                // }}
+                sx={{ color: "#fff" }}
+                disabled={
+                    cart &&
+                        cart.shipping_methods &&
+                        cart.shipping_methods.length > 0 &&
+                        cart.payment_sessions.length > 0 &&
+                        cart.payment_session
+                        ? true
+                        : false
+                }
+            />;
+            default: return <button disabled>
+                Not available
+            </button>
+        }
+    }
+
 
     return (
         <>
@@ -635,410 +678,409 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                 onClose={cancelPayment}
                 PaperProps={{
                     style: {
-                        borderRadius: '20px', padding: '10px', minWidth: '340px', boxShadow: 'none', backgroundColor: theme === "light" ? "#fff" : "rgba(68, 68, 68, 1)", color: theme === "light" ? "#222" : "#fff"
+                        borderRadius: '20px', padding: '10px', minWidth: '340px', boxShadow: 'none', backgroundColor: theme === "light" ? "#fff" : "rgba(68, 68, 68, 1)", color: theme === "light" ? "#222" : "#fff", minHeight: '130px'
                     }
                 }}
                 BackdropProps={{ invisible: true }}
             >
-                <span className='paymet__details--close cursor-pointer' onClick={cancelPayment}>
-                    <CloseIcon sx={{ fontSize: '30px' }} />
-                </span>
-
-                <div className='payment__details'>
-
-
-                    <div className='payment__details--Top'>
-                        <h2>{currentProduct && currentProduct.metadata.store && currentProduct.metadata.store.name ? (currentProduct.metadata.store.name) : (store && store?.name ? (store?.name) : (null))}</h2>
-                        <span className='sold--by'>
-                            <p>Ships and sold by</p>
-                            <span>
-                                {currentProduct && currentProduct.metadata.store && currentProduct.metadata.store.name ? (currentProduct.metadata.store.name) : (store && store?.name ? (store?.name) : (null))}
-                                <img className='ml-[-.2rem] mt-[-.2rem]' src={yellowLine} alt='avenue' />
-                            </span>
-                        </span>
-                    </div>
-
-                    <span className='delivery--location'>
-                        Delivery Location
+                {
+                    cart && cart.id ? (<><span className='paymet__details--close cursor-pointer' onClick={cancelPayment}>
+                        <CloseIcon sx={{ fontSize: '30px' }} />
                     </span>
 
-                    <div className='location' onClick={handleOpenForm}>
-                        <span className='location--name'>
-                            <img className='w-[30px] h-[30px]' src={location} />
-                            <span>
-                                <h3>
-                                    {cart && cart.shipping_address && cart.shipping_address.address_1 ? (`${cart.shipping_address.address_1}`) : ('Not Set')}
-                                </h3>
-                                <p>{`${cart && cart.shipping_address && cart.shipping_address.country_code ? (`${cart.shipping_address.country_code}`) : ('Not Set')}, ${cart && cart.shipping_address && cart.shipping_address.city ? (`${cart.shipping_address.city}`) : ('Not Set')}`}</p>
-                            </span>
-                        </span>
-                        <span>
-                            <ChevronRightIcon className='w-[30px] h-[36px]' />
-                        </span>
-                    </div>
-
-                    <div className='payment--method'>
-                        <h2>Payment Method</h2>
-                        <Form
-                            sx={{
-                                fontWeight: '600',
-                                '& .MuiSelect-select-MuiInputBase-input-MuiFilledInput-input.MuiSelect-select': {
-                                    backgroundColor: "#D9D9D9 !important",
-                                    borderRadius: '6px',
-                                    overflow: 'hidden'
-                                },
-                                '& .MuiSelect-select-MuiInputBase-input-MuiFilledInput-input.MuiSelect-select::before': {
-                                    borderBottom: 'none'
-                                },
-                            }}
-                        >
-                            <RadioButtonGroupInput
-                                sx={{
-                                    display: "flex !important",
-                                    justifyContent: 'space-between !important',
-                                    '& .MuiFormControlLabel-root': {
-                                        display: "flex !important",
-                                        justifyContent: 'space-between !important',
-                                        direction: 'row-reverse !important'
-                                    },
-                                    '& .MuiTypography-root': {
-                                        fontWeight: '600 !important',
-
-                                    }
-                                }}
-                                source="payment_session"
-                                label="Select payment method"
-                                row={false}
-                                choices={
-                                    cart && cart.payment_sessions && cart.shipping_methods
-                                        ? cart.payment_sessions.map((opt) => {
-                                            return {
-                                                id: opt.provider_id,
-                                                name: toTitleCase(opt.provider_id),
-                                            };
-                                        })
-                                        : null
-                                }
-                                onChange={(event, value) => SetPaymentSess(value)}
-                            />
-                        </Form>
-
-                    </div>
+                        <div className='payment__details' >
 
 
-                    {/* Shipping  */}
-                    <div className='free--shipping'>
-                        <span>
-                            <img src={lorry} alt='lorry' />
-
-                            <h2>
-                                Free Shipping
-                            </h2>
-                        </span>
-
-                        <p>
-                            Usually ships within 2-3 business days
-                        </p>
-
-                    </div>
-
-                    {/* Order history  */}
-                    <div className='order--info'>
-                        <h2>
-                            Order Info
-                        </h2>
-
-                        {/* subtotal  */}
-                        <div className="order--summation">
-                            <span className="sum--name">Subtotal</span>
-                            <span className="sum--digit">
-                                <span className="uppercase mr-[3px]">
-                                    {cart && cart.region && cart.region.currency_code}
-                                </span>
-                                {cart && cart.subtotal ? Number((cart.subtotal / 100).toFixed(2)).toLocaleString() : 0}
-                            </span>
-                        </div>
-
-                        {/* shipping cost  */}
-                        <div className="order--summation">
-                            <span className="sum--name">Shopping Cost</span>
-                            <span className="sum--digit">+ $10.00</span>
-                        </div>
-
-                        {/* Total  */}
-                        <div className="order--summation">
-                            <span className="sum--name">Total</span>
-                            <span className="sum--digit text-[16px]">
-                                <span className="uppercase mr-[3px]">
-                                    {cart && cart.region && cart.region.currency_code}
-                                </span>
-                                {cart && cart.total ? Number((cart.total / 100 + (10)).toFixed(2)).toLocaleString() : 0}
-                            </span>
-                        </div>
-                    </div>
-
-                </div>
-
-
-                <div className='flex items-center gap-x-4'>
-                    <div className='product__details--Bottom' >
-                        {cart &&
-                            cart.shipping_address_id &&
-                            cart.shipping_address &&
-                            cart.shipping_methods &&
-                            cart.payment_session &&
-                            cart.shipping_methods.length > 0 ? null : (
-                            <button>
-                                CHECKOUT
-                            </button>
-                        )}
-                        {cart &&
-                            cart.shipping_address_id &&
-                            cart.shipping_address &&
-                            cart.shipping_methods &&
-                            cart.payment_session &&
-                            cart.shipping_methods.length > 0 ? (
-                            <PaystackButton
-                                {...componentProps}
-                                alwaysEnable={
-                                    cart &&
-                                        cart.shipping_methods &&
-                                        cart.payment_session &&
-                                        cart.shipping_methods.length > 0
-                                        ? false
-                                        : true
-                                }
-                                // fullWidth
-                                color="primary"
-                                variant="contained"
-                                // label="Shipping Option"
-                                // onClick={() => {
-                                //   // ListShippingOptions(cart);
-                                // }}
-                                sx={{ color: "#fff" }}
-                                disabled={
-                                    cart &&
-                                        cart.shipping_methods &&
-                                        cart.shipping_methods.length > 0 &&
-                                        cart.payment_sessions.length > 0 &&
-                                        cart.payment_session
-                                        ? true
-                                        : false
-                                }
-                            />
-                        ) : null}
-                    </div>
-                    <div >
-                        <button className='bg-black text-white px-[2rem] py-[1rem] rounded-[20px] text-[14px] font-[500] mt-[1rem]'
-                            onClick={() => { handleRemoveItem(currentProduct.variants[0].id) }}
-                        >
-                            Clear
-                        </button>
-                    </div>
-                </div>
-                <Confirm
-                    isOpen={openShipping}
-                    // loading={isLoading}
-                    // PaperProps={{ style: { borderRadius: '10px' } }}
-                    fullScreen
-                    title=" "
-                    sx={{
-                        '& .MuiDialogContent-root': {
-                            padding: '0px !important'
-                        },
-
-                        '& .MuiToolbar-root': {
-                            backgroundColor: '#fff !important',
-                            borderTop: '1px solid rgba(0, 0, 0, 0.06)'
-                        }
-                    }}
-                    content={
-                        <Stack>
-                            <TabbedForm
-                                toolbar={<AutoSaveToolbar />}
-                                onSubmit={completePayment}
-                                syncWithLocation={true}
-                                sx={{
-                                    '& .MuiFilledInput-root': {
-                                        backgroundColor: "#D9D9D9 !important",
-                                        borderRadius: '6px',
-                                        overflow: 'hidden'
-                                    },
-                                    '& .MuiFilledInput-root::before': {
-                                        borderBottom: 'none'
-                                    },
-                                    '& .MuiTabs-flexContainer': {
-                                        justifyContent: 'center',
-                                        columnGap: '26px'
-                                    },
-                                    '& .MuiTab-root': {
-                                        textTransform: 'capitalize !important',
-                                        border: '2px solid #222',
-                                        borderRadius: "6px",
-                                        color: "#222 ",
-                                        fontSize: '16px',
-                                    },
-                                    "& .Mui-selected": {
-                                        color: "white !important",
-                                        background:
-                                            "#222222 !important",
-                                        borderRadius: "6px",
-
-
-                                    },
-                                    "& .MuiTabs-indicator": {
-                                        background: "none",
-                                        border: "none",
-                                    },
-                                    "& .MuiDivider-root": {
-                                        border: "none",
-                                    },
-                                    '& .MuiInputLabel-root': {
-                                        color: '#7A7A7A',
-                                        fontWeight: '500',
-
-
-                                    },
-                                    '& .MuiFilledInput-input': {
-                                        color: '#333',
-                                        fontWeight: '500'
-                                    },
-                                }}
-
-                            >
-
-                                <FormTab path='address' label="Address Info">
-                                    <span className='delivery-location'>
-                                        Previous
+                            <div className='payment__details--Top'>
+                                <h2>{currentProduct && currentProduct.metadata.store && currentProduct.metadata.store.name ? (currentProduct.metadata.store.name) : (store && store?.name ? (store?.name) : (null))}</h2>
+                                <span className='sold--by'>
+                                    <p>Ships and sold by</p>
+                                    <span>
+                                        {currentProduct && currentProduct.metadata.store && currentProduct.metadata.store.name ? (currentProduct.metadata.store.name) : (store && store?.name ? (store?.name) : (null))}
+                                        <img className='ml-[-.2rem] mt-[-.2rem]' src={yellowLine} alt='avenue' />
                                     </span>
+                                </span>
+                            </div>
 
-                                    <div className='location-part w-full'>
-                                        <span className='location-name'>
-                                            <img className='w-[30px] h-[30px]' src={location} />
-                                            <span>
+                            <span className='delivery--location'>
+                                Delivery Location
+                            </span>
 
-                                                <p className='text-[#222] font-[600] text-[12px]'>Select previous delivery location</p>
-                                            </span>
-                                        </span>
-                                        <span className='cursor-pointer '
+                            <div className='location' onClick={handleOpenForm}>
+                                <span className='location--name'>
+                                    <img className='w-[30px] h-[30px]' src={location} />
+                                    <span>
+                                        <h3>
+                                            {cart && cart.shipping_address && cart.shipping_address.address_1 ? (`${cart.shipping_address.address_1}`) : ('Not Set')}
+                                        </h3>
+                                        <p>{`${cart && cart.shipping_address && cart.shipping_address.country_code ? (`${cart.shipping_address.country_code}`) : ('Not Set')}, ${cart && cart.shipping_address && cart.shipping_address.city ? (`${cart.shipping_address.city}`) : ('Not Set')}`}</p>
+                                    </span>
+                                </span>
+                                <span>
+                                    <ChevronRightIcon className='w-[30px] h-[36px]' />
+                                </span>
+                            </div>
 
-                                        >
-                                            <ExpandMoreIcon className='' width='30px' height='30px' />
-                                        </span>
-                                    </div>
-                                    <div className='text-[14px] text-[#000] font-[600] mt-[30px]'>
-                                        <h2>New Address Info</h2>
-                                    </div>
-                                    <Grid container columnSpacing={1}>
-                                        <Grid item xs={6} md={6}>
-                                            <TextInput
-                                                source="first_name"
-                                                defaultValue={cart && cart.shipping_address ? `${cart.shipping_address.first_name}` : null}
-                                                fullWidth
-                                                variant="outlined"
-                                            />
-                                        </Grid>
-                                        <Grid item xs={6} md={6}>
-                                            <TextInput
-                                                source="last_name"
-                                                defaultValue={cart && cart.shipping_address ? `${cart.shipping_address.last_name}` : null}
-                                                fullWidth
-                                                variant="outlined"
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <TextInput
-                                                source="address_1"
-                                                label="Address"
-                                                variant="outlined"
-                                                defaultValue={cart && cart.shipping_address ? `${cart.shipping_address.address_1}` : null}
-                                                fullWidth
-                                            />
-                                        </Grid>
-                                        <Grid item xs={6} md={6}>
-                                            <TextInput
-                                                source="city"
-                                                variant="outlined"
-                                                defaultValue={cart && cart.shipping_address ? `${cart.shipping_address.city}` : null}
-                                                fullWidth
-                                            />
-                                        </Grid>
-                                        <Grid item xs={6} md={6}>
-                                            <TextInput
-                                                source="province"
-                                                variant="outlined"
-                                                defaultValue={cart && cart.shipping_address ? `${cart.shipping_address.province}` : null}
-                                                fullWidth
-                                            />
-                                        </Grid>
-                                        <Grid item xs={6} md={6}>
-                                            <SelectInput
-                                                source="country_code"
-                                                defaultValue={selectedRegion}
-                                                variant="outlined"
-                                                fullWidth
-                                                onChange={(e) => setSelectedRegion(e.target.value)}
-                                                choices={
-                                                    shipRegs.map((region) => {
-                                                        return {
-                                                            id: region.id,
-                                                            name: region.name,
-                                                        };
-                                                    })
-                                                }
-                                            />
-                                        </Grid>
-                                        <Grid item xs={6} md={6}>
-                                            <TextInput
-                                                source="postal_code"
-                                                variant="outlined"
-                                                defaultValue={cart && cart.shipping_address ? `${cart.shipping_address.postal_code}` : null}
-                                                fullWidth
-                                            />
-                                        </Grid>
-                                        <Grid item xs={6} md={6}>
-                                            <TextInput
-                                                source="email"
-                                                variant="outlined"
-                                                defaultValue={cart && cart.shipping_address ? `${cart.shipping_address.last_name}` : null}
-                                                fullWidth
-                                            />
-                                        </Grid>
-                                        <Grid item xs={6} md={6}>
-                                            <TextInput
-                                                source="phone"
-                                                variant="outlined"
-                                                defaultValue={cart && cart.shipping_address ? `${cart.shipping_address.phone}` : null}
-                                                fullWidth
-                                            />
-                                        </Grid>
-                                    </Grid>
-                                </FormTab>
-                                <FormTab path='shipping' label="Shipping option">
+                            <div className='payment--method'>
+                                <h2>Payment Method</h2>
+                                <Form
+                                    sx={{
+                                        fontWeight: '600',
+                                        '& .MuiSelect-select-MuiInputBase-input-MuiFilledInput-input.MuiSelect-select': {
+                                            backgroundColor: "#D9D9D9 !important",
+                                            borderRadius: '6px',
+                                            overflow: 'hidden'
+                                        },
+                                        '& .MuiSelect-select-MuiInputBase-input-MuiFilledInput-input.MuiSelect-select::before': {
+                                            borderBottom: 'none'
+                                        },
+                                    }}
+                                >
                                     <RadioButtonGroupInput
-                                        source="shipping_option"
+                                        sx={{
+                                            display: "flex !important",
+                                            justifyContent: 'space-between !important',
+                                            '& .MuiFormControlLabel-root': {
+                                                display: "flex !important",
+                                                justifyContent: 'space-between !important',
+                                                direction: 'row-reverse !important'
+                                            },
+                                            '& .MuiTypography-root': {
+                                                fontWeight: '600 !important',
+
+                                            }
+                                        }}
+                                        source="payment_session"
+                                        label="Select payment method"
                                         row={false}
-                                        defaultValue={cart && cart.shipping_methods && cart.shipping_methods.length ? `${cart.shipping_methods[0].shipping_option.id}` : null}
                                         choices={
-                                            shipOpts.length <= 0 && cart && cart.shipping_methods
-                                                ? cart.shipping_methods.map((opt) => {
+                                            cart && cart.payment_sessions && cart.shipping_methods
+                                                ? cart.payment_sessions.map((opt) => {
                                                     return {
-                                                        id: opt.shipping_option.id,
-                                                        name: opt.shipping_option.name,
+                                                        id: opt.provider_id,
+                                                        name: toTitleCase(opt.provider_id),
                                                     };
                                                 })
-                                                : shipOpts
+                                                : null
                                         }
-                                    // validate={required()}
-
+                                        onChange={(event, value) => SetPaymentSess(value)}
+                                        defaultValue={cart && cart?.payment_session && cart?.payment_session?.provider_id ? (cart?.payment_session?.provider_id) : (null)}
                                     />
-                                </FormTab>
-                            </TabbedForm>
-                        </Stack>
-                    }
-                    onConfirm={handleConfirm}
-                    onClose={handleDialogClose}
-                />
+                                </Form>
+
+                            </div>
+
+
+                            {/* Shipping  */}
+                            <div className='free--shipping'>
+                                <span>
+                                    <img src={lorry} alt='lorry' />
+
+                                    <h2>
+                                        Free Shipping
+                                    </h2>
+                                </span>
+
+                                <p>
+                                    Usually ships within 2-3 business days
+                                </p>
+
+                            </div>
+
+                            {/* Order history  */}
+                            <div className='order--info'>
+                                <h2>
+                                    Order Info
+                                </h2>
+
+                                {/* subtotal  */}
+                                <div className="order--summation">
+                                    <span className="sum--name">Subtotal</span>
+                                    <span className="sum--digit">
+                                        <span className="uppercase mr-[3px]">
+                                            {cart && cart.region && cart.region.currency_code}
+                                        </span>
+                                        {cart && cart.subtotal ? Number((cart.subtotal / 100).toFixed(2)).toLocaleString() : 0}
+                                    </span>
+                                </div>
+
+                                {/* shipping cost  */}
+                                <div className="order--summation">
+                                    <span className="sum--name">Shopping Cost</span>
+                                    <span className="sum--digit">+ $10.00</span>
+                                </div>
+
+                                {/* Total  */}
+                                <div className="order--summation">
+                                    <span className="sum--name">Total</span>
+                                    <span className="sum--digit text-[16px]">
+                                        <span className="uppercase mr-[3px]">
+                                            {cart && cart.region && cart.region.currency_code}
+                                        </span>
+                                        {cart && cart.total ? Number((cart.total / 100 + (10)).toFixed(2)).toLocaleString() : 0}
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div className='flex items-center gap-x-4'>
+                            <div className='product__details--Bottom' >
+                                {cart &&
+                                    cart.shipping_address_id &&
+                                    cart.shipping_address &&
+                                    cart.shipping_methods &&
+                                    cart.payment_session &&
+                                    cart.shipping_methods.length > 0 ? null : (
+                                    <button>
+                                        CHECKOUT
+                                    </button>
+                                )}
+                                {cart &&
+                                    cart.shipping_address_id &&
+                                    cart.shipping_address &&
+                                    cart.shipping_methods &&
+                                    cart.payment_session &&
+                                    cart.shipping_methods.length > 0 ? (
+                                    renderPaymentButton(cart, componentProps)
+                                ) : null}
+                            </div>
+                            <div >
+                                <button className='bg-black text-white px-[2rem] py-[1rem] rounded-[20px] text-[14px] font-[500] mt-[1rem]'
+                                    onClick={() => { handleRemoveItem(currentProduct.variants[0].id) }}
+                                >
+                                    Clear
+                                </button>
+                            </div>
+                        </div>
+                        <Confirm
+                            isOpen={openShipping}
+                            // loading={isLoading}
+                            // PaperProps={{ style: { borderRadius: '10px' } }}
+                            fullScreen
+                            title=" "
+                            sx={{
+                                '& .MuiDialogTitle-root, .MuiInputBase-input, .MuiDialogActions-root': {
+                                    background: theme === 'light' ? '#fff' : '#222',
+                                    color: theme === 'light' ? '#222' : '#fff',
+                                },
+                                '& .MuiDialogContent-root': {
+                                    padding: '0px !important',
+                                    background: theme === 'light' ? '#fff' : '#222',
+                                    color: theme === 'light' ? '#222' : '#fff',
+                                },
+
+                                '& .MuiToolbar-root': {
+                                    // backgroundColor: '#fff !important',
+                                    // borderTop: '1px solid rgba(0, 0, 0, 0.06)',
+                                    background: theme === 'light' ? '#fff' : '#222',
+                                    color: theme === 'light' ? '#222' : '#fff',
+                                },
+                                '& .MuiInputBase-root': {
+                                    borderColor: theme === 'light' ? '#222' : '#fff',
+                                },
+                                '& .Mui-selected': {
+                                    borderColor: theme === 'light' ? '#222' : '#fff',
+                                }
+                            }}
+                            content={
+                                <Stack>
+                                    <TabbedForm
+                                        toolbar={<AutoSaveToolbar />}
+                                        onSubmit={completePayment}
+                                        syncWithLocation={true}
+                                        sx={{
+                                            '& .MuiFilledInput-root': {
+                                                backgroundColor: "#D9D9D9 !important",
+                                                borderRadius: '6px',
+                                                overflow: 'hidden'
+                                            },
+                                            '& .MuiFilledInput-root::before': {
+                                                borderBottom: 'none'
+                                            },
+                                            '& .MuiTabs-flexContainer': {
+                                                justifyContent: 'center',
+                                                columnGap: '26px'
+                                            },
+                                            '& .MuiTab-root': {
+                                                textTransform: 'capitalize !important',
+                                                border: '2px solid #222',
+                                                borderRadius: "6px",
+                                                color: "#222 ",
+                                                fontSize: '16px',
+                                            },
+                                            "& .Mui-selected": {
+                                                color: "white !important",
+                                                background:
+                                                    "#222222 !important",
+                                                borderRadius: "6px",
+
+
+                                            },
+                                            "& .MuiTabs-indicator": {
+                                                background: "none",
+                                                border: "none",
+                                            },
+                                            "& .MuiDivider-root": {
+                                                border: "none",
+                                            },
+                                            '& .MuiInputLabel-root': {
+                                                color: '#7A7A7A',
+                                                fontWeight: '500',
+
+
+                                            },
+                                            '& .MuiFilledInput-input': {
+                                                color: '#333',
+                                                fontWeight: '500'
+                                            },
+
+                                            '& .form-tab': {
+                                                background: theme === 'light' ? '#fff' : 'rgba(68, 68, 68, 0.2)',
+                                                boxShadow: theme === 'light' ? '0 5px 4px rgba(0, 0, 0, 0.01)!important;' : '0 5px 4px rgba(0, 0, 0, 0.01)!important',
+                                                color: theme === 'light' ? '#222' : '#fff',
+                                            }
+                                        }}
+
+                                    >
+
+                                        <FormTab path='address' label="Address Info">
+                                            <span className='delivery-location'>
+                                                Previous
+                                            </span>
+
+                                            <div className='location-part w-full'>
+                                                <span className='location-name'>
+                                                    <img className='w-[30px] h-[30px]' src={location} />
+                                                    <span>
+
+                                                        <p className='text-[#222] font-[600] text-[12px]'>Select previous delivery location</p>
+                                                    </span>
+                                                </span>
+                                                <span className='cursor-pointer '
+
+                                                >
+                                                    <ExpandMoreIcon className='' width='30px' height='30px' />
+                                                </span>
+                                            </div>
+                                            <div className='text-[14px] text-[#000] font-[600] mt-[30px]'>
+                                                <h2>New Address Info</h2>
+                                            </div>
+                                            <Grid container columnSpacing={1}>
+                                                <Grid item xs={6} md={6}>
+                                                    <TextInput
+                                                        source="first_name"
+                                                        defaultValue={cart && cart.shipping_address ? `${cart.shipping_address.first_name}` : null}
+                                                        fullWidth
+                                                        variant="outlined"
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={6} md={6}>
+                                                    <TextInput
+                                                        source="last_name"
+                                                        defaultValue={cart && cart.shipping_address ? `${cart.shipping_address.last_name}` : null}
+                                                        fullWidth
+                                                        variant="outlined"
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <TextInput
+                                                        source="address_1"
+                                                        label="Address"
+                                                        variant="outlined"
+                                                        defaultValue={cart && cart.shipping_address ? `${cart.shipping_address.address_1}` : null}
+                                                        fullWidth
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={6} md={6}>
+                                                    <TextInput
+                                                        source="city"
+                                                        variant="outlined"
+                                                        defaultValue={cart && cart.shipping_address ? `${cart.shipping_address.city}` : null}
+                                                        fullWidth
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={6} md={6}>
+                                                    <TextInput
+                                                        source="province"
+                                                        variant="outlined"
+                                                        defaultValue={cart && cart.shipping_address ? `${cart.shipping_address.province}` : null}
+                                                        fullWidth
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={6} md={6}>
+                                                    <SelectInput
+                                                        source="country_code"
+                                                        defaultValue={selectedRegion}
+                                                        variant="outlined"
+                                                        fullWidth
+                                                        onChange={(e) => setSelectedRegion(e.target.value)}
+                                                        choices={
+                                                            shipRegs.map((region) => {
+                                                                return {
+                                                                    id: region.id,
+                                                                    name: region.name,
+                                                                };
+                                                            })
+                                                        }
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={6} md={6}>
+                                                    <TextInput
+                                                        source="postal_code"
+                                                        variant="outlined"
+                                                        defaultValue={cart && cart.shipping_address ? `${cart.shipping_address.postal_code}` : null}
+                                                        fullWidth
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={6} md={6}>
+                                                    <TextInput
+                                                        source="email"
+                                                        variant="outlined"
+                                                        defaultValue={cart && cart.shipping_address ? `${cart.shipping_address.last_name}` : null}
+                                                        fullWidth
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={6} md={6}>
+                                                    <TextInput
+                                                        source="phone"
+                                                        variant="outlined"
+                                                        defaultValue={cart && cart.shipping_address ? `${cart.shipping_address.phone}` : null}
+                                                        fullWidth
+                                                    />
+                                                </Grid>
+                                            </Grid>
+                                        </FormTab>
+                                        <FormTab path='shipping' label="Shipping option">
+                                            <RadioButtonGroupInput
+                                                source="shipping_option"
+                                                row={false}
+                                                defaultValue={cart && cart.shipping_methods && cart.shipping_methods.length ? `${cart.shipping_methods[0].shipping_option.id}` : null}
+                                                choices={
+                                                    shipOpts.length <= 0 && cart && cart.shipping_methods
+                                                        ? cart.shipping_methods.map((opt) => {
+                                                            return {
+                                                                id: opt.shipping_option.id,
+                                                                name: opt.shipping_option.name,
+                                                            };
+                                                        })
+                                                        : shipOpts
+                                                }
+                                            // validate={required()}
+
+                                            />
+                                        </FormTab>
+                                    </TabbedForm>
+                                </Stack>
+                            }
+                            onConfirm={handleConfirm}
+                            onClose={handleDialogClose}
+                        /></>) : (<div className='spinner justify-center items-center flex my-0 mx-0'>
+
+                            <CircularProgress sx={{ filter: theme === "light" ? "invert(0)" : "invert(1)" }} />
+                        </div>)
+                }
 
             </Dialog>
         </>
@@ -1160,6 +1202,8 @@ export const PurchaseDialog = ({ openPurchase, handleClosePurchase, handleCloseP
     const { pathname } = useLocation();
     const redirect = useRedirect();
     const [intCart, setIntCart] = useStore("int_carts");
+    const { data: identity, isLoading: identityLoading } = useGetIdentity();
+    
 
     const convertToDecimal = (amount) => {
         return Math.floor(amount) / 100
@@ -1177,7 +1221,7 @@ export const PurchaseDialog = ({ openPurchase, handleClosePurchase, handleCloseP
 
         medusa.auth
             .authenticate({
-                email: currentUser.email,
+                email: identity.email,
                 password: import.meta.env.VITE_AUTH_PASSWORD,
             })
             .then(({ customer }) => {
@@ -1229,7 +1273,7 @@ export const PurchaseDialog = ({ openPurchase, handleClosePurchase, handleCloseP
             else {
                 cart_id = await medusa.auth
                     .authenticate({
-                        email: currentUser.email,
+                        email: identity.email,
                         password: import.meta.env.VITE_AUTH_PASSWORD,
                     })
                     .then(async ({ customer }) => {

@@ -1,12 +1,12 @@
-import {  Create,  InfiniteList, Show } from 'react-admin';
-import {  HaulsListActions } from './_HaulsActions';
+import { Create, InfiniteList, Show } from 'react-admin';
+import { HaulsListActions } from './_HaulsActions';
 import { HaulsListContents } from './__haulsListContent';
 import { CreatePost } from '../../../../components';
 import { HaulsShowContent } from './_HaulsContent';
 
 
 
- 
+
 export const HaulsList = () => {
     return (
         <>
@@ -16,6 +16,7 @@ export const HaulsList = () => {
                         minHeight: '0px !important'
                     }
                 }}
+                queryOptions={{ refetchInterval: 5000 }}
             >
                 <HaulsListContents />
             </InfiniteList>
@@ -24,17 +25,17 @@ export const HaulsList = () => {
 };
 
 
-export const HaulsCreate = () => { 
+export const HaulsCreate = () => {
     return (
- 
+
         <Create >
-            <CreatePost title='Hauls' collectionName="hauls"/>
+            <CreatePost title='Hauls' collectionName="hauls" />
         </Create>
     )
 };
 
 export const HaulsEdit = () => (
- 
+
     <>
     </>
 );

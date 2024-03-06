@@ -12,6 +12,7 @@ import Medusa from '@medusajs/medusa-js';
 import { AuthContext } from '../../../components/context/AuthContext';
 import { current } from '@reduxjs/toolkit';
 import { authProvider } from '../../../supabase/authProvider';
+import { useGetIdentity, useGetOne } from 'react-admin';
 
 // authProvider.getIdentity().then(data => setCurrentUser(data));
 
@@ -39,6 +40,7 @@ const Fashion = () => {
     "product",
     // { filter: { store_id: store?.id }, },
   );
+  const { data: identity, isLoading: identityLoading } = useGetIdentity();
 
   const { data: vendors } = useGetList(
     "users",
@@ -46,11 +48,11 @@ const Fashion = () => {
   );
 
   React.useEffect(() => {
-    console.log(g_user)
-    if (g_user) {
+    console.log(identity)
+    if (identity) {
       medusa.auth
         .authenticate({
-          email: g_user.email,
+          email: identity.email,
           password: import.meta.env.VITE_AUTH_PASSWORD,
         })
         .then(({ customer }) => {
@@ -68,7 +70,7 @@ const Fashion = () => {
         });
     }
 
-  }, []);
+  }, [identity]);
 
   React.useEffect(() => {
     if (input) {

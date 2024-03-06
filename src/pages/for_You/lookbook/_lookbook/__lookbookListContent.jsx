@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from "uuid";
 import { supabase } from '../../../../supabase/SupabaseConfig';
 import NewMeetingForm from '../../../../components/LiveComponents/joinForm/JoinForm';
 import { ThemeContext } from '../../../../components/context/ThemeProvider';
+import { useGetIdentity, useGetOne } from 'react-admin';
 
 
 export const LookBookListContents = () => {
@@ -37,6 +38,7 @@ export const LookBookListContents = () => {
     const [input, setInput] = React.useState('');
     const [result, setResult] = React.useState([]);
     const { theme } = React.useContext(ThemeContext);
+    const { data: identity, isLoading: identityLoading } = useGetIdentity();
 
     React.useEffect(() => {
         if (input.length > 0 && input.trim() !== '') {
@@ -90,7 +92,7 @@ export const LookBookListContents = () => {
             await supabase
                 .from('liveStream')
                 .update({ hls: false })
-                .match({ created_by_id: currentUser.id, created_by_name: currentUser.displayName, URL: pathname })
+                .match({ created_by_id: identity.id, created_by_name: identity.displayName, URL: pathname })
                 .select();
             try {
                 const lock = false; // set to true to disallow rejoins
@@ -156,7 +158,7 @@ export const LookBookListContents = () => {
 
 
     const createRoom = async () => {
-        if (currentUser) {
+        if (identity) {
 
 
             const url = "https://api.100ms.live/v2/rooms";
@@ -167,7 +169,7 @@ export const LookBookListContents = () => {
 
             // Define the request body
             const body = JSON.stringify({
-                "name": `${currentUser?.id}`,
+                "name": `${identity?.id}`,
                 "description": "Live Streaming and conferencing",
                 "template_id": `65b50d50cd666ed1654e2184`,
             });
@@ -248,8 +250,8 @@ export const LookBookListContents = () => {
     // }, [rooms]);
 
     const createStream = async () => {
-        if (!currentUser) {
-            console.error('currentUser is not defined');
+        if (!identity) {
+            console.error('identity is not defined');
             return;
         }
 
@@ -257,8 +259,8 @@ export const LookBookListContents = () => {
             const { data, error: existingStream } = await supabase
                 .from("liveStream")
                 .select("*")
-                .eq('created_by_id', currentUser.id)
-                .eq('created_by_name', currentUser.displayName)
+                .eq('created_by_id', identity.id)
+                .eq('created_by_name', identity.displayName)
                 .eq('URL', pathname);
 
             if (existingStream) throw existingStream;
@@ -284,9 +286,9 @@ export const LookBookListContents = () => {
                         cohost_code: cohost.code,
                         viewer_code: viewer.code,
                         room_id: room.id,
-                        created_by_id: currentUser.id,
-                        created_by_photoURL: currentUser.photoURL,
-                        created_by_name: currentUser.displayName,
+                        created_by_id: identity.id,
+                        created_by_photoURL: identity.photoURL,
+                        created_by_name: identity.displayName,
                     });
 
                 if (streamError) throw streamError;
@@ -454,10 +456,10 @@ export const LookBookListContents = () => {
 
                 <DFooter />
                 {isConnected ? (
-                    <LiveScreenDialog currentUser={currentUser} open={openAsce} broadcasterImg={broadcasterImg} broadcasterData={broadcasterData} handleClose={CloseAcseLive} room_id={room?.id} rooms={rooms} />
+                    <LiveScreenDialog currentUser={identity} open={openAsce} broadcasterImg={broadcasterImg} broadcasterData={broadcasterData} handleClose={CloseAcseLive} room_id={room?.id} rooms={rooms} />
                 ) : (
 
-                    <NewMeetingForm open={openLive} isConnected={isConnected} currentUser={currentUser} broadcaster={broadcaster?.code} room_id={room?.id} handleClose={handleCloseLive} pathname={pathname} />
+                    <NewMeetingForm open={openLive} isConnected={isConnected} currentUser={identity} broadcaster={broadcaster?.code} room_id={room?.id} handleClose={handleCloseLive} pathname={pathname} />
                 )}
 
             </div>

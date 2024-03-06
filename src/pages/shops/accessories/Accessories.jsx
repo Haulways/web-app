@@ -10,6 +10,7 @@ import "@splidejs/splide/dist/css/splide.min.css";
 import { VideoPlay } from "../../../components/videoPlayer/VideoPlayer";
 import Medusa from '@medusajs/medusa-js';
 import { AuthContext } from '../../../components/context/AuthContext';
+import { useGetIdentity, useGetOne } from 'react-admin';
 
 
 
@@ -28,12 +29,13 @@ const Accessories = () => {
   const [cart_id, setCartID] = useStore("cart_id");
   const [cart, setCart] = React.useState(null);
   const [region, setRegion] = React.useState(null);
+  const { data: identity, isLoading: identityLoading } = useGetIdentity();
 
   React.useEffect(() => {
-    if (currentUser) {
+    if (identity) {
       medusa.auth
         .authenticate({
-          email: currentUser.email,
+          email: identity.email,
           password: import.meta.env.VITE_AUTH_PASSWORD,
         })
         .then(({ customer }) => {

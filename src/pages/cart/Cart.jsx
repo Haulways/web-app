@@ -17,6 +17,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useEffect } from 'react';
 import { DFooter } from '../../components';
 import { ThemeContext } from '../../components/context/ThemeProvider';
+import { useGetIdentity, useGetOne } from 'react-admin';
+
 
 
 
@@ -46,6 +48,7 @@ const Cart = () => {
     const [expanded, setExpanded] = React.useState(false);
     const location = useLocation()
     const redirect = useRedirect();
+    const { data: identity, isLoading: identityLoading } = useGetIdentity();
 
     const handleChange = (panel, cart) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
@@ -54,18 +57,33 @@ const Cart = () => {
     };
 
 
+    React.useEffect(() => {
+        if (identity) {
+            medusa.auth
+                .authenticate({
+                    email: identity.email,
+                    password: import.meta.env.VITE_AUTH_PASSWORD,
+                })
+                .then(({ customer }) => {
+                    setCustData(customer);
 
+                });
+        }
+
+
+    }, [identity]);
 
 
     useEffect(() => {
         LoadCarts();
-    }, [intCart])
+    }, [intCart, cart])
 
     useEffect(() => {
         if (cart_id) {
-            medusa.carts.retrieve(cart_id).then(({ cart }) => {
-                setCart(cart)
-            });
+            // medusa.carts.retrieve(cart_id).then(({ cart }) => {
+            //     setCart(cart)
+            // });
+            LoadCarts();
         }
 
     }, [cart_id])
@@ -86,8 +104,17 @@ const Cart = () => {
     useEffect(() => {
         if (cart) {
             console.log(cart);
+            // LoadCarts();
         }
     }, [cart]);
+
+    useEffect(() => {
+        if (carts) {
+            setCart(carts.filter((crt) => {
+                return crt.id === cart_id;
+            })[0])
+        }
+    }, [carts]);
 
     useEffect(() => {
         if (
@@ -340,8 +367,8 @@ const Cart = () => {
                     sx={{
                         textTransform: 'capitalize'
                     }}
-                    color="primary" 
-                    label={cart && cart.shipping_address_id && cart.shipping_address ? ('Update') : ('Add new shipping option')} 
+                    color="primary"
+                    label={cart && cart.shipping_address_id && cart.shipping_address ? ('Update') : ('Add new shipping option')}
                     icon=' '
 
 
@@ -465,7 +492,10 @@ const Cart = () => {
                             return cart ? (
                                 <>
                                     {cart && cart.items && cart.items.length > 0 ? (
-                                        <Accordion className='cart--accordian before:h-0 ' sx={{ boxShadow: '0px 1px 0px 0px rgba(0, 0, 0, 0.1), 0px 1px 0px 0px rgba(0, 0, 0, 0.019)', margin: '0 -10px' }} expanded={expanded === 'panel1'} onChange={handleChange('panel1', cart)} >
+                                        <Accordion className='cart--accordian before:h-0 ' sx={{
+                                            boxShadow: '0px 1px 0px 0px rgba(0, 0, 0, 0.1), 0px 1px 0px 0px rgba(0, 0, 0, 0.019)', margin: '0 -10px', backgroundColor: theme === 'light' ? '#fff' : '#222',
+                                            color: theme === 'light' ? '#222' : '#fff',
+                                        }} expanded={expanded === 'panel1'} onChange={handleChange('panel1', cart)} >
                                             <AccordionSummary className='border-y-[1px] border-solid mb-[10px] border-[#D9D9D9]'
                                                 expandIcon={<img className='h-[10px]' src={cartIcon} alt="expand" />}
                                                 aria-controls="panel1a-content"
@@ -529,14 +559,27 @@ const Cart = () => {
                     fullScreen
                     title=" "
                     sx={{
+                        '& .MuiDialogTitle-root, .MuiInputBase-input, .MuiDialogActions-root': {
+                            background: theme === 'light' ? '#fff' : '#222',
+                            color: theme === 'light' ? '#222' : '#fff',
+                        },
                         '& .MuiDialogContent-root': {
-                            padding: '0px !important'
+                            padding: '0px !important',
+                            background: theme === 'light' ? '#fff' : '#222',
+                            color: theme === 'light' ? '#222' : '#fff',
                         },
 
                         '& .MuiToolbar-root': {
-                            backgroundColor: '#fff !important',
-                            borderTop: '1px solid rgba(0, 0, 0, 0.06)'
+                            // backgroundColor: '#fff !important',
+                            borderTop: '1px solid rgba(0, 0, 0, 0.06)',
+                            background: theme === 'light' ? '#fff' : '#222',
+                            color: theme === 'light' ? '#222' : '#fff',
+                        },
+                        '& .MuiInputBase-root': {
+                            borderColor: theme === 'light' ? '#222' : '#fff',
                         }
+
+
                     }}
                     content={
                         <Stack>
@@ -592,6 +635,8 @@ const Cart = () => {
                                         color: '#333',
                                         fontWeight: '500'
                                     },
+                                    backgroundColor: theme === 'light' ? '#fff' : '#222',
+                                    color: theme === 'light' ? '#222' : '#fff',
                                 }}
 
                             >

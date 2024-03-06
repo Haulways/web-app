@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import AnimationContext from './components/animateContext/AnimationContext';
 import { AuthContext } from "./components/context/AuthContext";
 import { Home, SignIn, SignUp, Reset, ChatList, Hauls, Lookbook, DIY, GRWM, Search, Cart, OrderHistory, Vendors, Store, ResetPage, Contract, Influencers, InfluencerStore, InfluencerViewAll, SkillCenter, SkillViewAll, LoginScreen, SignupScreen, ResetScreen, ResetScreenPage, Downloads, History, AdStat, AdSetting, Accessories, Fashion, Beauty, Footwear, Jewelry, Others } from "./pages";
-import { Admin, Authenticated, CustomRoutes, Resource, } from 'react-admin';
+import { Admin, Authenticated, CustomRoutes, Resource, useGetIdentity, useStore, } from 'react-admin';
 import { MyLayout } from "./components/layout/MyLayout";
 import { PostCreate, PostEdit, PostList, PostShow } from "./pages/post/_Post/_Post";
 import { MyDashboard } from "./pages/dashboard/Dashboard";
@@ -22,6 +22,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { CartProvider, MedusaProvider, } from "medusa-react";
 import { StoreCreate, StoreEdit, StoreList, StoreShow } from "./pages/store/_Store";
 import { ProductCreate, ProductEdit, ProductList, ProductShow } from "./pages/product/_Product";
+import { OrderCreate, OrderEdit, OrderList, OrderShow } from "./pages/orders/_Order";
 import Settings from "./components/profile/Settings";
 import { ContractCreate, ContractEdit, ContractList, ContractShow } from "./pages/contract/_Contract";
 import { CreateAd, OnboardScreen } from "./components";
@@ -37,11 +38,15 @@ import { AdCreate, AdEdit, AdList, AdShow } from "./pages/ads/AdList";
 
 
 
-const queryClient = new QueryClient()
+
 
 function App() {
 	const [isAnimationActive, setAnimationActive] = React.useState(false);
-	// const { currentUser } = useContext(AuthContext);
+	const { currentUser } = useContext(AuthContext);
+	const [g_user, setG_User] = useStore("user");
+	// const { identity, isLoading: identityLoading } = useGetIdentity();
+	const queryClient = new QueryClient()
+
 	// const channelName = 'room1';
 
 	// Use the custom hook to get real-time updates
@@ -95,6 +100,7 @@ function App() {
 								layout={MyLayout}
 								dashboard={MyDashboard}
 								loginPage={LoginScreen}
+								// queryClient={queryClient}
 							>
 								<Resource
 									name="posts"
@@ -151,6 +157,13 @@ function App() {
 									edit={StoreEdit}
 									show={StoreShow}
 									create={StoreCreate}
+								/>
+								<Resource
+									name="order"
+									list={OrderList}
+									edit={OrderEdit}
+									show={OrderShow}
+									create={OrderCreate}
 								/>
 								<Resource
 									name="contract"
