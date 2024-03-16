@@ -725,6 +725,96 @@ export const SmallPHorizontalCards = ({ post }) => {
     );
 };
 
+export const SmallHorizontalMediaCards = ({ post, setPost }) => {
+    const slider1 = React.useRef();
+    const slider2 = React.useRef();
+  
+    React.useEffect(() => {
+      slider1.current.sync(slider2.current.splide);
+    //   slider2.current.sync(slider1.current.splide);
+    }, [slider1, slider2]);
+
+    const thumbnailCarouselOptions = {
+        type: 'slide',
+        fixedWidth: 60.16,
+        fixedHeight: 63.16,
+        isNavigation: true,
+        pagination: false,
+        gap: 5,
+        drag: 'free',
+        snap: false,
+        perPage: 3,
+        pauseOnHover: false,
+        arrows: false,
+        direction:'ttb',
+        height: '70vw',
+        autoHeight: true
+        // focus: slideFocus
+    };
+
+    const bigThumbnailCarouselOptions = {
+        type: 'slide',
+        // fixedWidth: 100,
+        isNavigation: true,
+        pagination: false,
+        gap: 5,
+        drag: 'free',
+        snap: true,
+        perPage: 1,
+        pauseOnHover: false,
+        arrows: false,
+        // focus: slideFocus
+    };
+
+    
+
+
+
+    return (
+        <div className='catalogue__container mx-auto flex flex-row-reverse' >
+                
+            <Splide id="thumbnail-carousel" className='catalogue__container__big' options={bigThumbnailCarouselOptions} ref={slider1}>
+
+                {Array.isArray(post) && post.slice(0, 4).map((mediaUrl, index) => {
+                    const isImage = mediaUrl.media[0].includes('.jpg') || mediaUrl.media[0].includes('.jpeg') || mediaUrl.media[0].includes('.png');
+                    return (
+                        <SplideSlide key={index} className='w-full h-full rounded-[8px] overflow-hidden border'>
+                            <div className='catalogueImg'>
+                                {isImage ? (
+                                    <img src={mediaUrl.media[0]} alt={mediaUrl.id} className="w-full h-full object-cover" style={{height: '70vw'}} />
+                                ) : (
+                                    <video src={mediaUrl.media[0]} alt={mediaUrl.id} muted controls={true} playsInline={true} controlsList="nodownload" />
+                                )}
+                            </div>
+                        </SplideSlide>
+                    );
+                })}
+                    
+            </Splide>
+            <div className='px-[1px]'></div>
+            <Splide id="thumbnail-carousel mr-2" options={thumbnailCarouselOptions} ref={slider2 }>
+
+                {Array.isArray(post) && post.slice(0, 7).map((mediaUrl, index) => {
+                    const isImage = mediaUrl.media[0].includes('.jpg') || mediaUrl.media[0].includes('.jpeg') || mediaUrl.media[0].includes('.png');
+                    return (
+                        <SplideSlide key={index} className='w-[60.16px] h-[63.16px] rounded-[8px] overflow-hidden'>
+                            <div className='catalogueImg' onClick={()=>{setPost(mediaUrl)}}>
+                                {isImage ? (
+                                    <img src={mediaUrl.media[0]} alt={mediaUrl.id} />
+                                ) : (
+                                    <video src={mediaUrl.media[0]} alt={mediaUrl.id} muted controls={false} playsInline={true} controlsList="nodownload" />
+                                )}
+                            </div>
+                        </SplideSlide>
+                    );
+                })}
+                    
+            </Splide>
+                        
+        </div>
+    );
+};
+
 export const SmallPHorizontalVariantCards = ({ post }) => {
     const { theme } = React.useContext(ThemeContext);
 

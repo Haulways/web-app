@@ -52,6 +52,7 @@ const Store = () => {
 		"product",
 		{ filter: { store_id: store?.id }, },
 	);
+	
 	const { data: identity, isLoading: identityLoading } = useGetIdentity();
 
 	React.useEffect(() => {

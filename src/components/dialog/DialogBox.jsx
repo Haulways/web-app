@@ -748,6 +748,7 @@ const Recommended = ({ index, postItem, data, handleClose, currentUser, recommen
 
     useEffect(()=>{
         if(prods_final && prods_final.length){
+            console.log(prods_final)
             setProds(prods_final)
             // toast.success('Updated')
         }

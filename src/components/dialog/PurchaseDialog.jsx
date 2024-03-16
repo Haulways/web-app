@@ -39,10 +39,10 @@ import { supabase } from '../../supabase/SupabaseConfig';
 
 
 
-// const medusa = new Medusa({
-//     maxRetries: 3,
-//     baseUrl: "https://ecommerce.haulway.co",
-// });
+const medusa = new Medusa({
+    maxRetries: 3,
+    baseUrl: "https://ecommerce.haulway.co",
+});
 
 const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentProduct, cart, cart_id, setCartID, setCart, custData, setCustData, theme }) => {
     const { currentUser, medusa } = useContext(AuthContext);
@@ -245,7 +245,11 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                 cart_id = intCart[product.metadata.store.id];
             }
             else {
-                cart_id = await medusa.customers.retrieve()
+                cart_id = await medusa.auth
+                    .authenticate({
+                        email: identity.email,
+                        password: import.meta.env.VITE_AUTH_PASSWORD,
+                    })
                     .then(async ({ customer }) => {
                         if (!cart_id || cart_id === '') {
                             return await medusa.carts.create().then(async ({ cart }) => {
@@ -1330,7 +1334,11 @@ export const PurchaseDialog = ({ openPurchase, handleClosePurchase, handleCloseP
             }
             else {
 
-                cart_id = await medusa.customers.retrieve()
+                cart_id = await medusa.auth
+                    .authenticate({
+                        email: identity.email,
+                        password: import.meta.env.VITE_AUTH_PASSWORD,
+                    })
                     .then(async ({ customer }) => {
                         if (!cart_id || cart_id === '') {
                             return await medusa.carts.create().then(async ({ cart }) => {
