@@ -13,7 +13,7 @@ import { useState } from 'react';
 import { MusicTag } from '../musicTag/MusicTag';
 
 
-const PostVideoEditor = ({ openEditor, handleCloseEditor, selectedfiles, activeFile, collectionName, setSelectedFiles, theme }) => {
+const PostVideoEditor = ({ openEditor, handleCloseEditor, selectedfiles, activeFile, collectionName, setSelectedFiles, theme, selectedFilesBlobs, setSelectedFilesBlobs, }) => {
   const [openTagProduct, setOpenTagProduct] = React.useState(false);
   const [openMusicTag, setOpenMusicTag] = React.useState(false);
   const [showTagProduct, setShowTagProduct] = React.useState(true);
@@ -44,7 +44,7 @@ const PostVideoEditor = ({ openEditor, handleCloseEditor, selectedfiles, activeF
   const closeMusicTag = () => {
     setOpenMusicTag(false);
   }
- 
+
 
   return (
     <Dialog
@@ -55,59 +55,59 @@ const PostVideoEditor = ({ openEditor, handleCloseEditor, selectedfiles, activeF
 
     >
       <button className='absolute top-4 left-2 h-[25px] w-[25px] z-[2000]' onClick={handleCloseEditor}>
-        <img src={backIcon} alt='back' style={{filter: theme === "light" ? "invert(0)" : "invert(1)" }}/>
+        <img src={backIcon} alt='back' style={{ filter: theme === "light" ? "invert(0)" : "invert(1)" }} />
       </button>
 
       <div className='w-full absolute top-4 right-2 '>
-      <ul className='flex items-center gap-x-[20px] justify-end edit---icons'>
-        <li className='tag--icon'>
-          <img src={addTag} alt='tag' className='w-[30px] h-[30px] flex-shrink-0' onClick={() => handleClick('tag')} style={{filter: theme === "light" ? "invert(0)" : "invert(1)" }}/>
-          {visibleTooltip === 'tag' && (
-            <div className='tag--icon--text cursor-pointer' onClick={handleOpenTag}>
-              <span className='flex items-center gap-x-[4px]'>
-                Tag Product
-                <img src={tag} alt='tag' />
-              </span>
-            </div>
-          )}
-        </li>
+        <ul className='flex items-center gap-x-[20px] justify-end edit---icons'>
+          <li className='tag--icon'>
+            <img src={addTag} alt='tag' className='w-[30px] h-[30px] flex-shrink-0' onClick={() => handleClick('tag')} style={{ filter: theme === "light" ? "invert(0)" : "invert(1)" }} />
+            {visibleTooltip === 'tag' && (
+              <div className='tag--icon--text cursor-pointer' onClick={handleOpenTag}>
+                <span className='flex items-center gap-x-[4px]'>
+                  Tag Product
+                  <img src={tag} alt='tag' />
+                </span>
+              </div>
+            )}
+          </li>
 
-        <li className='frame--icon'>
-          <img src={Frame} alt='text' className='w-[30px] h-[30px] flex-shrink-0' onClick={() => handleClick('frame')} style={{filter: theme === "light" ? "invert(0)" : "invert(1)" }}/>
-          {visibleTooltip === 'frame' && (
-            <div className='frame--icon--text cursor-pointer'>
-              <span className='flex items-center gap-x-[4px] justify-center'>
-                Add Frame
-              </span>
-            </div>
-          )}
-        </li>
+          {/* <li className='frame--icon'>
+            <img src={Frame} alt='text' className='w-[30px] h-[30px] flex-shrink-0' onClick={() => handleClick('frame')} style={{ filter: theme === "light" ? "invert(0)" : "invert(1)" }} />
+            {visibleTooltip === 'frame' && (
+              <div className='frame--icon--text cursor-pointer'>
+                <span className='flex items-center gap-x-[4px] justify-center'>
+                  Add Frame
+                </span>
+              </div>
+            )}
+          </li>
 
-        <li className='text--icon'>
-          <img src={Text} alt='audio' className='w-[30px] h-[30px] flex-shrink-0' onClick={() => handleClick('text')} style={{filter: theme === "light" ? "invert(0)" : "invert(1)" }}/>
-          {visibleTooltip === 'text' && (
-            <div className='text--icon--text cursor-pointer'>
-              <span className='flex items-center gap-x-[4px] justify-center'>
-                Add Text
-              </span>
-            </div>
-          )}
-        </li>
+          <li className='text--icon'>
+            <img src={Text} alt='audio' className='w-[30px] h-[30px] flex-shrink-0' onClick={() => handleClick('text')} style={{ filter: theme === "light" ? "invert(0)" : "invert(1)" }} />
+            {visibleTooltip === 'text' && (
+              <div className='text--icon--text cursor-pointer'>
+                <span className='flex items-center gap-x-[4px] justify-center'>
+                  Add Text
+                </span>
+              </div>
+            )}
+          </li> */}
 
-        <li className='music--icon'>
-          <img src={Audio} alt='frame' className='w-[30px] h-[30px] flex-shrink-0' onClick={() => handleClick('music')} style={{filter: theme === "light" ? "invert(0)" : "invert(1)" }}/>
-          {visibleTooltip === 'music' && (
+          <li className='music--icon'>
+            <img src={Audio} alt='frame' className='w-[30px] h-[30px] flex-shrink-0' onClick={() => handleClick('music')} style={{ filter: theme === "light" ? "invert(0)" : "invert(1)" }} />
+            {visibleTooltip === 'music' && (
               <div className='music--icon--text  cursor-pointer' onClick={handleOpenMusicTag}>
-              <span className='flex items-center gap-x-[4px]'>
+                <span className='flex items-center gap-x-[4px]'>
                   Tag Song
                   <img src={music} alt='music' />
-              </span>
-            </div>
-          )}
-        </li>
-      </ul>
-    </div>
-      
+                </span>
+              </div>
+            )}
+          </li>
+        </ul>
+      </div>
+
       <div className='px-[1rem]'>
         <VideoTrimmer
           selectedfiles={selectedfiles}
@@ -116,6 +116,8 @@ const PostVideoEditor = ({ openEditor, handleCloseEditor, selectedfiles, activeF
           taggedData={taggedData}
           setSelectedFiles={setSelectedFiles}
           theme={theme}
+          selectedFilesBlobs={selectedFilesBlobs}
+          setSelectedFilesBlobs={setSelectedFilesBlobs}
         />
       </div>
 

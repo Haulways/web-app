@@ -175,7 +175,6 @@ const AddDiscount = ({ show, close }: AddDiscountProps) => {
       });
     setIsSubmitting(false);
   });
-  console.log("regions", regions);
 
   useEffect(() => {
     setValue(FieldsName.REGIONS, selectedRegions);

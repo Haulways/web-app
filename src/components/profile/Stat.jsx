@@ -129,7 +129,7 @@ export const InfluencerStat = () => {
         <>
             <div className='feed--page'>
                 <UserStat />
-                <div className=' flex overflow-x-scroll store__card  gap-x-6 pt-[1rem] pb-[5px] px-[.5rem]'>
+                <div className=' flex overflow-x-scroll store__card  gap-x-6 pt-[1rem] pb-[5px] px-[.5rem] w-[90vw]'>
 
                     <TotalViews />
                     <Partnership  />

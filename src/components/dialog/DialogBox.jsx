@@ -40,7 +40,7 @@ import { CheckSavedPost, GetFullProdData } from "../../pages/post/Post";
 
 
 
-export const FullScreenDialog = ({ liked, open, handleClose, post, currentUser, toggleLike, savePost, likes2, cart, products }) => {
+export const FullScreenDialog = ({ liked, open, handleClose, post, currentUser, toggleLike, savePost, likes2, cart, products, poster_data }) => {
     const [currentMediaUrl, setCurrentMediaUrl] = useState(null);
     const [openCard, setOpenCard] = React.useState(false);
     const [openActions, setOpenActions] = React.useState(true);
@@ -662,6 +662,7 @@ export const FullScreenDialog = ({ liked, open, handleClose, post, currentUser, 
                                                 isImage={isImage}
                                                 mediaUrl={initialPost.media[0]}
                                                 product={currentMediaUrl}
+                                                poster_data={poster_data}
                                             />
                                             {Aditem?.post_id === initialPost?.id && <div className="fixed bottom-[2rem] left-[1rem] bg-[#fff] bg-opacity-50 text-[10px] px-[.6rem] py-[0.2rem] rounded-full">Sponsored</div>}
                                         </div>
@@ -748,7 +749,7 @@ const Recommended = ({ index, postItem, data, handleClose, currentUser, recommen
     useEffect(()=>{
         if(prods_final && prods_final.length){
             setProds(prods_final)
-            toast.success('Updated')
+            // toast.success('Updated')
         }
     },[prods_final])
 

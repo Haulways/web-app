@@ -12,12 +12,15 @@ import IG from "../../assets/socials/ig.png";
 import { GetStoreVendor } from '../post/Post';
 import { useGetIdentity, useGetOne } from 'react-admin';
 import ProductShow from '../products/ProductShow';
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 
-const medusa = new Medusa({
-	maxRetries: 3,
-	baseUrl: "https://ecommerce.haulway.co",
-});
+
+// const medusa = new Medusa({
+// 	maxRetries: 3,
+// 	baseUrl: "https://ecommerce.haulway.co",
+// });
 
 
 
@@ -28,7 +31,7 @@ const SProduct = () => {
 	const { theme } = React.useContext(ThemeContext);
 	const [selectedTab, setSelectedTab] = React.useState("related");
 	let navigate = useNavigate();
-	const { currentUser } = React.useContext(AuthContext)
+	const { currentUser, medusa } = React.useContext(AuthContext)
 	const [custData, setCustData] = React.useState(null);
 	const [products, setProducts] = React.useState(null);
 	const [cart_id, setCartID] = useStore("cart_id");
@@ -37,14 +40,11 @@ const SProduct = () => {
 	const [g_user, setG_User] = useStore("user");
 	const { store, vendor, vendorAcc, loading2, error2 } = GetStoreVendor(record?.store_id);
 	const { data: identity, isLoading: identityLoading } = useGetIdentity();
+	const [filteredData, setFilteredData] = useState(null)
 
 	React.useEffect(() => {
-		if (identity) {
-			medusa.auth
-				.authenticate({
-					email: identity.email,
-					password: import.meta.env.VITE_AUTH_PASSWORD,
-				})
+		if (medusa) {
+			medusa.customers.retrieve()
 				.then(({ customer }) => {
 					setCustData(customer);
 					if (!cart_id) {
@@ -61,7 +61,7 @@ const SProduct = () => {
 		}
 
 
-	}, [identity]);
+	}, [medusa]);
 
 
 
@@ -83,7 +83,7 @@ const SProduct = () => {
 			//
 			medusa.products.retrieve(id, { expand: 'store, sales_channels' })
 				.then(({ product }) => {
-					console.log({...product})
+					console.log({ ...product })
 					setProduct({ ...product, store_id: record.store_id })
 
 				})
@@ -120,6 +120,63 @@ const SProduct = () => {
 
 		}
 	}, [record]);
+
+	const useFetchMultipleLists = (resources) => {
+		const dataProvider = useDataProvider();
+		const [data, setData] = React.useState([]);
+		const [loading, setLoading] = React.useState(true);
+		const [error, setError] = React.useState(null);
+
+		React.useEffect(() => {
+			const fetchResources = async () => {
+				try {
+					const dataPromises = resources.map((resource) =>
+						dataProvider.getList(resource, {
+							pagination: { page: 1, perPage: 1000 },
+							sort: { field: "id", order: "ASC" },
+							filter: {},
+						})
+					);
+
+					const results = await Promise.all(dataPromises);
+					const seenIds = new Set();
+					const combinedData = results.reduce((acc, { data }) => {
+						const uniqueData = data.filter((item) => {
+							if (!seenIds.has(item.id)) {
+								seenIds.add(item.id);
+								return true;
+							}
+							return false;
+						});
+						return [...acc, ...uniqueData];
+					}, []);
+
+					setData(combinedData);
+				} catch (e) {
+					setError(e);
+				} finally {
+					setLoading(false);
+				}
+			};
+
+			fetchResources();
+		}, [dataProvider, resources]);
+
+		return { data, loading, error };
+	};
+
+	const tables = ["posts", "hauls", "lookbook", "diy", "grwm"];
+	const { data, loading } = useFetchMultipleLists(tables);
+
+
+
+	useEffect(() => {
+		if (data) {
+			setFilteredData(data?.filter(item =>
+				item.taggedProducts.some(taggedProduct => taggedProduct.id === id)
+			))
+		}
+	}, [data])
 
 
 	// console.log(product);
@@ -228,7 +285,7 @@ const SProduct = () => {
 							<WithListContext
 								render={({ isLoading, data }) =>
 									!isLoading ? (
-										<RVideos data={data} product={product} id={id} theme={theme} />
+										<RVideos data={data} product={product} id={id} theme={theme} filteredData={filteredData} setFilteredData={setFilteredData} loading={loading} />
 									) : (
 										<p className="font-[500] text-[#222] flex items-center justify-center">
 											Loading...
@@ -254,63 +311,13 @@ const SProduct = () => {
 export default SProduct
 
 
-const RVideos = ({ product, id, theme }) => {
+const RVideos = ({ product, id, theme, filteredData, setFilteredData, loading }) => {
 	const [isReady, setIsReady] = React.useState(false);
 
 	const handleCanPlay = () => {
 		setIsReady(true);
 	};
 
-	const useFetchMultipleLists = (resources) => {
-		const dataProvider = useDataProvider();
-		const [data, setData] = React.useState([]);
-		const [loading, setLoading] = React.useState(true);
-		const [error, setError] = React.useState(null);
-
-		React.useEffect(() => {
-			const fetchResources = async () => {
-				try {
-					const dataPromises = resources.map((resource) =>
-						dataProvider.getList(resource, {
-							pagination: { page: 1, perPage: 1000 },
-							sort: { field: "id", order: "ASC" },
-							filter: {},
-						})
-					);
-
-					const results = await Promise.all(dataPromises);
-					const seenIds = new Set();
-					const combinedData = results.reduce((acc, { data }) => {
-						const uniqueData = data.filter((item) => {
-							if (!seenIds.has(item.id)) {
-								seenIds.add(item.id);
-								return true;
-							}
-							return false;
-						});
-						return [...acc, ...uniqueData];
-					}, []);
-
-					setData(combinedData);
-				} catch (e) {
-					setError(e);
-				} finally {
-					setLoading(false);
-				}
-			};
-
-			fetchResources();
-		}, [dataProvider, resources]);
-
-		return { data, loading, error };
-	};
-
-	const tables = ["posts", "hauls", "lookbook", "diy", "grwm"];
-	const { data, loading } = useFetchMultipleLists(tables);
-
-	let filteredData = data?.filter(item =>
-		item.taggedProducts.some(taggedProduct => taggedProduct.id === id)
-	);
 
 	// console.log();
 
@@ -437,39 +444,39 @@ const PDetails = ({ theme, product }) => {
 	return (
 		<>{
 			product && product.variants ? (
-			// <div className='mx-5'>
-			// 	<div className='mx-auto pt-[1rem]'>
-			// 		<SmallPHorizontalCards post={product} />
-			// 	</div>
-			// 	<div className='product__details--Middle mt-[2px]'>
-			// 		<span className="brand--name">
-			// 			{product?.title}
-			// 		</span>
+				// <div className='mx-5'>
+				// 	<div className='mx-auto pt-[1rem]'>
+				// 		<SmallPHorizontalCards post={product} />
+				// 	</div>
+				// 	<div className='product__details--Middle mt-[2px]'>
+				// 		<span className="brand--name">
+				// 			{product?.title}
+				// 		</span>
 
-			// 		<span className="product--socials">
-			// 			<span className="share">
-			// 				<img src={share} />
-			// 			</span>
+				// 		<span className="product--socials">
+				// 			<span className="share">
+				// 				<img src={share} />
+				// 			</span>
 
-			// 			{/* <span className="fb-ig">
-			// 				<img src={FB} />
-			// 			</span> */}
+				// 			{/* <span className="fb-ig">
+				// 				<img src={FB} />
+				// 			</span> */}
 
-			// 			<span className="fb-ig">
-			// 				<img src={IG} />
-			// 			</span>
-			// 		</span>
-			// 	</div>
+				// 			<span className="fb-ig">
+				// 				<img src={IG} />
+				// 			</span>
+				// 		</span>
+				// 	</div>
 
-			// 	<div className='product__details--MiddleText'>
-			// 		{product?.description}
-			// 	</div>
+				// 	<div className='product__details--MiddleText'>
+				// 		{product?.description}
+				// 	</div>
 
-			// 	<div className='mx-auto pb-[1rem]'>
-			// 		<SmallPHorizontalVariantCards post={product} />
-			// 	</div>
-			// </div>
-			<ProductShow product={product}/>
+				// 	<div className='mx-auto pb-[1rem]'>
+				// 		<SmallPHorizontalVariantCards post={product} />
+				// 	</div>
+				// </div>
+				<ProductShow product={product} />
 			) : (<div className='spinner absolute top-0 bottom-0 left-0 right-0 my-0 mx-0'>
 
 				<CircularProgress sx={{ filter: theme === "light" ? "invert(0)" : "invert(1)" }} />

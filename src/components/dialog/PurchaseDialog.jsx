@@ -39,13 +39,13 @@ import { supabase } from '../../supabase/SupabaseConfig';
 
 
 
-const medusa = new Medusa({
-    maxRetries: 3,
-    baseUrl: "https://ecommerce.haulway.co",
-});
+// const medusa = new Medusa({
+//     maxRetries: 3,
+//     baseUrl: "https://ecommerce.haulway.co",
+// });
 
 const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentProduct, cart, cart_id, setCartID, setCart, custData, setCustData, theme }) => {
-    const { currentUser } = useContext(AuthContext);
+    const { currentUser, medusa } = useContext(AuthContext);
     const [openShipping, setOpenShipping] = React.useState(false);
     const [shipOpts, setShipOpts] = React.useState([]);
     const [selectedRegion, setSelectedRegion] = React.useState(null);
@@ -245,11 +245,7 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                 cart_id = intCart[product.metadata.store.id];
             }
             else {
-                cart_id = await medusa.auth
-                    .authenticate({
-                        email: identity.email,
-                        password: import.meta.env.VITE_AUTH_PASSWORD,
-                    })
+                cart_id = await medusa.customers.retrieve()
                     .then(async ({ customer }) => {
                         if (!cart_id || cart_id === '') {
                             return await medusa.carts.create().then(async ({ cart }) => {
@@ -1186,7 +1182,7 @@ const CollectionsDialog = ({ openCompleted, cancelCompleted, theme }) => {
 
 
 
-export const PurchaseDialog = ({ openPurchase, handleClosePurchase, handleClosePurchase1, openPurchase1, post, setOpenPurchase1, mediaUrl, product, theme }) => {
+export const PurchaseDialog = ({ openPurchase, handleClosePurchase, handleClosePurchase1, openPurchase1, post, setOpenPurchase1, mediaUrl, product, theme, poster_data }) => {
     const [openPayment, setOpenPayment] = React.useState(false);
     const [purchase, setPurchase] = React.useState(true);
     const [openProcessing, setOpenProcessing] = React.useState(false);
@@ -1196,7 +1192,7 @@ export const PurchaseDialog = ({ openPurchase, handleClosePurchase, handleCloseP
     const [custData, setCustData] = useStore("customer");
     const [cart, setCart] = React.useState(null);
     const [gcart, setGCart] = React.useState(null);
-    const { currentUser } = React.useContext(AuthContext)
+    const { currentUser, medusa } = React.useContext(AuthContext)
     const [cart_id, setCartID] = useStore("cart_id");
     const [g_cart_id, setGCartID] = useStore("gcart_id");
     const currentProduct = product || mediaUrl;
@@ -1206,18 +1202,23 @@ export const PurchaseDialog = ({ openPurchase, handleClosePurchase, handleCloseP
     const [intCart, setIntCart] = useStore("int_carts");
     const { data: identity, isLoading: identityLoading } = useGetIdentity();
     const record = useRecordContext();
-    const { data: poster_data, isLoading, error } = useGetOne('users', { id: record.uid });
-    
 
-    useEffect(()=> {
-        if(poster_data && cart_id && cart){
-            console.log(poster_data, cart)
-            // filterContractDocuments(cart.context?.vendor?.email, poster_data?.email)
+
+
+    useEffect(() => {
+        console.log(poster_data);
+        if (poster_data && cart_id && cart) {
+
+            if (cart.context && cart.context.vendor && !cart.context.split_doc) {
+                console.log('poster status', poster_data.role)
+                filterContractDocuments(cart.context?.vendor?.email, poster_data?.email)
+            }
         }
-    },[poster_data, cart_id, cart])
+    }, [poster_data, cart_id, cart])
 
     async function filterContractDocuments(vendorEmail, influencerEmail) {
         try {
+            console.log(vendorEmail, influencerEmail)
             // Query contract documents table
             const { data, error } = await supabase
                 .from("contract")
@@ -1229,13 +1230,19 @@ export const PurchaseDialog = ({ openPurchase, handleClosePurchase, handleCloseP
                 throw error;
             }
 
+            console.log(data)
+
+
             // Return filtered contract documents
-            if(data && data.length && data[0].ps_split_doc && data[0].agreed_at){
+            if (data && data.length && data[0].ps_split_doc && data[0].agreed_at) {
                 medusa.carts.update(cart_id, {
-                    context: { ...cart.context, ...{influencer: poster_data && poster_data.role === 'influencer' ? (poster_data) : (null), split_doc: data[0].ps_split_doc } },
+                    context: { ...cart.context, ...{ influencer: poster_data && poster_data.role === 'influencer' ? (poster_data) : (null), split_doc: data[0].ps_split_doc } },
+                }).then(async ({ cart }) => {
+                    console.log(cart.context)
+                    setCart(cart)
                 })
             }
-            return data;
+            // return data;
         } catch (error) {
             console.error('Error filtering contract documents:', error.message);
             return null;
@@ -1254,27 +1261,41 @@ export const PurchaseDialog = ({ openPurchase, handleClosePurchase, handleCloseP
         }).format(convertToDecimal(amount))
     }
 
+    // React.useEffect(() => {
+
+    //     medusa.auth
+    //         .authenticate({
+    //             email: identity.email,
+    //             password: import.meta.env.VITE_AUTH_PASSWORD,
+    //         })
+    //         .then(({ customer }) => {
+    //             setCustData(customer);
+    //             RetrieveInternalCart(currentProduct);
+    //             if (!g_cart_id) {
+    //                 medusa.carts.create().then(({ cart }) => {
+    //                     setGCartID(cart.id);
+    //                     setGCart(cart)
+    //                 });
+    //             } else {
+    //                 medusa.carts.retrieve(g_cart_id).then(({ cart }) => setGCart(cart));
+    //             }
+    //         });
+
+    // }, []);
+
     React.useEffect(() => {
-
-        medusa.auth
-            .authenticate({
-                email: identity.email,
-                password: import.meta.env.VITE_AUTH_PASSWORD,
-            })
-            .then(({ customer }) => {
-                setCustData(customer);
-                RetrieveInternalCart(currentProduct);
-                if (!g_cart_id) {
-                    medusa.carts.create().then(({ cart }) => {
-                        setGCartID(cart.id);
-                        setGCart(cart)
-                    });
-                } else {
-                    medusa.carts.retrieve(g_cart_id).then(({ cart }) => setGCart(cart));
-                }
+        RetrieveInternalCart(currentProduct);
+        if (!g_cart_id) {
+            medusa.carts.create().then(({ cart }) => {
+                setGCartID(cart.id);
+                setGCart(cart)
             });
+        } else {
+            medusa.carts.retrieve(g_cart_id).then(({ cart }) => setGCart(cart));
+        }
+    }, [medusa])
 
-    }, []);
+
 
     React.useEffect(() => {
         if (currentProduct) {
@@ -1308,11 +1329,8 @@ export const PurchaseDialog = ({ openPurchase, handleClosePurchase, handleCloseP
                 cart_id = intCart[product.metadata.store.id];
             }
             else {
-                cart_id = await medusa.auth
-                    .authenticate({
-                        email: identity.email,
-                        password: import.meta.env.VITE_AUTH_PASSWORD,
-                    })
+
+                cart_id = await medusa.customers.retrieve()
                     .then(async ({ customer }) => {
                         if (!cart_id || cart_id === '') {
                             return await medusa.carts.create().then(async ({ cart }) => {

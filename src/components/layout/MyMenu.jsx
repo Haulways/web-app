@@ -212,7 +212,7 @@ export const MyMenu = () => {
 					leftIcon={<SettingsIcon />}
 				/>
 
-				{/* <label className="switch mt-[1rem] ml-[3rem]">
+				<label className="switch mt-[1rem] ml-[3rem]">
 					<input type="checkbox" id="theme-switch" onClick={toggleTheme} />
 					<span className="menuSlide round">
 						<i>
@@ -222,7 +222,7 @@ export const MyMenu = () => {
 							<IoSunny />
 						</i>
 					</span>
-				</label> */}
+				</label>
 			</div>
 
 			{/* {

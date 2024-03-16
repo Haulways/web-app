@@ -35,7 +35,7 @@ import { useGetIdentity, useGetOne } from 'react-admin';
 
 
 
-const MPost = ({ post, id, comments, formatFollowers, following, followers, unfollow, follow, toggleLike, liked, likes, savePost, cart, products, GetFullProdData }) => {
+const MPost = ({ post, id, comments, formatFollowers, following, followers, unfollow, follow, toggleLike, liked, likes, savePost, cart, products, GetFullProdData, poster_data}) => {
     const [showComment, setShowComment] = useState(false);
     const { currentUser } = useContext(AuthContext)
     const [isMuted, setIsMuted] = useState(true);
@@ -71,7 +71,7 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
     }
 
     useEffect(() => {
-        // console.log(cart)
+        console.log(cart)
     }, [cart])
 
 
@@ -368,8 +368,9 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
                 )}
                 <div className='showCard--post max-w-[92vw]'>
                     <Splide ref={splideRef} options={options} className='w-full' >
-                        {Array.isArray(products) && products.map((mediaUrl, index) => (
-                            <SplideSlide key={index} className='p-[3px]'>
+                        {Array.isArray(products) && products.map((mediaUrl, index) => {
+                            // console.log(mediaUrl, cart);
+                            return <SplideSlide key={index} className='p-[3px]'>
                                 <ShowPageCarousels_1
                                     index={index}
                                     activeIndex={activeIndex}
@@ -378,7 +379,7 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
                                     price={cart && mediaUrl.variants && mediaUrl.variants.length ? formatPrice(mediaUrl.variants[0].prices.filter((curr) => { return curr.currency_code === cart.region.currency_code })[0].amount) : 0}
                                 />
                             </SplideSlide>
-                        ))}
+                        })}
                     </Splide>
 
                 </div>
@@ -404,7 +405,7 @@ const MPost = ({ post, id, comments, formatFollowers, following, followers, unfo
                     <WithListContext render={({ isLoading, data }) => (
                         !isLoading && (
                             <>
-                                <FullScreenDialog liked={liked} post={post} open={open} handleClose={handleClose} postId={id} currentUser={identity} savePost={savePost} toggleLike={toggleLike} likes2={data} cart={cart} products={products} GetFullProdData={GetFullProdData}/>
+                                <FullScreenDialog liked={liked} post={post} open={open} handleClose={handleClose} postId={id} currentUser={identity} savePost={savePost} toggleLike={toggleLike} likes2={data} cart={cart} products={products} GetFullProdData={GetFullProdData} poster_data={poster_data} />
                             </>
                         ))} />
                 </InfiniteList>

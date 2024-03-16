@@ -23,7 +23,7 @@ export const HaulsListContents = () => {
     const [openLive, setOpenLive] = useState(false);
     const isConnected = useHMSStore(selectIsConnectedToRoom);
     const hmsActions = useHMSActions();
-    const { currentUser } = React.useContext(AuthContext)
+    const { currentUser, medusa } = React.useContext(AuthContext)
     const [openAsce, setOpenAsce] = React.useState(false);
     const [room, setRoom] = React.useState(null);
     const [roomCodes, setRoomCodes] = React.useState(null);
@@ -58,6 +58,13 @@ export const HaulsListContents = () => {
             setResult([]);
         }
     }, [input]);
+
+
+    // React.useEffect(()=>{
+    //     if(haulsList){
+    //         console.log(haulsList)
+    //     }
+    // },[haulsList])
 
     const peers = (useHMSStore(selectPeers) || []).filter(
         peer =>

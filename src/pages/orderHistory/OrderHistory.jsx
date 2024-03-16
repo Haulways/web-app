@@ -12,6 +12,7 @@ import { AuthContext } from '../../components/context/AuthContext';
 import { DFooter } from '../../components';
 import { ThemeContext } from '../../components/context/ThemeProvider';
 import { useGetIdentity, useGetOne } from 'react-admin';
+// import { useOrders } from "medusa-react"
 
 
 const medusa = new Medusa({
@@ -23,11 +24,31 @@ const OrderHistory = () => {
     const [open, setOpen] = React.useState(true);
     const { currentUser } = React.useContext(AuthContext);
     const [openStates, setOpenStates] = React.useState([]);
+    const [openState, setOpenState] = React.useState(false);
     const [cart, setCart] = React.useState(null);
     const [custOrders, setCustOrders] = React.useState([]);
     const [custData, setCustData] = useStore("customer");
     const { theme } = React.useContext(ThemeContext);
     const { data: identity, isLoading: identityLoading } = useGetIdentity();
+
+    const LoadOrders = async () => {
+        let all_orders = await Promise.all(custOrders.map(async (ord) => {
+            return await medusa.orders.retrieve(ord.id).then(({ order }) => {
+                return order
+            });
+        }))
+
+        if (all_orders && all_orders.length) {
+            setCustOrders(all_orders);
+        }
+    }
+
+
+    React.useEffect(() => {
+        if (custOrders && custOrders.length && !custOrders[0].shipping_address && !custOrders[0].shipping_address?.id) {
+            LoadOrders()
+        }
+    }, [custOrders])
 
 
     React.useEffect(() => {
@@ -40,8 +61,10 @@ const OrderHistory = () => {
                 .then(({ customer }) => {
                     setCustData(customer);
                     console.log(customer);
+                    setCustOrders(customer.orders);
                     medusa.customers.listOrders()
                         .then(({ orders, limit, offset, count }) => {
+                            console.log(orders)
                             setCustOrders(orders);
                             // console.log(orders)
                         })
@@ -190,7 +213,15 @@ const OrderHistory = () => {
                                                 onClick={() => {
                                                     let newOpenStates = [...openStates];
                                                     newOpenStates[index] = !newOpenStates[index];
-                                                    setOpenStates(newOpenStates);
+
+                                                    setOpenStates(newOpenStates.map((dt, indx) => {
+                                                        if (indx !== index) {
+                                                            return false
+                                                        }
+                                                        else {
+                                                            return dt
+                                                        }
+                                                    }));
                                                 }}
                                             >
                                                 {openStates[index] ? (
@@ -260,26 +291,30 @@ const OrderHistory = () => {
                                 </div>
 
                                 {/* bottom table  */}
-                                <Table style={{ minWidth: '320px', marginTop: '20px', borderBottom: '1px solid #666' }} aria-label="simple table">
-                                    <tr className="bg-black">
-                                        <th align="center" style={cellStyle}>Delivery location</th>
-                                        <th align="center" style={cellStyle}>Shipping method</th>
-                                        <th align="center" style={cellStyle}>Payment method</th>
-                                    </tr>
-                                    <TableBody>
-                                        <TableRow>
-                                            <TableCell align="center" sx={cellBody}>
-                                                {order.shipping_address.address_1}, {order.shipping_address.city}.
-                                            </TableCell>
-                                            <TableCell align="center" sx={cellBody}>
-                                                {order.shipping_methods[0].shipping_option.name}
-                                            </TableCell>
-                                            <TableCell align="center" sx={cellBody} className='capitalize'>
-                                                {order.payments[0].provider_id}
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableBody>
-                                </Table>
+                                {
+                                    order && order.shipping_address && order.shipping_address.address_1 && (
+                                        <Table style={{ minWidth: '320px', marginTop: '20px', borderBottom: '1px solid #666' }} aria-label="simple table">
+                                            <tr className="bg-black">
+                                                <th align="center" style={cellStyle}>Delivery location</th>
+                                                <th align="center" style={cellStyle}>Shipping method</th>
+                                                <th align="center" style={cellStyle}>Payment method</th>
+                                            </tr>
+                                            <TableBody>
+                                                <TableRow>
+                                                    <TableCell align="center" sx={cellBody}>
+                                                        {order.shipping_address.address_1}, {order.shipping_address.city}.
+                                                    </TableCell>
+                                                    <TableCell align="center" sx={cellBody}>
+                                                        {order.shipping_methods[0].shipping_option.name}
+                                                    </TableCell>
+                                                    <TableCell align="center" sx={cellBody} className='capitalize'>
+                                                        {order.payments[0].provider_id}
+                                                    </TableCell>
+                                                </TableRow>
+                                            </TableBody>
+                                        </Table>)
+                                }
+
 
                             </Collapse>
                         </React.Fragment>

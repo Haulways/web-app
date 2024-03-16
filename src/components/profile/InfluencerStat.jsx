@@ -260,7 +260,7 @@ export const VendorsStat = ({theme}) => {
         <>
             <div className='feed--page'>
                 <UserStat theme={theme} />
-                <div className='mt-[31px] flex overflow-x-scroll store__card  gap-x-6 pb-[5px] px-[.5rem]'>
+                <div className='mt-[31px] flex overflow-x-scroll store__card  gap-x-6 pb-[5px] px-[.5rem] w-[90vw]'>
 
                     <TotalViews />
                     <Partnership />

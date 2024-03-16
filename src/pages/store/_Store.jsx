@@ -1,7 +1,8 @@
 import { Show } from "react-admin";
-import { StoreEditContent, StoreListContent, StoreShowContent } from "./_StoreContent";
+import { StoreCreateContent, StoreEditContent, StoreListContent, StoreShowContent } from "./_StoreContent";
 import { ThemeContext } from "../../components/context/ThemeProvider";
 import * as React from 'react';
+
 
 export const StoreList = () => {
 
@@ -18,7 +19,7 @@ export const StoreList = () => {
 
 export const StoreCreate = () => {
     return (
-        <></>
+        <><StoreCreateContent/></>
     )
 };
 

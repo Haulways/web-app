@@ -20,15 +20,15 @@ import { useGetIdentity, useGetOne } from 'react-admin';
 
 
 
-const medusa = new Medusa({
-  maxRetries: 3,
-  baseUrl: "https://ecommerce.haulway.co",
-});
+// const medusa = new Medusa({
+//   maxRetries: 3,
+//   baseUrl: "https://ecommerce.haulway.co",
+// });
 
 const Fashion = () => {
   const { theme } = useContext(ThemeContext);
   const [input, setInput] = React.useState("");
-  const { currentUser } = React.useContext(AuthContext)
+  const { currentUser, medusa } = React.useContext(AuthContext)
   const [custData, setCustData] = React.useState(null);
   const [products, setProducts] = React.useState(null);
   const [ra_products, setRa_Products] = React.useState(null);
@@ -47,30 +47,41 @@ const Fashion = () => {
     { filter: { role: 'vendor' }, },
   );
 
+  // React.useEffect(() => {
+  //   console.log(identity)
+  //   if (identity) {
+  //     medusa.auth
+  //       .authenticate({
+  //         email: identity.email,
+  //         password: import.meta.env.VITE_AUTH_PASSWORD,
+  //       })
+  //       .then(({ customer }) => {
+  //         setCustData(customer);
+  //         if (!cart_id) {
+  //           medusa.carts.create().then(({ cart }) => {
+  //             setCartID(cart.id);
+  //             setCart(cart)
+  //           });
+  //         } else {
+  //           medusa.carts.retrieve(cart_id).then(({ cart }) => setCart(cart));
+  //         }
+
+
+  //       });
+  //   }
+
+  // }, [identity]);
   React.useEffect(() => {
-    console.log(identity)
-    if (identity) {
-      medusa.auth
-        .authenticate({
-          email: identity.email,
-          password: import.meta.env.VITE_AUTH_PASSWORD,
-        })
-        .then(({ customer }) => {
-          setCustData(customer);
-          if (!cart_id) {
-            medusa.carts.create().then(({ cart }) => {
-              setCartID(cart.id);
-              setCart(cart)
-            });
-          } else {
-            medusa.carts.retrieve(cart_id).then(({ cart }) => setCart(cart));
-          }
-
-
-        });
+    if (!cart_id) {
+      medusa.carts.create().then(({ cart }) => {
+        setCartID(cart.id);
+        setCart(cart)
+      });
+    } else {
+      medusa.carts.retrieve(cart_id).then(({ cart }) => setCart(cart));
     }
+  }, [medusa])
 
-  }, [identity]);
 
   React.useEffect(() => {
     if (input) {

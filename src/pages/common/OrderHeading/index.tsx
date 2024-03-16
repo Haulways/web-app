@@ -35,7 +35,7 @@ const OrderHeading = () => {
           gap: 2,
         }}
       >
-        {/* <Link
+        <Link
           underline="none"
           sx={{
             color:
@@ -72,44 +72,41 @@ const OrderHeading = () => {
           onClick={() => redirect(Routes.ORDERS_DRAFT_ROUTE)}
         >
           Drafts
-        </Link> */}
+        </Link>
       </Box>
 
       <div className="flex">
-        {
-          // location.pathname === Routes.ORDERS_ROUTE 
-          true
-            ? (
-              <StyledButton
-                variant="outlined"
-                startIcon={<FileUploadOutlinedIcon />}
-                aria-label="export orders"
-              >
-                <Typography
-                  sx={{
-                    fontSize: "11px",
-                    fontWeight: "500",
-                  }}
-                >
-                  Export Orders
-                </Typography>
-              </StyledButton>
-            ) : (
-              <StyledButton
-                variant="outlined"
-                startIcon={<AddOutlinedIcon />}
-                aria-label="create draft"
-              >
-                <Typography
-                  sx={{
-                    fontSize: "11px",
-                    fontWeight: "500",
-                  }}
-                >
-                  Create draft order
-                </Typography>
-              </StyledButton>
-            )}
+        {location.pathname === Routes.ORDERS_ROUTE ? (
+          <StyledButton
+            variant="outlined"
+            startIcon={<FileUploadOutlinedIcon />}
+            aria-label="export orders"
+          >
+            <Typography
+              sx={{
+                fontSize: "11px",
+                fontWeight: "500",
+              }}
+            >
+              Export Orders
+            </Typography>
+          </StyledButton>
+        ) : (
+          <StyledButton
+            variant="outlined"
+            startIcon={<AddOutlinedIcon />}
+            aria-label="create draft"
+          >
+            <Typography
+              sx={{
+                fontSize: "11px",
+                fontWeight: "500",
+              }}
+            >
+              Create draft order
+            </Typography>
+          </StyledButton>
+        )}
       </div>
     </Box>
   );

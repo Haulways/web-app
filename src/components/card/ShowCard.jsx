@@ -138,6 +138,18 @@ export const ShowPageCarousels_1 = ({ mediaUrl, activeIndex, index, post, price 
 
 // Tag CaReact.rd Component 
 export const TagCard = ({ post, taggedData, setTaggedData, theme }) => {
+    
+    const convertToDecimal = (amount) => {
+        return Math.floor(amount) / 100
+    }
+
+    const formatPrice = (amount) => {
+        return new Intl.NumberFormat("en-US", {
+            style: "currency",
+            // TODO assuming region is already defined somewhere
+            currency: post?.metadata?.store?.default_currency_code
+        }).format(convertToDecimal(amount))
+    }
 
     const isTagged = taggedData.some(item => item.id === post.id);
 
@@ -181,7 +193,7 @@ export const TagCard = ({ post, taggedData, setTaggedData, theme }) => {
                             </p>
 
                             <span className='price' style={{color: theme === "light" ? "#222" : "#fff"}}>
-                                $150.00
+                                {post && post.variants && post.variants.length ? formatPrice(post.variants[0].prices.filter((curr) => { return curr.currency_code === post?.metadata?.store?.default_currency_code })[0].amount) : 0}
                             </span>
 
                         </div>
@@ -751,6 +763,73 @@ export const SmallPHorizontalVariantCards = ({ post }) => {
                         }}>
                             <div className='catalogueImg'>
                                 {mediaUrl.title}
+                                
+                                {/* {isImage ? (
+                                    <img src={mediaUrl.url} alt={post.id} />
+                                ) : (
+                                    <video src={mediaUrl} alt={post.id} muted controls={false} playsInline={true} controlsList="nodownload" />
+                                )} */}
+                            </div>
+                        </SplideSlide>
+                    );
+                })}
+                    
+            </Splide>
+            <div className='py-2'></div>
+                        
+        </div>
+    );
+};
+
+export const SmallHorizontalRecordedCards = ({ post }) => {
+    const { theme } = React.useContext(ThemeContext);
+
+    // console.log(post);
+    // const slider1 = React.useRef();
+    // const slider2 = React.useRef();
+  
+    // React.useEffect(() => {
+    //   slider1.current.sync(slider2.current.splide);
+    // }, [slider1, slider2]);
+
+    const thumbnailCarouselOptions = {
+        type: 'slide',
+        fixedWidth: 120.32,
+        fixedHeight: 63.16,
+        isNavigation: true,
+        pagination: false,
+        gap: 5,
+        drag: 'free',
+        snap: false,
+        perPage: 3,
+        pauseOnHover: false,
+        arrows: false,
+        // focus: slideFocus
+    };
+
+    
+
+    
+
+
+
+    return (
+        <div className='catalogue__container mx-auto' >
+                
+            
+            
+            <Splide id="thumbnail-carousel" options={thumbnailCarouselOptions}>
+
+                {post && Array.isArray(post) && post.slice(0, 4).map((mediaUrl, index) => {
+                    // const isImage = mediaUrl.url.includes('.jpg') || mediaUrl.url.includes('.jpeg') || mediaUrl.url.includes('.png');
+                    return (
+                        <SplideSlide key={index} className='w-[120.32px] h-[63.16px] px-0 rounded-[8px] overflow-hidden flex flex-nowrap justify-center items-center bg-[#eee]' style={{
+                            backgroundColor: theme === 'light' ? '#fff' : 'rgba(68, 68, 68, 0.2)',
+                            color: theme === 'light' ? '#222' : '#fff',
+                            boxShadow: theme === 'light' ? '0 5px 4px rgba(0, 0, 0, 0.01)!important' : '0 5px 4px rgba(0, 0, 0, 0.01)!important',
+                        }}>
+                            <div className='catalogueImg'>
+                                <video loop autoPlay ref={mediaUrl.previewRef} alt={mediaUrl.id} muted controls={false} playsInline={true} controlsList="nodownload" className='w-full h-full object-cover' />
                                 
                                 {/* {isImage ? (
                                     <img src={mediaUrl.url} alt={post.id} />

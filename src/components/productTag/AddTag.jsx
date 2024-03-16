@@ -8,8 +8,8 @@ import backIcon from "../../assets/postImg-Icons/backIcon.png";
 import tagIcon from "../../assets/editorIcons/tagbtn.png";
 import tagRule from "../../assets/editorIcons/tagRule.png";
 import { SearchBox } from "../search/SearchBox";
-import { CreateButton, FilterButton, FilterForm, InfiniteList, List, ListActions, ListBase, Pagination, SelectInput, TextInput, TopToolbar, WithListContext, useDataProvider } from "react-admin";
-import {  AdCard, TagCard, TagCard2, TaggedProductCard, TaggedProductCard2, TaggedVideoCard } from "../card/ShowCard";
+import { AuthContext, CreateButton, FilterButton, FilterForm, InfiniteList, List, ListActions, ListBase, Pagination, SelectInput, TextInput, TopToolbar, WithListContext, useDataProvider, useGetList } from "react-admin";
+import { AdCard, TagCard, TagCard2, TaggedProductCard, TaggedProductCard2, TaggedVideoCard } from "../card/ShowCard";
 import { useProducts } from "medusa-react";
 import { useState } from "react";
 import { supabase } from "../../supabase/SupabaseConfig";
@@ -31,9 +31,9 @@ export const AddTag = ({ selectedfiles, activeFile, openTagProduct, handleCloseT
         setTags(false);
         setShowTagProduct(true);
     }
-    
 
-    
+
+
 
     React.useEffect(() => {
         if (activeFile && activeFile instanceof Blob) {
@@ -44,9 +44,9 @@ export const AddTag = ({ selectedfiles, activeFile, openTagProduct, handleCloseT
             setVideoUrl(fileUrl);
         }
     }, [selectedfiles, activeFile]);
-    
-    
-    
+
+
+
     return (
         <>
             <Dialog
@@ -56,26 +56,26 @@ export const AddTag = ({ selectedfiles, activeFile, openTagProduct, handleCloseT
                 PaperProps={{ style: { backgroundColor: theme === "light" ? "#fff" : "#222", color: theme === "light" ? "#222" : "#fff", padding: '16px' } }}
             >
                 <button className='absolute top-4 left-2 h-[35px] w-[35px]  invert' onClick={handleCloseTagProduct}>
-                    <img src={backIcon} alt='back' style={{filter: theme === "light" ? "invert(0)" : "invert(1)" }} />
+                    <img src={backIcon} alt='back' style={{ filter: theme === "light" ? "invert(0)" : "invert(1)" }} />
                 </button>
 
                 <button className='bg-black text-white rounded-full  text-[14px] h-[34px] px-[1.1rem] font-[600] absolute top-4 right-4'
                     onClick={handleCloseTagProduct}
-                    style={{filter: theme === "light" ? "invert(0)" : "invert(1)" }}
+                    style={{ filter: theme === "light" ? "invert(0)" : "invert(1)" }}
                 >
                     Done
                 </button>
 
                 {showTagProduct && (
                     <TagProduct
-                        videoUrl={videoUrl} 
+                        videoUrl={videoUrl}
                         closeShowTag={closeShowTag}
                         taggedData={taggedData}
                         theme={theme}
                     />
                 )}
 
-                
+
                 <Tags
                     tags={tags}
                     handleCloseTags={handleCloseTags}
@@ -86,7 +86,7 @@ export const AddTag = ({ selectedfiles, activeFile, openTagProduct, handleCloseT
 
 
             </Dialog>
-        
+
         </>
     );
 };
@@ -109,14 +109,14 @@ const TagProduct = ({ videoUrl, closeShowTag, taggedData, theme }) => {
                 {videoUrl && (
                     <>
                         <EditorVideoPlayer url={videoUrl} isMuted={isMuted} isPlaying={isPlaying} />
-                        <button className="absolute top-0 bottom-0 left-0 right-0  mx-auto my-auto invert w-[40px] h-[40px]" onClick={togglePlay} style={{filter: theme === "light" ? "invert(0)" : "invert(0)" }}>
-                                                
+                        <button className="absolute top-0 bottom-0 left-0 right-0  mx-auto my-auto invert w-[40px] h-[40px]" onClick={togglePlay} style={{ filter: theme === "light" ? "invert(0)" : "invert(0)" }}>
+
                             {isPlaying ?
                                 <FaPause style={{ fontSize: 40 }} />
                                 :
                                 <FaPlay style={{ fontSize: 40 }} />
                             }
-                                               
+
                         </button>
                     </>
                 )}
@@ -127,13 +127,13 @@ const TagProduct = ({ videoUrl, closeShowTag, taggedData, theme }) => {
                 <div className="flex flex-wrap items-center justify-center gap-[10px]">
                     <div className="flex flex-wrap gap-[10px]">
                         {taggedData && taggedData.map((product) => {
-                            
+
                             return (
                                 <React.Fragment key={product.id}>
                                     <div className='w-[50px] h-[50px] overflow-hidden rounded-[6px]'>
-                                       
-                                            <img src={product.images[0].url} alt={product.title}  className="w-full h-full object-cover"/>
-                                       
+
+                                        <img src={product.images[0].url} alt={product.title} className="w-full h-full object-cover" />
+
                                     </div>
                                 </React.Fragment>
                             )
@@ -141,7 +141,7 @@ const TagProduct = ({ videoUrl, closeShowTag, taggedData, theme }) => {
                     </div>
 
                     <button onClick={closeShowTag}>
-                        <img className="w-[50px] h-[50px]" src={tagIcon} alt="tag"  />
+                        <img className="w-[50px] h-[50px]" src={tagIcon} alt="tag" />
                     </button>
                 </div>
             </div>
@@ -156,14 +156,26 @@ const TagProduct = ({ videoUrl, closeShowTag, taggedData, theme }) => {
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
-  
+
+
+
 export const Tags = ({ tags, handleCloseTags, taggedData, setTaggedData, theme }) => {
-    
-    const { products, isLoading } = useProducts();
+    const { currentUser } = useContext(AuthContext);
+    const { data: contracts } = useGetList("contract");
+    const [store_ids, setStore_ids] = useState(null);
+
+    const { products, isLoading } = useProducts({ expand: 'variants,variants.prices,images' });
     const [currentPage, setCurrentPage] = useState(1);
     const ITEMS_PER_PAGE = 3;
 
- 
+    useEffect(() => {
+        console.log(contracts)
+        if (contracts && contracts.length) {
+            Console.log(contracts.find(contrct => { return (currentUser.id === contrct.created_for || currentUser.id === contrct.created_for) }));
+        }
+    }, [contracts])
+
+
 
     const TagFilters = [
         // <SearchBox placeholder='Search for tags' />
@@ -172,7 +184,7 @@ export const Tags = ({ tags, handleCloseTags, taggedData, setTaggedData, theme }
         <SelectInput label="Vendors" source="vendor" alwaysOn
             sx={{
                 overflow: 'hidden',
-                
+
                 '& .css-19n9far-MuiInputBase-root-MuiFilledInput-root ': {
                     maxWidth: '154px',
                     borderRadius: '100px',
@@ -195,7 +207,7 @@ export const Tags = ({ tags, handleCloseTags, taggedData, setTaggedData, theme }
             }}
             choices={[
                 { id: '1', name: 'Victor' }
- 
+
             ]}
         />,
 
@@ -210,10 +222,10 @@ export const Tags = ({ tags, handleCloseTags, taggedData, setTaggedData, theme }
             }}
             choices={[
                 { id: '1', name: 'Victor' }
- 
+
             ]}
         />,
-      
+
     ];
 
     const TagActions = () => (
@@ -221,11 +233,11 @@ export const Tags = ({ tags, handleCloseTags, taggedData, setTaggedData, theme }
             backgroundColor: 'transparent !important',
             width: '310px',
             margin: '0 auto',
-   
+
             flexDirection: 'column !important',
 
             '& .MuiToolbar-root .RaTopToolbar-root': {
-               
+
             },
             "& .RaList-actions": {
                 backgroundColor: 'transparent !important',
@@ -277,14 +289,14 @@ export const Tags = ({ tags, handleCloseTags, taggedData, setTaggedData, theme }
 
                     }}
                     filters={TagFilters} />
-                
+
             </Stack>
-            
+
         </TopToolbar>
     );
 
-    
-       
+
+
     return (
         <>
             <Dialog
@@ -300,13 +312,14 @@ export const Tags = ({ tags, handleCloseTags, taggedData, setTaggedData, theme }
                         <img className="mx-auto" src={tagRule} alt='rule' style={{ filter: theme === "light" ? "invert(0)" : "invert(1)" }} />
                     </div>
 
-                
+
                     <div className="flex items-center gap-x-[30px] flex-shrink-0">
                         <SearchBox placeholder='Search for tags' />
                         <BsFillFilterCircleFill className="w-[35px] h-[35px] flex-shrink-0 object-cover bg-[#222]  fill-[#D9D9D9] rounded-full cursor-pointer" style={{ backgroundColor: theme === "light" ? "#222" : "rgba(68, 68, 68, 0.2)", fill: theme === "light" ? "#d9d9d9" : "#d9d9d9" }} />
                     </div>
+                    <div className="py-2"></div>
 
-                    {/* filter tags  */}
+                    {/* filter tags 
                     <div className="mt-[25px] mb-[10px] store__card" >
                         <ul className="flex gap-x-[20px] items-center overflow-x-scroll store__card">
                             <li className="flex items-center gap-x-[50px] px-[17px] py-[10px] text-[14px] font-[500] rounded-full bg-[#d9d9d9] w-[154px] cursor-pointer" style={{ backgroundColor: theme === "light" ? "#d9d9d9" : "rgba(68, 68, 68, 0.4)", color: theme === "light" ? "#222" : "#fff" }}>
@@ -322,11 +335,11 @@ export const Tags = ({ tags, handleCloseTags, taggedData, setTaggedData, theme }
                                 <PiCaretDownBold className="flex-shrink-0" />
                             </li>
                         </ul>
-                    </div>
+                    </div> */}
 
-               
-                    
-              
+
+
+
                     {/* <ListBase resource="posts" style={{ backgroundColor: '#F1F1F1' }}>
 
                 
@@ -398,7 +411,7 @@ export const Tags = ({ tags, handleCloseTags, taggedData, setTaggedData, theme }
                             </React.Fragment>
                         ))}
                     </div>
-                
+
                 </div>
             </Dialog>
         </>
@@ -406,7 +419,7 @@ export const Tags = ({ tags, handleCloseTags, taggedData, setTaggedData, theme }
 };
 
 export const Tag2 = ({ tags, handleCloseTags, taggedData, setTaggedData, theme, broadcasterData }) => {
-    
+
     const { products, isLoading } = useProducts();
     const [currentPage, setCurrentPage] = useState(1);
     const ITEMS_PER_PAGE = 3;
@@ -416,7 +429,7 @@ export const Tag2 = ({ tags, handleCloseTags, taggedData, setTaggedData, theme, 
     const handleClick = (newPage) => {
         setCurrentPage(newPage);
     };
- 
+
 
     const TagFilters = [
         // <SearchBox placeholder='Search for tags' />
@@ -425,7 +438,7 @@ export const Tag2 = ({ tags, handleCloseTags, taggedData, setTaggedData, theme, 
         <SelectInput label="Vendors" source="vendor" alwaysOn
             sx={{
                 overflow: 'hidden',
-                
+
                 '& .css-19n9far-MuiInputBase-root-MuiFilledInput-root ': {
                     maxWidth: '154px',
                     borderRadius: '100px',
@@ -448,7 +461,7 @@ export const Tag2 = ({ tags, handleCloseTags, taggedData, setTaggedData, theme, 
             }}
             choices={[
                 { id: '1', name: 'Victor' }
- 
+
             ]}
         />,
 
@@ -463,10 +476,10 @@ export const Tag2 = ({ tags, handleCloseTags, taggedData, setTaggedData, theme, 
             }}
             choices={[
                 { id: '1', name: 'Victor' }
- 
+
             ]}
         />,
-      
+
     ];
 
     const TagActions = () => (
@@ -474,11 +487,11 @@ export const Tag2 = ({ tags, handleCloseTags, taggedData, setTaggedData, theme, 
             backgroundColor: 'transparent !important',
             width: '310px',
             margin: '0 auto',
-   
+
             flexDirection: 'column !important',
 
             '& .MuiToolbar-root .RaTopToolbar-root': {
-               
+
             },
             "& .RaList-actions": {
                 backgroundColor: 'transparent !important',
@@ -530,14 +543,14 @@ export const Tag2 = ({ tags, handleCloseTags, taggedData, setTaggedData, theme, 
 
                     }}
                     filters={TagFilters} />
-                
+
             </Stack>
-            
+
         </TopToolbar>
     );
 
-    
-       
+
+
     return (
         <>
             <Dialog
@@ -553,33 +566,33 @@ export const Tag2 = ({ tags, handleCloseTags, taggedData, setTaggedData, theme, 
                         <img className="mx-auto" src={tagRule} alt='rule' style={{ filter: theme === "light" ? "invert(0)" : "invert(1)" }} />
                     </div>
 
-                
+
                     <div className="flex items-center gap-x-[30px] flex-shrink-0">
                         <SearchBox placeholder='Search for tags' />
-                        <BsFillFilterCircleFill className="w-[35px] h-[35px] flex-shrink-0 object-cover bg-[#222]  fill-[#D9D9D9] rounded-full cursor-pointer" style={{backgroundColor: theme === "light" ? "#222" : "rgba(68, 68, 68, 0.2)", fill: theme === "light" ? "#d9d9d9" : "#d9d9d9"}} />
+                        <BsFillFilterCircleFill className="w-[35px] h-[35px] flex-shrink-0 object-cover bg-[#222]  fill-[#D9D9D9] rounded-full cursor-pointer" style={{ backgroundColor: theme === "light" ? "#222" : "rgba(68, 68, 68, 0.2)", fill: theme === "light" ? "#d9d9d9" : "#d9d9d9" }} />
                     </div>
 
                     {/* filter tags  */}
                     <div className="mt-[25px] mb-[10px] store__card" >
                         <ul className="flex gap-x-[20px] items-center overflow-x-scroll store__card">
-                            <li className="flex items-center gap-x-[50px] px-[17px] py-[10px] text-[14px] font-[500] rounded-full bg-[#d9d9d9] w-[154px] cursor-pointer" style={{backgroundColor: theme === "light" ? "#d9d9d9" : "rgba(68, 68, 68, 0.4)", color: theme === "light" ? "#222" : "#fff"}}>
+                            <li className="flex items-center gap-x-[50px] px-[17px] py-[10px] text-[14px] font-[500] rounded-full bg-[#d9d9d9] w-[154px] cursor-pointer" style={{ backgroundColor: theme === "light" ? "#d9d9d9" : "rgba(68, 68, 68, 0.4)", color: theme === "light" ? "#222" : "#fff" }}>
                                 Vendor
                                 <PiCaretDownBold className="flex-shrink-0" />
                             </li>
-                            <li className="flex items-center gap-x-[50px] px-[17px] py-[10px] text-[14px] font-[500] rounded-full bg-[#d9d9d9] w-[154px] cursor-pointer" style={{backgroundColor: theme === "light" ? "#d9d9d9" : "rgba(68, 68, 68, 0.4)", color: theme === "light" ? "#222" : "#fff"}}>
+                            <li className="flex items-center gap-x-[50px] px-[17px] py-[10px] text-[14px] font-[500] rounded-full bg-[#d9d9d9] w-[154px] cursor-pointer" style={{ backgroundColor: theme === "light" ? "#d9d9d9" : "rgba(68, 68, 68, 0.4)", color: theme === "light" ? "#222" : "#fff" }}>
                                 Product
                                 <PiCaretDownBold className="flex-shrink-0" />
                             </li>
-                            <li className="flex items-center gap-x-[50px] px-[17px] py-[10px] text-[14px] font-[500] rounded-full bg-[#d9d9d9] min-w-[164px] cursor-pointer" style={{backgroundColor: theme === "light" ? "#d9d9d9" : "rgba(68, 68, 68, 0.4)", color: theme === "light" ? "#222" : "#fff"}}>
+                            <li className="flex items-center gap-x-[50px] px-[17px] py-[10px] text-[14px] font-[500] rounded-full bg-[#d9d9d9] min-w-[164px] cursor-pointer" style={{ backgroundColor: theme === "light" ? "#d9d9d9" : "rgba(68, 68, 68, 0.4)", color: theme === "light" ? "#222" : "#fff" }}>
                                 Price Tag
                                 <PiCaretDownBold className="flex-shrink-0" />
                             </li>
                         </ul>
                     </div>
 
-               
-                    
-              
+
+
+
                     {/* <ListBase resource="product" style={{ backgroundColor: '#F1F1F1' }}>
 
                 
@@ -643,7 +656,7 @@ export const Tag2 = ({ tags, handleCloseTags, taggedData, setTaggedData, theme, 
                                 <span>
                                     {Math.min((currentPage - 1) * ITEMS_PER_PAGE + 1, products.length)} - {Math.min(currentPage * ITEMS_PER_PAGE, products.length)} of {products.length}
                                 </span>
-                                <button disabled={currentPage === 1}  style={{ backgroundColor: currentPage === 1 ? 'transparent' : '' }} className="px-[10px]" onClick={() => handleClick(currentPage - 1)}>
+                                <button disabled={currentPage === 1} style={{ backgroundColor: currentPage === 1 ? 'transparent' : '' }} className="px-[10px]" onClick={() => handleClick(currentPage - 1)}>
                                     {'<'}
                                 </button>
                                 <button disabled={currentPage === totalPages} style={{ backgroundColor: currentPage === totalPages ? 'transparent' : '' }} onClick={() => handleClick(currentPage + 1)}>
@@ -660,7 +673,7 @@ export const Tag2 = ({ tags, handleCloseTags, taggedData, setTaggedData, theme, 
                             </React.Fragment>
                         ))}
                     </div>
-                
+
                 </div>
             </Dialog>
         </>
@@ -670,7 +683,7 @@ export const Tag2 = ({ tags, handleCloseTags, taggedData, setTaggedData, theme, 
 
 
 export const VideoTags = ({ vtags, handleCloseVTags, taggedDataVideo, setTaggedDataVideo }) => {
-    
+
     const { products, isLoading } = useProducts();
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -680,9 +693,9 @@ export const VideoTags = ({ vtags, handleCloseVTags, taggedDataVideo, setTaggedD
     const ITEMS_PER_PAGE = 9;
 
     const totalPages = Math.ceil(posts?.length / ITEMS_PER_PAGE);
-    
-    
-    
+
+
+
     const handleAddClick = (post) => {
         const isTagged = taggedDataVideo.some(item => item.id === post.id);
         if (!isTagged) {
@@ -714,7 +727,7 @@ export const VideoTags = ({ vtags, handleCloseVTags, taggedDataVideo, setTaggedD
                 if (error && status !== 406) throw error;
                 allData = [...allData, ...data];
             }
-        
+
             const uniquePosts = Array.from(new Set(allData.map((post) => post.id)))
                 .map((id) => {
                     return allData.find((post) => post.id === id);
@@ -735,7 +748,7 @@ export const VideoTags = ({ vtags, handleCloseVTags, taggedDataVideo, setTaggedD
         <SelectInput label="Vendors" source="vendor" alwaysOn
             sx={{
                 overflow: 'hidden',
-                
+
                 '& .css-19n9far-MuiInputBase-root-MuiFilledInput-root ': {
                     maxWidth: '154px',
                     borderRadius: '100px',
@@ -758,7 +771,7 @@ export const VideoTags = ({ vtags, handleCloseVTags, taggedDataVideo, setTaggedD
             }}
             choices={[
                 { id: '1', name: 'Victor' }
- 
+
             ]}
         />,
 
@@ -773,10 +786,10 @@ export const VideoTags = ({ vtags, handleCloseVTags, taggedDataVideo, setTaggedD
             }}
             choices={[
                 { id: '1', name: 'Victor' }
- 
+
             ]}
         />,
-      
+
     ];
 
     const TagActions = () => (
@@ -784,11 +797,11 @@ export const VideoTags = ({ vtags, handleCloseVTags, taggedDataVideo, setTaggedD
             backgroundColor: 'transparent !important',
             width: '310px',
             margin: '0 auto',
-   
+
             flexDirection: 'column !important',
 
             '& .MuiToolbar-root .RaTopToolbar-root': {
-               
+
             },
             "& .RaList-actions": {
                 backgroundColor: 'transparent !important',
@@ -840,15 +853,15 @@ export const VideoTags = ({ vtags, handleCloseVTags, taggedDataVideo, setTaggedD
 
                     }}
                     filters={TagFilters} />
-                
+
             </Stack>
-            
+
         </TopToolbar>
     );
 
 
-    
-       
+
+
     return (
         <>
             <Dialog
@@ -864,7 +877,7 @@ export const VideoTags = ({ vtags, handleCloseVTags, taggedDataVideo, setTaggedD
                         <img className="mx-auto" src={tagRule} alt='rule' style={{ filter: theme === "light" ? "invert(0)" : "invert(1)" }} />
                     </div>
 
-                
+
                     <div className="flex items-center gap-x-[30px] flex-shrink-0">
                         <SearchBox placeholder='Search for tags' />
                         <BsFillFilterCircleFill className="w-[35px] h-[35px] flex-shrink-0 object-cover bg-[#222]  fill-[#D9D9D9] rounded-full cursor-pointer" style={{ backgroundColor: theme === "light" ? "#222" : "rgba(68, 68, 68, 0.2)", fill: theme === "light" ? "#d9d9d9" : "#d9d9d9" }} />
@@ -888,10 +901,10 @@ export const VideoTags = ({ vtags, handleCloseVTags, taggedDataVideo, setTaggedD
                         </ul>
                     </div>
 
-               
-                    
-              
-                   
+
+
+
+
                     {loading && <span>Loading...</span>}
                     {!posts && <span>No video</span>}
                     {posts && (
@@ -917,7 +930,7 @@ export const VideoTags = ({ vtags, handleCloseVTags, taggedDataVideo, setTaggedD
                                                         onCanPlay={handleCanPlay}
                                                         style={{ display: isReady ? 'block' : 'none' }}
                                                     />
-                              
+
                                                 </>
                                                 <div className='absolute top-[5.6px] right-[6.23px] w-[4px] h-[15px]' style={{ filter: "invert(1)" }}>
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="4" height="15" viewBox="0 0 4 15" fill="none">
@@ -932,16 +945,16 @@ export const VideoTags = ({ vtags, handleCloseVTags, taggedDataVideo, setTaggedD
                                                 <p>Single style video</p>
                                                 <p>$10.00</p>
                                             </div>
-                                                   
-                                
-                                                 
+
+
+
                                         </Grid>
                                     )
                                 })}
                             </Grid>
-                              
-                            <div className=" mb-[1rem] float-right" style={{color: theme === "light" ? "#222" : "#fff" }}>
-                                <button disabled={currentPage === 1}  style={{ backgroundColor: currentPage === 1 ? 'transparent' : '' }} className="px-[10px]" onClick={() => handleClick(currentPage - 1)}>
+
+                            <div className=" mb-[1rem] float-right" style={{ color: theme === "light" ? "#222" : "#fff" }}>
+                                <button disabled={currentPage === 1} style={{ backgroundColor: currentPage === 1 ? 'transparent' : '' }} className="px-[10px]" onClick={() => handleClick(currentPage - 1)}>
                                     {'<'}
                                 </button>
                                 <span>
@@ -962,7 +975,7 @@ export const VideoTags = ({ vtags, handleCloseVTags, taggedDataVideo, setTaggedD
                             </React.Fragment>
                         ))}
                     </div>
-                
+
                 </div>
             </Dialog>
         </>
@@ -981,21 +994,21 @@ const TransitionAd = React.forwardRef(function Transition(props, ref) {
 export const AdTags = ({ tags, handleCloseEditor, taggedData, setTaggedData, theme, collectionName }) => {
     const [openType, setOpenType] = useState(false);
     const [openSendPost, setOpenSendPost] = React.useState(false);
-  
+
     const [selectedTab, setSelectedTab] = useState("posts");
 
     const handleTabClick = (tab) => {
         setSelectedTab(tab);
     }
-    
-const handleSendPost = () => {
+
+    const handleSendPost = () => {
         setOpenSendPost(true)
     };
 
 
     const closeSendPost = () => { setOpenSendPost(false); handleCloseEditor() };
-    
-       
+
+
     return (
         <>
             <Dialog
@@ -1017,9 +1030,9 @@ const handleSendPost = () => {
                     Done
                 </button>
                 <div className="h-full w-full mt-[5rem]">
-                   
 
-                
+
+
                     <div className="flex items-center justify-between gap-x-[30px] flex-shrink-0 relative ">
                         <h2 style={{ color: theme === "light" ? '#222' : "#fff" }}>Choose Ad type</h2>
                         <BsFillFilterCircleFill className="w-[35px] h-[35px] flex-shrink-0 object-cover rounded-full cursor-pointer" style={{ color: theme === 'light' ? '#222' : '#fff' }} onClick={() => setOpenType(!openType)} />
@@ -1042,7 +1055,7 @@ const handleSendPost = () => {
                             </div>
                         </TransitionAd>
                     </div>
-         
+
                     <div className="mt-[2rem]">
                         {selectedTab === 'posts' ? (
                             <PostAds theme={theme} taggedData={taggedData} setTaggedData={setTaggedData} />
@@ -1056,8 +1069,8 @@ const handleSendPost = () => {
                     </div>
 
 
-                    
-                
+
+
                 </div>
 
                 <AdContainer
@@ -1085,7 +1098,7 @@ const PostAds = ({ theme, taggedData, setTaggedData }) => {
         const [data, setData] = useState([]);
         const [loading, setLoading] = useState(true);
         const [error, setError] = useState(null);
-  
+
         useEffect(() => {
             const fetchResources = async () => {
                 try {
@@ -1096,7 +1109,7 @@ const PostAds = ({ theme, taggedData, setTaggedData }) => {
                             filter: {},
                         })
                     );
-  
+
                     const results = await Promise.all(dataPromises);
                     const combinedData = results.reduce((acc, { data }) => [...acc, ...data], []);
                     setData(combinedData);
@@ -1106,10 +1119,10 @@ const PostAds = ({ theme, taggedData, setTaggedData }) => {
                     setLoading(false);
                 }
             };
-  
+
             fetchResources();
         }, [dataProvider, resources]);
-  
+
         return { data, loading, error };
     };
 
@@ -1119,7 +1132,7 @@ const PostAds = ({ theme, taggedData, setTaggedData }) => {
     const totalPages = Math.ceil(data?.length / ITEMS_PER_PAGE);
 
 
-// Effect to perform search when input or data changes
+    // Effect to perform search when input or data changes
     React.useEffect(() => {
         if (input.trim() !== '') {
             // Filter data based on input
@@ -1133,7 +1146,7 @@ const PostAds = ({ theme, taggedData, setTaggedData }) => {
             setSearchResults(data);
         }
     }, [input, data]);
-    
+
 
     const handleClick = (newPage) => {
         setCurrentPage(newPage);
@@ -1176,7 +1189,7 @@ const PostAds = ({ theme, taggedData, setTaggedData }) => {
                             )
                         })}
                     </Grid>
-                              
+
                     <div className=" mb-[1rem] float-right" style={{ color: theme === "light" ? "#222" : "#fff" }}>
                         <button disabled={currentPage === 1} style={{ backgroundColor: currentPage === 1 ? 'transparent' : '' }} className="px-[10px]" onClick={() => handleClick(currentPage - 1)}>
                             {'<'}

@@ -2,8 +2,10 @@ import { createContext, useEffect, useState } from "react";
 import { supabase } from "../../supabase/SupabaseConfig";
 import { supabaseAuthProvider } from "ra-supabase";
 import Medusa from "@medusajs/medusa-js";
-import { useStore } from "react-admin";
+import { useDataProvider, useStore } from "react-admin";
 import { useGetIdentity, useGetOne } from 'react-admin';
+
+import { useMeCustomer, useMedusa } from "medusa-react"
 
 
 const auth = supabaseAuthProvider(supabase, {
@@ -38,7 +40,72 @@ export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [custData, setCustData] = useStore("customer");
   const [cart_id, setCartID] = useStore("cart_id");
+  
+  
+  // const useFetchMultipleLists = (resources) => {
+	// 	const dataProvider = useDataProvider();
+	// 	const [data, setData] = React.useState([]);
+  //   const [haulsList, setHaulsList] = React.useState([]);
+	// 	const [loading, setLoading] = React.useState(true);
+	// 	const [error, setError] = React.useState(null);
+  //   const [h_loading, setH_Loading] = React.useState(true);
+	// 	const [h_error, setH_Error] = React.useState(null);
 
+	// 	React.useEffect(() => {
+	// 		const fetchResources = async () => {
+	// 			try {
+	// 				const dataPromises = resources.map((resource) =>
+	// 					dataProvider.getList(resource, {
+	// 						pagination: { page: 1, perPage: 1000 },
+	// 						sort: { field: "id", order: "ASC" },
+	// 						filter: {},
+	// 					})
+	// 				);
+
+	// 				const results = await Promise.all(dataPromises);
+	// 				const seenIds = new Set();
+	// 				const combinedData = results.reduce((acc, { data }) => {
+	// 					const uniqueData = data.filter((item) => {
+	// 						if (!seenIds.has(item.id)) {
+	// 							seenIds.add(item.id);
+	// 							return true;
+	// 						}
+	// 						return false;
+	// 					});
+	// 					return [...acc, ...uniqueData];
+	// 				}, []);
+
+  //         const seenHaulIds = new Set();
+  //         const haulsData = results[resources.indexOf("hauls")].reduce((acc, { data }) => {
+	// 					const uniqueData = data.filter((item) => {
+	// 						if (!seenHaulIds.has(item.id)) {
+	// 							seenHaulIds.add(item.id);
+	// 							return true;
+	// 						}
+	// 						return false;
+	// 					});
+	// 					return [...acc, ...uniqueData];
+	// 				}, []);
+
+  //         setHaulsList(haulsData);
+	// 				setData(combinedData);
+	// 			} catch (e) {
+	// 				setError(e);
+	// 			} finally {
+	// 				setLoading(false);
+	// 			}
+	// 		};
+
+	// 		fetchResources();
+	// 	}, [dataProvider, resources]);
+
+	// 	return { data, haulsList, loading, error };
+	// };
+
+	// const tables = ["posts", "hauls", "lookbook", "diy", "grwm"];
+	// const { data, haulsList, loading } = useFetchMultipleLists(tables);
+  
+  
 
   useEffect(() => {
     // Call your authProvider here and update the state
@@ -48,7 +115,7 @@ export const AuthContextProvider = ({ children }) => {
 
   useEffect(() => {
     // console.log(currentUser)
-    if (currentUser) {
+    if (currentUser && currentUser.email) {
       setG_User(currentUser)
       medusa.auth
         .authenticate({
@@ -59,7 +126,7 @@ export const AuthContextProvider = ({ children }) => {
         })
     }
     else {
-      if (g_user) {
+      if (g_user && g_user.email) {
         setCurrentUser(g_user)
         medusa.auth
           .authenticate({
@@ -176,7 +243,7 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ currentUser }}>
+    <AuthContext.Provider value={{ currentUser, medusa }}>
       {children}
     </AuthContext.Provider>
   );

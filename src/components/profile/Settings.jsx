@@ -144,31 +144,31 @@ const Settings = () => {
             </li>
 
             {/* user info */}
-            {/* <li className='profile justify-between'>
+            <li className='profile justify-between'>
               <div className='flex gap-x-[8px] items-center'>
                 <div className='uImage--container'>
                   <div className='overflow-hidden relative rounded-full h-[60px] w-[60px] drop-shadow-lg'>
                     <Avatar sx={{ width: '60px', height: "60px" }}
-                      src={userData.photoURL}
+                      src={userData?.photoURL}
                     />
                   </div>
-                  <Link to={`/users/${userData.id}/edit`}>
+                  <Link to={`/users/${userData?.id}/edit`}>
                     <img className='absolute top-[70%] right-[0] w-[20px] h-[20px] rounded-full' src={camera} alt='camera' />
                   </Link>
                 </div>
                 <div>
-                  <p className='text-[16px] font-[600]'>{userData.displayName}</p>
+                  <p className='text-[16px] font-[600]'>{userData?.displayName}</p>
                   <p className=' font-[400] text-[16px]'>
-                    @{userData && userData.username ? userData.username.toLowerCase() : 'username'} - {formatFollowers(totalFollowers)} Followers
+                    @{userData && userData?.username ? userData?.username.toLowerCase() : 'username'} - {formatFollowers(totalFollowers)} Followers
                   </p>
                 </div>
               </div>
 
               <div>
-                <Link to={`/users/${userData.id}/edit`}><MdArrowForwardIos size={20} />
+                <Link to={`/users/${userData?.id}/edit`}><MdArrowForwardIos size={20} />
                 </Link>
               </div>
-            </li> */}
+            </li>
 
             {/* account center */}
             <div className=' mt-[2rem] flex justify-between items-center cursor-pointer' onClick={openAccount}>

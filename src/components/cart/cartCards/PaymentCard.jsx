@@ -14,13 +14,13 @@ import { ThemeContext } from '../../context/ThemeProvider';
 
 
 
-export const CartPayment = ({ cart, openForm, SetPaymentSess, componentProps }) => {
+export const CartPayment = ({ cart, openForm, SetPaymentSess, componentProps, UpdatePaymentSessWithSplitConfig }) => {
     const { theme } = React.useContext(ThemeContext);
-    React.useEffect(() => {
-        if (cart) {
-            console.log(cart)
-        }
-    }, [cart])
+    // React.useEffect(() => {
+    //     if (cart) {
+    //         console.log(cart)
+    //     }
+    // }, [cart])
 
     function toTitleCase(str) {
         return str
@@ -151,7 +151,7 @@ export const CartPayment = ({ cart, openForm, SetPaymentSess, componentProps }) 
                 {/* action buttons  */}
                 <div className='action--btns'>
                     <IconButton>
-                        <div className='update--bag'>
+                        <div className='update--bag' onClick={()=>{ UpdatePaymentSessWithSplitConfig(cart.payment_session.provider_id)}}>
                             UPDATE BAG
                         </div>
                     </IconButton>

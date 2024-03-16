@@ -20,20 +20,20 @@ export const ForYouCard = () => {
                 </div>
 
                 <div className="forU__cards">
-                    <NavLink>
+                    {/* <NavLink>
                     <div className="bg-[#D17D41] text-white">Dinner</div>
                     </NavLink>
 
                     <NavLink>
                     <div className="bg-[#074942] text-white">Office</div>
+                    </NavLink> */}
+
+                    <NavLink>
+                    <div className="bg-[#3D1556] text-white">GRWM</div>
                     </NavLink>
 
                     <NavLink>
-                    <div className="bg-[#3D1556] text-white">Sport</div>
-                    </NavLink>
-
-                    <NavLink>
-                    <div className="bg-[#20591B] text-white">Pyjamas</div>
+                    <div className="bg-[#20591B] text-white">DIY</div>
                     </NavLink>
 
                     <NavLink to='/hauls'>

@@ -14,6 +14,8 @@ import { useGetIdentity, useGetOne } from 'react-admin';
 import StoreDetails from '../store-details';
 import ProductList from '../products/ProductList';
 import OrderList from '../orders/OrderList';
+import { InfluencerStat } from '../../components/profile/Stat';
+import { VendorsStat } from '../../components/profile/InfluencerStat';
 
 
 
@@ -266,73 +268,87 @@ const Store = () => {
 				}
 
 			}}>
-				{/* <TabbedShowLayout.Tab label="Products">
-					<div className="pt-[0rem] pb-[4rem]">
-						<div className="mb-[1.5rem]">
 
-							Search box
-							<div
-								className="general search--box my-[1rem]"
-								style={{ filter: theme === "light" ? "invert(0)" : "invert(1)" }}
-							>
-								<input
-									className="search--input"
-									type="search"
-									placeholder={`Search ${store && store.name ? (store.name) : "Store"}`}
-									value={input}
-									onChange={(e) => setInput(e.target.value)}
-								/>
-								{search}
-							</div>
-						</div>
+				{currentUser && vendor && currentUser.email === vendor.email ? (<TabbedShowLayout.Tab label="Info"><StoreDetails /></TabbedShowLayout.Tab>) : (null)}
 
-
-
-
-
-
-
-						{products && products.length && (
-							<>
-								{products && !products.length && <span>No Products</span>}
-								{products && products.length > 0 && (
-									<Grid container spacing="10px" rowGap={{ xs: 2 }} style={{
-										backgroundColor: theme === 'light' ? '#fff' : '#222',
-										color: theme === 'light' ? '#222' : '#fff',
-									}}>
-										{products &&
-											products.map((product) => {
-												return (
-													<Grid key={product.id} item xs={4} sm={4} md={4} style={{
-														backgroundColor: theme === 'light' ? '#fff' : '#222',
-														color: theme === 'light' ? '#222' : '#fff',
-													}}>
-														<NormalStoreCards
-															title=""
-															subTitle={store && store.name ? (store.name) : ('Shop')}
-															price={product && region && product.variants ? (formatPrice(product.variants[0].prices.filter((curr) => { return curr.currency_code === region.currency_code })[0].amount)) : (null)}
-															name={product.title}
-															product={product}
-															vendor={vendorAcc}
-														/>
-													</Grid>
-												);
-											})}
-									</Grid>
-								)}
-							</>
-						)}
-					</div>
-				</TabbedShowLayout.Tab> */}
-				<TabbedShowLayout.Tab label="Store Details">
-					<StoreDetails />
-				</TabbedShowLayout.Tab>
 				<TabbedShowLayout.Tab label='Products' >
-					<ProductList />
+					{currentUser && vendor && currentUser.email === vendor.email ? (<ProductList />) : (
+						<div className="pt-[0rem] pb-[4rem]">
+							<div className="mb-[1.5rem]">
+
+								{/* Search box */}
+								<div
+									className="general search--box my-[1rem]"
+									style={{ filter: theme === "light" ? "invert(0)" : "invert(1)" }}
+								>
+									<input
+										className="search--input"
+										type="search"
+										placeholder={`Search ${store && store.name ? (store.name) : "Store"}`}
+										value={input}
+										onChange={(e) => setInput(e.target.value)}
+									/>
+									{search}
+								</div>
+							</div>
+
+
+
+
+
+
+
+							{products && products.length && (
+								<>
+									{products && !products.length && <span>No Products</span>}
+									{products && products.length > 0 && (
+										<Grid container spacing="10px" rowGap={{ xs: 2 }} style={{
+											backgroundColor: theme === 'light' ? '#fff' : '#222',
+											color: theme === 'light' ? '#222' : '#fff',
+										}}>
+											{products &&
+												products.map((product) => {
+													return (
+														<Grid key={product.id} item xs={4} sm={4} md={4} style={{
+															backgroundColor: theme === 'light' ? '#fff' : '#222',
+															color: theme === 'light' ? '#222' : '#fff',
+														}}>
+															<NormalStoreCards
+																title=""
+																subTitle={store && store.name ? (store.name) : ('Shop')}
+																price={product && region && product.variants ? (formatPrice(product.variants[0].prices.filter((curr) => { return curr.currency_code === region.currency_code })[0].amount)) : (null)}
+																name={product.title}
+																product={product}
+																vendor={vendorAcc}
+															/>
+														</Grid>
+													);
+												})}
+										</Grid>
+									)}
+								</>
+							)}
+						</div>
+					)}
+
 				</TabbedShowLayout.Tab>
-				<TabbedShowLayout.Tab label='Orders' >
-					<OrderList />
-				</TabbedShowLayout.Tab>
+				{
+					currentUser && vendor && currentUser.email === vendor.email ? (
+						<>
+							<TabbedShowLayout.Tab label='Orders' >
+								<OrderList />
+							</TabbedShowLayout.Tab>
+							{/* <TabbedShowLayout.Tab label='Stats'>
+								<div className='flex w-[90vw]'>
+									{currentUser && currentUser.role === 'vendor' ? (<VendorsStat />) : (<InfluencerStat />)}
+								</div>
+							</TabbedShowLayout.Tab> */}
+						</>
+					) : (
+						null
+					)
+				}
+
 
 			</TabbedShowLayout>
 
@@ -344,3 +360,9 @@ const Store = () => {
 	);
 };
 export default Store;
+
+
+
+
+
+

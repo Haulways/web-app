@@ -8,7 +8,7 @@ import { collection, onSnapshot, orderBy, query, } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { AuthContext } from '../../components/context/AuthContext';
 import { Avatar, Box, CircularProgress, IconButton, Skeleton } from '@mui/material';
-import { useGetIdentity, useGetList, useGetMany, useRecordContext, useRefresh, useStore } from 'react-admin';
+import { useGetIdentity, useGetList, useGetMany, useGetOne, useRecordContext, useRefresh, useStore } from 'react-admin';
 import cartImg from "../../assets/cart.png";
 import backIcon from "../../assets/postImg-Icons/back.png";
 import shareIcon from "../../assets/socials/share.png";
@@ -27,12 +27,14 @@ import { ThemeContext } from '../../components/context/ThemeProvider';
 import useSupabaseRealtime from '../../supabase/realTime';
 import { v4 as uuidv4 } from "uuid";
 import { ShowPageCarousels_1 } from '../../components/card/ShowCard';
+// import { Product } from "@medusajs/medusa"
+import { useProducts } from "medusa-react"
 
 
 
-const medusa = new Medusa({
-  baseUrl: "https://ecommerce.haulway.co",
-});
+// const medusa = new Medusa({
+//   baseUrl: "https://ecommerce.haulway.co",
+// });
 
 export const CheckSavedPost = (postId) => {
   const record = useRecordContext();
@@ -319,7 +321,7 @@ export const ListStoreVendors = (store_ids) => {
       let store = prod && prod.metadata && prod.metadata.store ? (prod.metadata.store) : (await getStore(prod.store_id));
       let vendor = prod && prod.metadata && prod.metadata.vendor ? (prod.metadata.vendor) : (await getVendor(store?.id));
       let vendorAcc = prod && prod.metadata && prod.metadata.vendorAcc ? (prod.metadata.vendorAcc) : (await getVendorAcc(vendor));
-      
+
       await updateProduct({
         prod_id: prod?.id, payload: {
           store: store,
@@ -335,6 +337,7 @@ export const ListStoreVendors = (store_ids) => {
         vendor: vendor,
         vendorAcc: vendorAcc
       }
+
     }));
 
 
@@ -346,9 +349,9 @@ export const ListStoreVendors = (store_ids) => {
   }
 
   useEffect(() => {
-    console.log(store_ids?.length);
+    // console.log(store_ids?.length);
     if (store_ids?.length) {
-      getAllAtOnce(store_ids);
+      // getAllAtOnce(store_ids);
     }
 
   }, [store_ids]);
@@ -422,7 +425,7 @@ const Signlepost = () => {
   const [post, setPost] = useState(null);
   const { id } = useParams();
   const [comments, setComments] = useState([]);
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, medusa } = useContext(AuthContext);
   const [following, setFollowing] = useState(false);
   const [followers, setFollowers] = useState([]);
   const [liked, setLiked] = useState(false);
@@ -445,34 +448,57 @@ const Signlepost = () => {
   const [g_user, setG_User] = useStore("user");
   const { prods_final } = GetFullProdData(post?.taggedProducts);
   const { data: identity, isLoading: identityLoading } = useGetIdentity();
+  const { products: prodss, isLoading: isLd } = useProducts()
+  const { data: poster_data, isLoading, error } = useGetOne('users', { id: record?.uid });
 
 
+  React.useState(() => {
+    if (prodss) {
+      console.log('products', prodss)
+    }
+  }, [prodss])
 
   // Attach an event listener after the Splide instance is mounted
 
+  // React.useEffect(() => {
+  //   if (identity) {
+  //     medusa.auth
+  //       .authenticate({
+  //         email: identity.email,
+  //         password: import.meta.env.VITE_AUTH_PASSWORD,
+  //       })
+  //       .then(({ customer }) => {
+  //         setCustData(customer);
+  //         if (!g_cart_id) {
+  //           medusa.carts.create().then(({ cart }) => {
+  //             setGCartID(cart.id);
+  //             setGCart(cart)
+  //           });
+  //         } else {
+  //           medusa.carts.retrieve(g_cart_id).then(({ cart }) => setGCart(cart));
+  //         }
+  //       });
+  //   }
+
+
+
+  // }, [identity]);
+
   React.useEffect(() => {
-    if (identity) {
-      medusa.auth
-        .authenticate({
-          email: identity.email,
-          password: import.meta.env.VITE_AUTH_PASSWORD,
-        })
-        .then(({ customer }) => {
-          setCustData(customer);
-          if (!g_cart_id) {
-            medusa.carts.create().then(({ cart }) => {
-              setGCartID(cart.id);
-              setGCart(cart)
-            });
-          } else {
-            medusa.carts.retrieve(g_cart_id).then(({ cart }) => setGCart(cart));
-          }
-        });
+    if (!cart_id) {
+      medusa.carts.create().then(({ cart }) => {
+        setCartID(cart.id);
+        setCart(cart)
+      });
+    } else {
+      medusa.carts.retrieve(cart_id).then(({ cart }) => {
+        console.log(cart);
+        setCart(cart)
+      });
     }
+  }, [medusa])
 
 
-
-  }, [identity]);
 
   React.useEffect(() => {
     if (post) {
@@ -481,14 +507,15 @@ const Signlepost = () => {
         // expand: 'store'
       })
         .then(({ products, limit, offset, count }) => {
+          // console.log(products);
           setPost({ ...post, taggedProducts: products })
           setProducts(products)
 
         })
-      // console.log(post);
+
     }
 
-  }, [custData, currentUser, post])
+  }, [custData, currentUser, post, medusa])
 
   React.useEffect(() => {
     if (prods_final.length && products && products.length) {
@@ -531,16 +558,8 @@ const Signlepost = () => {
 
 
   React.useEffect(() => {
-    if (!cart_id) {
-      medusa.carts.create().then(({ cart }) => {
-        setCartID(cart.id);
-        setCart(cart)
-      });
-    } else {
-      medusa.carts.retrieve(cart_id).then(({ cart }) => setCart(cart));
-    }
-
-    // console.log(cart);
+    setGCart(cart)
+    setGCartID(cart_id)
   }, [cart_id, cart]);
 
   React.useEffect(() => {
@@ -1099,7 +1118,7 @@ const Signlepost = () => {
 
           </div>
 
-          <MPost post={post} id={id} comments={comments} liked={liked} likes={likes} follow={follow} followers={followers} unfollow={unfollow} toggleLike={toggleLike} formatFollowers={formatFollowers} following={following} savePost={savePost} cart={gcart} products={products} GetFullProdData={GetFullProdData} />
+          <MPost post={post} id={id} comments={comments} liked={liked} likes={likes} follow={follow} followers={followers} unfollow={unfollow} toggleLike={toggleLike} formatFollowers={formatFollowers} following={following} savePost={savePost} cart={gcart} products={products} GetFullProdData={GetFullProdData} poster_data={poster_data} />
         </>
       ) : (
         <div className='spinner'>

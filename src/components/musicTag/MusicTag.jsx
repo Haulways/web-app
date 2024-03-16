@@ -9,21 +9,7 @@ import backIcon from "../../assets/postImg-Icons/backIcon.png";
 
 export const MusicTag = ({ openMusicTag, closeMusicTag, theme, selectedfiles, activeFile }) => {
     const [input, setInput] = React.useState("");
-    const [audios, setAudios] = React.useState([]);
-    const [currentPage, setCurrentPage] = React.useState(1);
-    const ITEMS_PER_PAGE = 3;
-
-    
-    // React.useEffect(() => {
-    //     async function fetchData() {
-    //         const results = await searchVideo(input);
-    //         setAudios(results);
-    //         console.log(results);
-    //     }
-    //     fetchData();
-    // }, [input]);
-
-    const myaudios = [
+    const [audios, setAudios] = React.useState([
         {
             "title": "Restream hôm qua.................",
             "videoId": "pXbdOLFm8g4",
@@ -73,13 +59,31 @@ export const MusicTag = ({ openMusicTag, closeMusicTag, theme, selectedfiles, ac
                 "height": 90
             }
         }
-    ];
-    const totalPages = Math.ceil(myaudios?.length / ITEMS_PER_PAGE);
+    ]);
+    const [currentPage, setCurrentPage] = React.useState(1);
+    const ITEMS_PER_PAGE = 4;
+
+
+    React.useEffect(() => {
+        console.log(input)
+        async function fetchData() {
+            searchVideo(input)
+                .then((results) => {
+                    setAudios(results);
+                    console.log(results);
+                })
+
+        }
+        fetchData();
+    }, [input]);
+
+
+    const totalPages = Math.ceil(audios?.length / ITEMS_PER_PAGE);
 
     const handleClick = (newPage) => {
         setCurrentPage(newPage);
     };
-	
+
     return (
         <Dialog
             fullScreen
@@ -99,37 +103,36 @@ export const MusicTag = ({ openMusicTag, closeMusicTag, theme, selectedfiles, ac
                 Done
             </button>
 
-            {/* <input
-                className='search--input'
-                type='search'
-                placeholder='Search for courses'
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-            /> */}
             
 
+
             <div className="flex items-center gap-x-[30px] flex-shrink-0 mt-[4rem]">
-                <SearchBox placeholder='Search for song' />
+                
+                <SearchBox
+                    placeholder='Search for Music'
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                />
                 <BsFillFilterCircleFill className="w-[35px] h-[35px] flex-shrink-0 object-cover bg-[#222]  fill-[#D9D9D9] rounded-full cursor-pointer" style={{ backgroundColor: theme === "light" ? "#222" : "rgba(68, 68, 68, 0.2)", fill: theme === "light" ? "#d9d9d9" : "#d9d9d9" }} />
             </div>
 
             {/* filter tags  */}
-            <div className="mt-[25px] mb-[10px] store__card" >
+
+            {/* <div className="mt-[25px] mb-[10px] store__card" >
                 <ul className="flex gap-x-[20px] justify-end items-center overflow-x-scroll store__card">
                     <li className="flex items-center gap-x-[50px] px-[17px] py-[10px] text-[14px] font-[500] rounded-full bg-[#d9d9d9] w-fit cursor-pointer" style={{ backgroundColor: theme === "light" ? "#d9d9d9" : "rgba(68, 68, 68, 0.4)", color: theme === "light" ? "#222" : "#fff" }}>
-                       Name
+                        Name
                         <PiCaretDownBold className="flex-shrink-0" />
                     </li>
                     <li className="flex items-center gap-x-[50px] px-[17px] py-[10px] text-[14px] font-[500] rounded-full bg-[#d9d9d9] w-fit cursor-pointer" style={{ backgroundColor: theme === "light" ? "#d9d9d9" : "rgba(68, 68, 68, 0.4)", color: theme === "light" ? "#222" : "#fff" }}>
-                       Artist
+                        Artist
                         <PiCaretDownBold className="flex-shrink-0" />
                     </li>
-                    {/* */}
                 </ul>
-            </div>
+            </div> */}
 
             <div className="flex flex-col gap-6 mt-[2rem]">
-                {myaudios && myaudios.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE).map((song, index) => (
+                {audios && audios.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE).map((song, index) => (
                     <div key={index}>
 
                         <MusicCard
@@ -145,7 +148,7 @@ export const MusicTag = ({ openMusicTag, closeMusicTag, theme, selectedfiles, ac
 
             <div className="mt-[1rem] mb-[1rem] flex justify-end text-white">
                 <span>
-                    {Math.min((currentPage - 1) * ITEMS_PER_PAGE + 1, myaudios.length)} - {Math.min(currentPage * ITEMS_PER_PAGE, myaudios.length)} of {myaudios.length}
+                    {Math.min((currentPage - 1) * ITEMS_PER_PAGE + 1, audios.length)} - {Math.min(currentPage * ITEMS_PER_PAGE, audios.length)} of {audios.length}
                 </span>
                 <button disabled={currentPage === 1} style={{ backgroundColor: currentPage === 1 ? 'transparent' : '' }} className="px-[10px]" onClick={() => handleClick(currentPage - 1)}>
                     {'<'}
@@ -156,7 +159,7 @@ export const MusicTag = ({ openMusicTag, closeMusicTag, theme, selectedfiles, ac
             </div>
 
 
-            
+
         </Dialog>
     );
 };

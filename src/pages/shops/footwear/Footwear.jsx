@@ -14,44 +14,55 @@ import { AuthContext } from '../../../components/context/AuthContext';
 
 
 
-const medusa = new Medusa({
-  maxRetries: 3,
-  baseUrl: "https://ecommerce.haulway.co",
-});
+// const medusa = new Medusa({
+//   maxRetries: 3,
+//   baseUrl: "https://ecommerce.haulway.co",
+// });
 
 const Footwear = () => {
   const { theme } = useContext(ThemeContext);
   const [input, setInput] = React.useState("");
-  const { currentUser } = React.useContext(AuthContext)
+  const { currentUser, medusa } = React.useContext(AuthContext)
   const [custData, setCustData] = React.useState(null);
   const [products, setProducts] = React.useState(null);
   const [cart_id, setCartID] = useStore("cart_id");
   const [cart, setCart] = React.useState(null);
   const [region, setRegion] = React.useState(null);
 
+  // React.useEffect(() => {
+  //   if (currentUser) {
+  //     medusa.auth
+  //       .authenticate({
+  //         email: currentUser.email,
+  //         password: import.meta.env.VITE_AUTH_PASSWORD,
+  //       })
+  //       .then(({ customer }) => {
+  //         setCustData(customer);
+  //         if (!cart_id) {
+  //           medusa.carts.create().then(({ cart }) => {
+  //             setCartID(cart.id);
+  //             setCart(cart)
+  //           });
+  //         } else {
+  //           medusa.carts.retrieve(cart_id).then(({ cart }) => setCart(cart));
+  //         }
+
+
+  //       });
+  //   }
+
+  // }, []);
+
   React.useEffect(() => {
-    if (currentUser) {
-      medusa.auth
-        .authenticate({
-          email: currentUser.email,
-          password: import.meta.env.VITE_AUTH_PASSWORD,
-        })
-        .then(({ customer }) => {
-          setCustData(customer);
-          if (!cart_id) {
-            medusa.carts.create().then(({ cart }) => {
-              setCartID(cart.id);
-              setCart(cart)
-            });
-          } else {
-            medusa.carts.retrieve(cart_id).then(({ cart }) => setCart(cart));
-          }
-
-
-        });
+    if (!cart_id) {
+      medusa.carts.create().then(({ cart }) => {
+        setCartID(cart.id);
+        setCart(cart)
+      });
+    } else {
+      medusa.carts.retrieve(cart_id).then(({ cart }) => setCart(cart));
     }
-
-  }, []);
+  }, [medusa])
 
   React.useEffect(() => {
     if (input) {

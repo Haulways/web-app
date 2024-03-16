@@ -59,15 +59,18 @@ const Accordion = ({ options, handleSelect, selectedOption, currentUser, record 
 
 
                 {currentUser && (
-                    currentUser.role === 'vendor' ? (
-                        <span className='text-[10px] font-[600] ml-[.5rem]'>
-                            (Vendor's choice)
-                        </span>
-                    ) : currentUser.role === 'influencer' && (
-                        <span className='text-[10px] font-[600] ml-[.5rem]'>
-                            (Influencer's choice)
-                        </span>
-                    )
+                    record.agreed_at === null ? (
+                        currentUser.role === 'vendor' ? (
+                            <span className='text-[10px] font-[600] ml-[.5rem]'>
+                                (Influencer's choice)
+                            </span>
+                        ) : currentUser.role === 'influencer' && (
+                            <span className='text-[10px] font-[600] ml-[.5rem]'>
+                                (Vendor's choice)
+                            </span>
+                        )) : (<span className='text-[10px] font-[600] ml-[.5rem]'>
+                            (Agreed choice)
+                        </span>)
                 )}
 
                 <span className={`icon ${isOpen ? 'open' : ''}`}>
@@ -181,8 +184,8 @@ export const Partnership = () => {
 
             // console.log(res);
 
-            
-          
+
+
             const { data, error } = await supabase
                 .from('contract')
                 .update({

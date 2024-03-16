@@ -26,6 +26,8 @@ import { toast } from 'react-toastify';
 import { ThemeContext } from '../../components/context/ThemeProvider';
 import useSupabaseRealtime from '../../supabase/realTime';
 import axios, { isCancel, AxiosError } from 'axios';
+import { VendorsStat } from '../../components/profile/InfluencerStat';
+import { InfluencerStat } from '../../components/profile/Stat';
 
 
 
@@ -810,6 +812,7 @@ const Profile = () => {
                                             label="Post"
                                             sx={tabStyles}
                                         />
+
                                         {(userData?.uid === currentUser?.uid) && (
                                             <Tab
                                                 value={1}
@@ -819,6 +822,7 @@ const Profile = () => {
                                                 sx={tabStyles}
                                             />
                                         )}
+
                                         {(userData.role === "admin" || userData.role === "vendor" || userData.role === "influencer") && (
                                             <Tab
                                                 value={userData.role === "admin" ? 2 : userData.role === "vendor" ? 2 : userData.role === "influencer" ? 2 : false}
@@ -834,6 +838,15 @@ const Profile = () => {
                                                 icon={<img src={request} alt='request' />}
                                                 iconPosition='end'
                                                 label="Request"
+                                                sx={tabStyles}
+                                            />
+                                        )}
+                                        {(userData?.uid === currentUser?.uid) && (
+                                            <Tab
+                                                value={4}
+                                                icon={<img src={saved} alt='stats' />}
+                                                iconPosition='end'
+                                                label="Stats"
                                                 sx={tabStyles}
                                             />
                                         )}
@@ -896,6 +909,19 @@ const Profile = () => {
 
                                         </TabPanel>
                                     )}
+                                    {userData?.uid === currentUser?.uid && (
+                                        <TabPanel
+                                            className="mb-[2rem] mobile:min-w-[90vw]"
+                                            value={tabValue}
+                                            index={4}
+                                        >
+                                            <div className='flex w-[90vw]'>
+                                                {currentUser && currentUser.role === 'vendor' ? (<VendorsStat />) : (<InfluencerStat />)}
+                                            </div>
+
+
+                                        </TabPanel>
+                                    )}
                                 </SwipeableViews>
                             </Grid>
 
@@ -925,3 +951,4 @@ const Profile = () => {
 };
 
 export default Profile
+

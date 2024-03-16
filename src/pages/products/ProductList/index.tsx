@@ -13,7 +13,7 @@ const ProductList = () => {
   return (
     <Fragment>
       <Container>
-        <div className="h-full w-[95vw] md:w-full bg-white overflow-y-auto hidden-scrollbar border border-gray-200 rounded-md p-3 md:p-8">
+        <div className="h-full w-[97vw] md:w-full bg-white overflow-y-auto hidden-scrollbar border border-gray-200 rounded-md p-3 px-4 md:p-8">
           <ProductHeading setAddProduct={setAddProduct} />
           <ProductListFilter />
 

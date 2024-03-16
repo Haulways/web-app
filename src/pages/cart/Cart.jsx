@@ -19,15 +19,19 @@ import { DFooter } from '../../components';
 import { ThemeContext } from '../../components/context/ThemeProvider';
 import { useGetIdentity, useGetOne } from 'react-admin';
 import { supabase } from '../../supabase/SupabaseConfig';
+import { useContext } from 'react';
+import { AuthContext } from '../../components/context/AuthContext';
 
 
 
 
 
 
-const medusa = new Medusa({
-    baseUrl: "https://ecommerce.haulway.co",
-});
+// const medusa = new Medusa({
+//     baseUrl: "https://ecommerce.haulway.co",
+// });
+
+
 
 
 const Cart = () => {
@@ -50,6 +54,7 @@ const Cart = () => {
     const location = useLocation()
     const redirect = useRedirect();
     const { data: identity, isLoading: identityLoading } = useGetIdentity();
+    const { currentUser, medusa } = useContext(AuthContext);
 
     const handleChange = (panel, cart) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
@@ -57,54 +62,47 @@ const Cart = () => {
 
     };
 
-    async function filterContractDocuments(vendorEmail, influencerEmail) {
-        try {
-            // Query contract documents table
-            const { data, error } = await supabase
-                .from("contract")
-                .select("*")
-                .eq('vendor_email', vendorEmail)
-                .eq('influencer_email', influencerEmail);
+    // async function filterContractDocuments(vendorEmail, influencerEmail) {
+    //     try {
+    //         // Query contract documents table
+    //         const { data, error } = await supabase
+    //             .from("contract")
+    //             .select("*")
+    //             .eq('vendor_email', vendorEmail)
+    //             .eq('influencer_email', influencerEmail);
 
-            if (error) {
-                throw error;
-            }
+    //         if (error) {
+    //             throw error;
+    //         }
 
-            // Return filtered contract documents
-            return data;
-        } catch (error) {
-            console.error('Error filtering contract documents:', error.message);
-            return null;
-        }
-    }
+    //         // Return filtered contract documents
+    //         return data;
+    //     } catch (error) {
+    //         console.error('Error filtering contract documents:', error.message);
+    //         return null;
+    //     }
+    // }
 
 
-    
+
 
 
     React.useEffect(() => {
-        if (identity) {
-            medusa.auth
-                .authenticate({
-                    email: identity.email,
-                    password: import.meta.env.VITE_AUTH_PASSWORD,
-                })
+        if (medusa) {
+            medusa.customers.retrieve()
                 .then(({ customer }) => {
                     setCustData(customer);
-
                 });
         }
-
-
-    }, [identity]);
+    }, [medusa]);
 
 
     useEffect(() => {
         LoadCarts();
-    }, [intCart, cart])
+    }, [intCart])
 
     // useEffect(() => {
-        
+
     // }, [cart])
 
     useEffect(() => {
@@ -133,15 +131,21 @@ const Cart = () => {
     useEffect(() => {
         if (cart) {
             console.log(cart);
-            // LoadCarts();
+            LoadCarts();
         }
     }, [cart]);
 
     useEffect(() => {
         if (carts) {
+            // if (JSON.stringify(cart) === JSON.stringify(carts.filter((crt) => { return crt.id !== cart_id })[0])) {
+            //     setCart(carts.filter((crt) => {
+            //         return crt.id === cart_id;
+            //     })[0])
+            // }
             setCart(carts.filter((crt) => {
                 return crt.id === cart_id;
             })[0])
+
         }
     }, [carts]);
 
@@ -163,6 +167,8 @@ const Cart = () => {
                 email: custData.email,
                 amount: cart.payment_session.amount,
                 publicKey: import.meta.env.VITE_PS_PUB_KEY,
+                split_code: cart.context.split_doc ? (cart.context.split_doc.split_code) : (null),
+                split: cart.context.split_doc ? (cart.context.split_doc) : (null)
             };
 
             console.log(conf);
@@ -194,19 +200,22 @@ const Cart = () => {
             medusa.carts
                 .complete(cart_id)
                 .then(({ type, data }) => {
-                    setFinalData(data);
-                    setFinalType(type);
-                    console.log(data, type);
-                    const lineItem = data.cart.items;
+                    let intCrt = intCart;
+                    delete intCrt[cart.context.store.id];
+                    setIntCart({ ...intCrt })
+                    // setFinalData(data);
+                    // setFinalType(type);
+                    // console.log(data, type);
+                    // const lineItem = data.cart.items;
 
-                    // Loop through each line item and remove it from the cart
-                    lineItem.forEach(item => {
-                        medusa.carts.lineItems.delete(cart_id, item.id)
-                            .then(({ cart }) => {
-                                setCart(cart);
-                            })
-                            .catch(error => console.error(`Error removing item ${item.id} from cart:`, error));
-                    });
+                    // // Loop through each line item and remove it from the cart
+                    // lineItem.forEach(item => {
+                    //     medusa.carts.lineItems.delete(cart_id, item.id)
+                    //         .then(({ cart }) => {
+                    //             setCart(cart);
+                    //         })
+                    //         .catch(error => console.error(`Error removing item ${item.id} from cart:`, error));
+                    // });
                 })
                 .catch((error) => {
                     toast(error.message);
@@ -223,7 +232,7 @@ const Cart = () => {
         // Implementation for whatever you want to do with reference and after success call.
         console.log(reference);
         // UpdatePaymentSess(cart.payment_session.provider_id, reference)
-        handleCompleted()
+        // handleCompleted()
         completeCheckout()
         setOpenShipping(false);
     };
@@ -311,6 +320,7 @@ const Cart = () => {
                 .then(({ cart }) => {
                     console.log("Here", cart.payment_session);
                     setCart(cart);
+                    // UpdatePaymentSessWithSplitConfig(paymentProviderId)
                 })
                 .catch((error) => {
                     console.log(error.message);
@@ -319,6 +329,70 @@ const Cart = () => {
             console.log("Payment Session not set");
         }
     };
+
+    const UpdatePaymentSessWithSplitConfig = (paymentProviderId) => {
+        if (
+            custData &&
+            cart_id &&
+            cart.shipping_address_id &&
+            cart.shipping_address &&
+            cart.shipping_methods &&
+            cart.shipping_methods.length > 0 &&
+            cart.payment_sessions.length > 0 &&
+            paymentProviderId === 'paystack' &&
+            cart.context.split_doc
+        ) {
+            medusa.carts.updatePaymentSession(cart_id, paymentProviderId, {
+                data: {
+                    split_code: cart.context.split_doc.split_code
+                },
+            })
+                .then(({ cart }) => {
+                    console.log("Here", cart.payment_session);
+                    setCart(cart);
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                });
+
+
+        } else {
+            console.log("Payment Session not Updated");
+        }
+
+    }
+
+
+    const UpdatePaymentSess = (paymentProviderId, reference) => {
+        if (
+            custData &&
+            cart_id &&
+            cart.shipping_address_id &&
+            cart.shipping_address &&
+            cart.shipping_methods &&
+            cart.shipping_methods.length > 0 &&
+            cart.payment_sessions.length > 0 &&
+            paymentProviderId
+        ) {
+            medusa.carts.updatePaymentSession(cart_id, paymentProviderId, {
+                data: {
+                    ...reference
+                },
+            })
+                .then(({ cart }) => {
+                    console.log("Here", cart.payment_session);
+                    setCart(cart);
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                });
+
+
+        } else {
+            console.log("Payment Session not Updated");
+        }
+
+    }
 
     useEffect(() => {
         if (custData &&
@@ -347,6 +421,7 @@ const Cart = () => {
                     option_id: shippingOptionId, // the ID of the selected option
                 })
                 .then(({ cart }) => {
+                    toast("Shipping Option Updated")
                     setCart(cart);
                 });
         } else {
@@ -356,30 +431,39 @@ const Cart = () => {
     };
 
     // update shipping address 
-    const UpdateShippingAddress = (address) => {
+    const UpdateShippingAddress = async (address) => {
         // console.log(custData.shipping_addresses);
         if (custData && cart_id && !cart.shipping_address) {
-            medusa.carts.update(cart_id, {
-                customer_id: custData.id,
-                shipping_address: {
-                    company: address.company,
-                    first_name: address.first_name,
-                    last_name: address.last_name,
-                    address_1: address.address_1,
-                    address_2: "",
-                    city: address.city,
-                    country_code: address.country_code,
-                    province: address.province,
-                    postal_code: address.postal_code,
-                    phone: address.phone,
-                },
-            })
-                .then(({ cart }) => {
-                    setCart(cart);
+            await toast.promise(
+                medusa.carts.update(cart_id, {
+                    customer_id: custData.id,
+                    shipping_address: {
+                        company: address.company,
+                        first_name: address.first_name,
+                        last_name: address.last_name,
+                        address_1: address.address_1,
+                        address_2: "",
+                        city: address.city,
+                        country_code: address.country_code,
+                        province: address.province,
+                        postal_code: address.postal_code,
+                        phone: address.phone,
+                    },
                 })
-                .catch((error) => {
-                    console.log(error.message)
-                })
+                    .then(({ cart }) => {
+                        setCart(cart);
+
+                    })
+                    .catch((error) => {
+                        console.log(error.message)
+                    }),
+                {
+                    pending: `Updating shipping address`,
+                    success: 'shipping address Updated 👌',
+                    error: 'shipping address Failed 🤯'
+                }
+            )
+
         }
         else {
 
@@ -562,6 +646,7 @@ const Cart = () => {
                                                 openForm={handleOpenForm}
                                                 SetPaymentSess={SetPaymentSess}
                                                 componentProps={componentProps}
+                                                UpdatePaymentSessWithSplitConfig={UpdatePaymentSessWithSplitConfig}
                                             />
                                             <div className='py-7'></div>
 
@@ -792,6 +877,7 @@ const Cart = () => {
                                                 })
                                                 : shipOpts
                                         }
+                                        onChange={(event, value) => SelectShippingMethod(value)}
                                     // validate={required()}
 
                                     />
