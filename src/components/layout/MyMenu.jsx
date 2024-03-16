@@ -171,11 +171,11 @@ export const MyMenu = () => {
 						primaryText="Affiliate marketing..."
 						leftIcon={<GiNotebook size={24} />}
 					/>
-					{/* <Menu.Item
-							to="/contract"
+					<Menu.Item
+							to="/ugc"
 							primaryText="UGC sales"
 							leftIcon={<MonetizationOnIcon size={24} />}
-						/> */}
+						/>
 				</SubMenu>
 
 				{/* <SubMenu primaryText="Skill center" leftIcon={<ChevronRight />}>

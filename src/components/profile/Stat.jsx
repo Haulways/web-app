@@ -29,14 +29,14 @@ const data = {
         }
     ]
 };
-  
+
 const prevStats = [
     { label: 'Accounts reached', value: 28 },
     { label: 'Accounts engaged', value: 70 },
     { label: 'Total Followers', value: 70 },
     { label: 'Content Shared', value: 40 }
 ];
-  
+
 const stats = [
     { label: 'Accounts reached', value: 50, change: '0.0%', color: '#FF2C91' },
     { label: 'Accounts engaged', value: 60, change: '0.0%', color: '#FFD52C' },
@@ -44,15 +44,15 @@ const stats = [
     { label: 'Content Shared', value: 40, change: '', color: '#37C8AE' }
 ];
 
-  function formatCount(count) {
+function formatCount(count) {
     if (count >= 1000) {
-      return (count / 1000).toFixed(1) + 'K+';
+        return (count / 1000).toFixed(1) + 'K+';
     } else {
-      return count;
+        return count;
     }
 };
 
- const UserStat = ({theme}) => {
+const UserStat = ({ theme }) => {
     return (
         <>
             <Card className='feed--page'
@@ -70,7 +70,7 @@ const stats = [
                     <div className="Doughnut">
                         <Doughnut data={data} options={{ plugins: { legend: { display: false } }, cutout: '60%' }} />
                     </div>
-                    
+
                     <div className='flex flex-wrap w-full gap-x-[15px] gap-y-[20px] items-center'>
                         {stats.map((stat, index) => {
                             const prevStat = prevStats.find(s => s.label === stat.label);
@@ -99,7 +99,7 @@ const stats = [
                                     changeColor = '#FF2C91'; // Change is negative
                                 }
                             }
-  
+
                             return (
                                 <div key={index} className='flex-[30%]'>
                                     <p className="stat-value">{formatCount(stat.value)}</p>
@@ -122,7 +122,7 @@ const stats = [
     );
 };
 
-export const InfluencerStat = () => {
+export const InfluencerStat = ({ full }) => {
     const { theme } = useContext(ThemeContext);
 
     return (
@@ -132,14 +132,14 @@ export const InfluencerStat = () => {
                 <div className=' flex overflow-x-scroll store__card  gap-x-6 pt-[1rem] pb-[5px] px-[.5rem] w-[90vw]'>
 
                     <TotalViews />
-                    <Partnership  />
-                    <TotalEarned  />
-                    <TotalContent  />
-                    <TotalEngagement  />
+                    <Partnership />
+                    <TotalEarned />
+                    <TotalContent />
+                    <TotalEngagement />
                 </div>
 
                 {/* Trending Post */}
-                <div className=''>
+                {full ? (<div className=''>
                     <h2 className='text-[12px] font-[600]  mt-[20px] laptop:text-[18px]'>Trending Post</h2>
 
                     <ListBase title=' ' resource='posts'>
@@ -148,7 +148,7 @@ export const InfluencerStat = () => {
                                 '& .MuiPaper-root': {
                                     backgroundColor: theme === "light" ? "#fff !important" : "#222 !important",
                                     color: theme === "light" ? "#222 !important" : "#fff !important",
-                                   
+
                                 },
                             }}
                         >
@@ -163,7 +163,7 @@ export const InfluencerStat = () => {
                                                 return (
                                                     <div key={post.id} className="w-[80px] h-[80px] flex-shrink-0 rounded-full overflow-hidden laptop:w-[100px] laptop:h-[100px]">
                                                         {isImage ? (
-        
+
                                                             <img src={mediaUrl} alt='user-post' className="object-cover w-full h-full" />
                                                         ) : (
                                                             <video
@@ -187,7 +187,7 @@ export const InfluencerStat = () => {
                             )} />
                         </InfiniteList>
                     </ListBase>
-                </div>
+                </div>) : (null)}
             </div>
         </>
     );
@@ -207,7 +207,7 @@ const TotalViews = () => {
                     <img src={viewsIcon} alt='views' />
                 </div>
             </div>
-            
+
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', marginBottom: '5px' }}>
                 <p>0%</p>
                 <p>{progress}%</p>
@@ -225,7 +225,7 @@ const Partnership = () => {
 
     const progress = 40
     return (
-        <div className='partners--container' style={{backgroundColor: theme === "light" ? "#fff " : "", boxShadow: theme === 'light' ? "0px 2px 2px 0px rgba(0, 0, 0, 0.1), 2px 0px 2px 0px rgba(0, 0, 0, 0.019) " : "0px 1px 1px 1px rgba(255, 255, 255, 0.2)"}} >
+        <div className='partners--container' style={{ backgroundColor: theme === "light" ? "#fff " : "", boxShadow: theme === 'light' ? "0px 2px 2px 0px rgba(0, 0, 0, 0.1), 2px 0px 2px 0px rgba(0, 0, 0, 0.019) " : "0px 1px 1px 1px rgba(255, 255, 255, 0.2)" }} >
             <div className='partner--top'>
                 <div>
                     <h2>8/20</h2>
@@ -235,7 +235,7 @@ const Partnership = () => {
                     <img src={partnerIcon} alt='partner' />
                 </div>
             </div>
-            
+
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', marginBottom: '5px' }}>
                 <p>0%</p>
                 <p>{progress}%</p>
@@ -253,7 +253,7 @@ const TotalEarned = () => {
 
     const progress = 40
     return (
-        <div className='partners--container' style={{backgroundColor: theme === "light" ? "#fff " : "", boxShadow: theme === 'light' ? "0px 2px 2px 0px rgba(0, 0, 0, 0.1), 2px 0px 2px 0px rgba(0, 0, 0, 0.019) " : "0px 1px 1px 1px rgba(255, 255, 255, 0.2)"}}>
+        <div className='partners--container' style={{ backgroundColor: theme === "light" ? "#fff " : "", boxShadow: theme === 'light' ? "0px 2px 2px 0px rgba(0, 0, 0, 0.1), 2px 0px 2px 0px rgba(0, 0, 0, 0.019) " : "0px 1px 1px 1px rgba(255, 255, 255, 0.2)" }}>
             <div className='partner--top'>
                 <div>
                     <h2>$150</h2>
@@ -263,7 +263,7 @@ const TotalEarned = () => {
                     <img src={earnedIcon} alt='earned' />
                 </div>
             </div>
-            
+
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', marginBottom: '5px' }}>
                 <p>0%</p>
                 <p>{progress}%</p>
@@ -281,7 +281,7 @@ const TotalContent = () => {
 
     const progress = 90
     return (
-        <div className='partners--container' style={{backgroundColor: theme === "light" ? "#fff " : "", boxShadow: theme === 'light' ? "0px 2px 2px 0px rgba(0, 0, 0, 0.1), 2px 0px 2px 0px rgba(0, 0, 0, 0.019) " : "0px 1px 1px 1px rgba(255, 255, 255, 0.2)"}}>
+        <div className='partners--container' style={{ backgroundColor: theme === "light" ? "#fff " : "", boxShadow: theme === 'light' ? "0px 2px 2px 0px rgba(0, 0, 0, 0.1), 2px 0px 2px 0px rgba(0, 0, 0, 0.019) " : "0px 1px 1px 1px rgba(255, 255, 255, 0.2)" }}>
             <div className='partner--top'>
                 <div>
                     <h2>1052</h2>
@@ -291,7 +291,7 @@ const TotalContent = () => {
                     <img src={contentIcon} alt='content' />
                 </div>
             </div>
-            
+
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', marginBottom: '5px' }}>
                 <p>0%</p>
                 <p>{progress}%</p>
@@ -309,7 +309,7 @@ const TotalEngagement = () => {
 
     const progress = 70
     return (
-        <div className='partners--container' style={{backgroundColor: theme === "light" ? "#fff " : "", boxShadow: theme === 'light' ? "0px 2px 2px 0px rgba(0, 0, 0, 0.1), 2px 0px 2px 0px rgba(0, 0, 0, 0.019) " : "0px 1px 1px 1px rgba(255, 255, 255, 0.2)"}}>
+        <div className='partners--container' style={{ backgroundColor: theme === "light" ? "#fff " : "", boxShadow: theme === 'light' ? "0px 2px 2px 0px rgba(0, 0, 0, 0.1), 2px 0px 2px 0px rgba(0, 0, 0, 0.019) " : "0px 1px 1px 1px rgba(255, 255, 255, 0.2)" }}>
             <div className='partner--top'>
                 <div>
                     <h2>50,000</h2>
@@ -319,7 +319,7 @@ const TotalEngagement = () => {
                     <img src={engageIcon} alt='engage' />
                 </div>
             </div>
-            
+
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', marginBottom: '5px' }}>
                 <p>0%</p>
                 <p>{progress}%</p>
@@ -336,4 +336,3 @@ const TotalEngagement = () => {
 
 
 
-  

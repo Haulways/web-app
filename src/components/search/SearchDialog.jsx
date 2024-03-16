@@ -13,7 +13,10 @@ import { VideoPlay } from '../videoPlayer/VideoPlayer';
 
 
 export const SearchDialog = () => {
-    
+    const [input, setInput] = React.useState('');
+
+
+
     const mPostCarousel = {
         type: 'slide',
         pauseOnHover: false,
@@ -23,37 +26,43 @@ export const SearchDialog = () => {
     return (
 
         <>
-           
+
 
             <div className='search--page feed--page'>
                 <div className='mx-auto laptop:max-w-sm tablet:max-w-sm max-w-[330px] min-w-[330px]'>
-                    <SearchBox placeholder='Search' />
+                    <SearchBox
+                        placeholder='Search'
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                    />
                 </div>
-                    
+
                 <div className='stacked--contents'>
+
                     <WithListContext render={({ isLoading, data }) => (
                         !isLoading ? (
                             <>
-                                {data && data.map((post, index) => {
-                                    const mediaUrl = post.media[0];
-                                    console.log(post);
-                                    const isImage = mediaUrl.includes('.jpg') || mediaUrl.includes('.jpeg') || mediaUrl.includes('.png');
+                                {['hauls', 'grwm', 'diy', 'posts', 'lookbook'].map((post, index) => {
+                                    // const mediaUrl = post.media[0];
+                                    // console.log(post);
+                                    // const isImage = mediaUrl.includes('.jpg') || mediaUrl.includes('.jpeg') || mediaUrl.includes('.png');
                                     return (
-                                        <StackedAvatars post={post} title={post.URL} />
-                                               
+                                        <StackedAvatars post={data[index]} title={post} />
+
                                     );
                                 })}
+
                             </>
                         ) : (
                             <p className='font-[500] text-[#222] flex items-center justify-center'>Loading...</p>
                         ))}
                     />
-                       
+
                 </div>
 
                 <div className='search__card--container'>
 
-                    <Splide options={mPostCarousel} className='mobile--post-splide card__splide overflow-hidden rounded-[10px] h-[137px] w-full' >
+                    {/* <Splide options={mPostCarousel} className='mobile--post-splide card__splide overflow-hidden rounded-[10px] h-[137px] w-full' >
                         <WithListContext render={({ isLoading, data }) => (
                             !isLoading ? (
                                 <>
@@ -84,23 +93,23 @@ export const SearchDialog = () => {
                                 <p className='font-[500] text-[#222] flex items-center justify-center'>Loading...</p>
                             ))}
                         />
-                    </Splide>
+                    </Splide> */}
                     {/* <AdCard />
                     <AdCard />
                     <AdCard /> */}
                 </div>
 
                 <div className='searched'>
-                    <SearchCards title='Tuxedos' subTitle='Office' type='Recommended' />
-                    <SearchCards title='Wedding Gown' subTitle='Wedding' type='Trending' />
-                    <SearchCards title='Gown' subTitle='Dinner' type='Recommended' />
-                    <SearchCards title='Joggers' subTitle='Sport' type='Trending' />
-                    <SearchCards title='Bikini' subTitle='Beach' type='Recommended' />
+                    <SearchCards title='Tuxedos' subTitle='hauls' type='Recommended' input={input} />
+                    <SearchCards title='Wedding Gown' subTitle='grwm' type='Trending' input={input} />
+                    <SearchCards title='Gown' subTitle='diy' type='Recommended' input={input} />
+                    <SearchCards title='Joggers' subTitle='posts' type='Trending' input={input} />
+                    <SearchCards title='Bikini' subTitle='lookbook' type='Recommended' input={input} />
                 </div>
 
             </div>
             <DFooter />
-          
+
         </>
     );
 };

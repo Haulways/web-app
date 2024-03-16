@@ -33,11 +33,11 @@ export const ViewAllDialog = ({ openView, closeViewAll, title, subTitle, type })
 
                     <div className='mb-[1.5rem]'>
                         <h2 className='text-[18px]  font-[600]'>{title}</h2>
-                        <p className='text-[14px]  font-[600]'>{subTitle} outfit</p>
+                        <p className='text-[14px]  font-[600]'>{subTitle} - {type}</p>
                     </div>
 
                     <InfiniteList
-                        resource='posts'
+                        resource={subTitle}
                         title=" "
                         actions={false}
                         sx={{

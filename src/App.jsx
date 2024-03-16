@@ -29,6 +29,7 @@ import { CreateAd, OnboardScreen } from "./components";
 import Slider from "./components/slider/Slider";
 import useSupabaseRealtime from "./supabase/realTime";
 import { MakeupCreate, MakeupEdit, MakeupList, MakeupShow } from "./pages/skillCenter/skill/makeup/MakeupList";
+import { UGCCreate, UGCEdit, UGCList, UGCShow } from "./pages/UGC/UGCList";
 import { CraftCreate, CraftEdit, CraftList, CraftShow } from "./pages/skillCenter/skill/craft/CraftList";
 import { FashionCreate, FashionEdit, FashionList, FashionShow } from "./pages/skillCenter/skill/fashion/FashionList";
 import { CosmeticsCreate, CosmeticsEdit, CosmeticsList, CosmeticsShow } from "./pages/skillCenter/skill/cosmetics/CosmeticsList";
@@ -171,6 +172,13 @@ function App() {
 									edit={ContractEdit}
 									show={ContractShow}
 									create={ContractCreate}
+								/>
+								<Resource
+									name="ugc"
+									list={UGCList}
+									edit={UGCEdit}
+									show={UGCShow}
+									create={UGCCreate}
 								/>
 								<Resource
 									name="courses"

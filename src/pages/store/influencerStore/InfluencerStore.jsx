@@ -1,19 +1,45 @@
 import { CardMedia, Grid, IconButton, Skeleton } from '@mui/material';
 import * as React from 'react'
-import { InfiniteList, WithListContext, useInfiniteGetList, useRedirect } from 'react-admin';
-import { Link, useNavigate,   } from 'react-router-dom';
+import { InfiniteList, WithListContext, useGetIdentity, useGetList, useInfiniteGetList, useRedirect } from 'react-admin';
+import { Link, useNavigate, } from 'react-router-dom';
 import backIcon from '../../../assets/hauls/backIcon.png';
 import { ThemeContext } from '../../../components/context/ThemeProvider';
 import { DFooter } from '../../../components';
+import { InfluencerStat } from '../../../components/profile/Stat';
 
-const InfluencerStore = () => {
 
+
+
+const InfluencerStore = ({ influncr }) => {
+    const [influencer, setInfluencer] = React.useState(influncr);
+    const { data: identity, isLoading: identityLoading } = useGetIdentity();
+    const { data: followers, total: totalFollowers, isLoading } = useGetList(
+        'followers', { filter: { followed_id: influencer?.id } }
+    );
     const { theme } = React.useContext(ThemeContext);
     const [isReady, setIsReady] = React.useState(false);
+
     const handleCanPlay = () => {
         setIsReady(true);
     };
-    
+
+    React.useEffect(() => {
+        if (!influncr && identity && identity.role === 'influencer') {
+            setInfluencer(identity)
+        }
+    }, [influncr])
+
+
+    // formatting the number of followers
+    const formatFollowers = (count) => {
+        if (count >= 1000) {
+            return (count / 1000).toFixed(1) + 'K+';
+        } else if (count >= 100 && count <= 999) {
+            return (count / 100).toFixed(1) + 'H';
+        } else {
+            return count;
+        }
+    }
     // const { data: postData } = useInfiniteGetList(
     //     'posts'
     // );
@@ -28,42 +54,50 @@ const InfluencerStore = () => {
 
     // console.log(followersData?.pages)
     // console.log(followingData?.pages)
- 
+
+
+
     return (
         <>
             <div className=' max-w-[340px] laptop:max-w-[1000px]  mx-auto pb-[3rem]'>
                 <div className="relative mt-[15px] feed--page">
-                    <IconButton
+
+                    {/* <IconButton
                         aria-label="close"
                         className='absolute top-0 left-0'
                         sx={{
                             position: 'absolute',
-   
+
                         }}
                     >
                         <img className='w-[11.63px] h-[17.34px] invert' style={{ filter: theme === "light" ? "invert(1)" : "invert(0)" }} src={backIcon} alt='back' />
-                    </IconButton>
-        
+                    </IconButton> */}
+
+
+                </div>
+
+                {influncr ? (<>
                     <div className="pb-[10px] px-[14px] ">
 
                         {/* Hauls Heading */}
                         <div className='flex flex-col items-center  mx-auto'>
-                            <h2 className='font-[500] text-[14px] text-center leading-[20px] '>Raine Goldie</h2>
-                            <p className='font-[400] text-[12px] '>3M followers</p>
+                            <h2 className='font-[500] text-[14px] text-center leading-[20px] '>{influencer?.displayName}</h2>
+                            <p className='font-[400] text-[12px] '>{totalFollowers ? (formatFollowers(totalFollowers)) : (0)} followers</p>
                         </div>
-                    
-                    
+
+
 
                     </div>
-                </div>
+                    <div className='flex w-[90vw]'><InfluencerStat /></div></>) : (null)}
 
+                <span className='flex justify-start items-center mt-[15px]'><p className='font-[500] text-[14px] text-center leading-[20px]' > {influncr ? ('Your UGCs') : ('Browse UGCs')}</p></span>
                 <CustomInfiniteList resource='posts' title="All" handleCanPlay={handleCanPlay} isReady={isReady} theme={theme} />
                 <CustomInfiniteList resource='hauls' title="Hauls" handleCanPlay={handleCanPlay} isReady={isReady} theme={theme} />
                 <CustomInfiniteList resource='lookbook' title="LookBook" handleCanPlay={handleCanPlay} isReady={isReady} theme={theme} />
                 <CustomInfiniteList resource='grwm' title="GRWM" handleCanPlay={handleCanPlay} isReady={isReady} theme={theme} />
                 <CustomInfiniteList resource='diy' title="DIY" handleCanPlay={handleCanPlay} isReady={isReady} theme={theme} />
-            
-            
+
+
             </div>
             <DFooter />
         </>
@@ -73,7 +107,7 @@ const InfluencerStore = () => {
 export default InfluencerStore
 
 
-const CustomInfiniteList = ({ resource, title, handleCanPlay, isReady, theme }) => {
+const CustomInfiniteList = ({ resource, title, handleCanPlay, isReady, theme, }) => {
     const navigate = useNavigate();
     const goToStore = (data) => {
         navigate('/catalogue', { state: data });
@@ -112,23 +146,23 @@ const CustomInfiniteList = ({ resource, title, handleCanPlay, isReady, theme }) 
                                                 View all
                                             </h2>
 
-            
+
                                         </div>
-      
+
                                     </div>
 
 
-                                    <div className='pb-[1.5rem] pt-[10px]  flex gap-x-[15px] store__card overflow-x-scroll feed--page laptop:max-w-[1000px] max-w-[340px] mx-auto' style={{boxSizing: 'border-box' }}>
+                                    <div className='pb-[1.5rem] pt-[10px]  flex gap-x-[15px] store__card overflow-x-scroll feed--page laptop:max-w-[1000px] max-w-[340px] mx-auto' style={{ boxSizing: 'border-box' }}>
                                         {data && data.slice(0, 9).map((product) => {
                                             const mediaUrl = product.media[0]; // Get the URL of the single media file
                                             const isImage = mediaUrl.includes('.jpg') || mediaUrl.includes('.jpeg') || mediaUrl.includes('.png');
-  
+
                                             return (
                                                 <div key={product.id} className="min-w-[100px]  flex-shrink-0 " >
                                                     <div className="min-w-[100px] h-[100px] laptop:w-[250px] laptop:h-[250px] rounded-[5.374px] overflow-hidden relative">
-             
+
                                                         {isImage ? (
-  
+
                                                             <img src={mediaUrl} alt='user-post' className="object-cover w-full h-full" />
                                                         ) : (
                                                             <>
@@ -146,7 +180,7 @@ const CustomInfiniteList = ({ resource, title, handleCanPlay, isReady, theme }) 
                                                                     onCanPlay={handleCanPlay}
                                                                     style={{ display: isReady ? 'block' : 'none' }}
                                                                 />
-                          
+
                                                             </>
                                                         )}
                                                         <div className='absolute top-[5.6px] right-[6.23px] w-[4px] h-[15px]' style={{ filter: "invert(1)" }}>
@@ -162,16 +196,16 @@ const CustomInfiniteList = ({ resource, title, handleCanPlay, isReady, theme }) 
                                                         <p>Single style video</p>
                                                         <p>$10.00</p>
                                                     </div>
-                                               
-                            
-                                             
+
+
+
                                                 </div>
-   
+
                                             )
                                         })
                                         }
                                     </div>
-                                    
+
                                 </>
                             )}
                         </>

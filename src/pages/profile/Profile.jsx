@@ -909,7 +909,7 @@ const Profile = () => {
 
                                         </TabPanel>
                                     )}
-                                    {userData?.uid === currentUser?.uid && (
+                                    {/* {userData?.uid === currentUser?.uid && (
                                         <TabPanel
                                             className="mb-[2rem] mobile:min-w-[90vw]"
                                             value={tabValue}
@@ -921,7 +921,7 @@ const Profile = () => {
 
 
                                         </TabPanel>
-                                    )}
+                                    )} */}
                                 </SwipeableViews>
                             </Grid>
 

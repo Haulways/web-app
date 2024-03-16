@@ -1,20 +1,49 @@
 import * as React from 'react';
 import './search.css';
-import { Avatar, Card, CardActionArea, CardContent, CardHeader, CardMedia, IconButton, Skeleton, Typography } from "@mui/material";
+import { Avatar, Card, CardActionArea, CardContent, CardHeader, CardMedia, CircularProgress, IconButton, Skeleton, Typography } from "@mui/material";
 import { StoreViewALl, ViewAllDialog } from './ViewAll';
 import userIcon from "../../assets/default-user-image.png";
 import { InfiniteList, Link, WithListContext } from 'react-admin';
 import { ThemeContext } from '../context/ThemeProvider';
 import { GetStoreVendor } from '../../pages/post/Post';
+import { supabase } from '../../supabase/SupabaseConfig';
 
 
 
 
 // Search cards 
-export const SearchCards = ({ title, subTitle, type }) => {
+export const SearchCards = ({ title, subTitle, type, input }) => {
     const [openView, setOpenView] = React.useState(false);
     const [isReady, setIsReady] = React.useState(false);
     const { theme } = React.useContext(ThemeContext);
+    const [main_data, setMain_data] = React.useState([]);
+    const [searching, setSearching] = React.useState(false);
+
+    React.useEffect(() => {
+        search(input);
+    }, [input]);
+
+    const search = async (input) => {
+        if (input.length > 0 && input.trim() !== '') {
+            console.log(input)
+            setSearching(true)
+            await supabase
+                .from(subTitle)
+                .select('*')
+                .or(`body.ilike.%${input}%,name.ilike.%${input}%`)
+                .then(({ data, error }) => {
+                    if (error) {
+                        console.error('Error fetching posts:', error);
+                    } else {
+
+                        setMain_data(data);
+                    }
+                });
+            setSearching(false)
+        } else {
+            setMain_data([]);
+        }
+    };
 
     const handleCanPlay = () => {
         setIsReady(true);
@@ -29,8 +58,12 @@ export const SearchCards = ({ title, subTitle, type }) => {
 
 
 
-    const SearchCard = ({ post, mediaUrl }) => (
-        <div className="search--card">
+    const SearchCard = ({ post, mediaUrl }) => {
+
+
+
+
+        return <div className="search--card">
             {!isReady && <Skeleton variant="rectangular" width="100%" height='100%' />}
             <CardMedia
                 component="video"
@@ -46,7 +79,7 @@ export const SearchCards = ({ title, subTitle, type }) => {
                 style={{ display: isReady ? 'block' : 'none' }}
             />
         </div>
-    );
+    };
 
     return (
         <>
@@ -67,7 +100,7 @@ export const SearchCards = ({ title, subTitle, type }) => {
             </div>
 
             <InfiniteList
-                resource='posts'
+                resource={subTitle}
                 title=" "
                 actions={false}
                 sx={{
@@ -88,18 +121,33 @@ export const SearchCards = ({ title, subTitle, type }) => {
                     !isLoading ? (
                         <>
                             {data && !data.length && <span>No Posts</span>}
+
                             {data && data.length > 0 && (
-                                <>
-                                    <div className='search__card--container'>
-                                        {data && data.map((post) => {
-                                            const mediaUrl = post.media[0]; // Get the URL of the 
-                                            return (
-                                                <SearchCard key={post.id} post={post} mediaUrl={mediaUrl} />
-                                            )
-                                        })
-                                        }
-                                    </div>
-                                </>
+                                main_data && main_data.length > 0 && input.length > 0 && input.trim() !== '' ? (
+                                    searching ? (<CircularProgress />) : (<>
+                                        <div className='search__card--container'>
+                                            {main_data && main_data.map((post) => {
+                                                const mediaUrl = post.media[0]; // Get the URL of the 
+                                                return (
+                                                    <SearchCard key={post.id} post={post} mediaUrl={mediaUrl} />
+                                                )
+                                            })
+                                            }
+                                        </div>
+                                    </>)
+                                ) : (
+                                    <>
+                                        <div className='search__card--container'>
+                                            {data && data.map((post) => {
+                                                const mediaUrl = post.media[0]; // Get the URL of the 
+                                                return (
+                                                    <SearchCard key={post.id} post={post} mediaUrl={mediaUrl} />
+                                                )
+                                            })
+                                            }
+                                        </div>
+                                    </>
+                                )
                             )}
                         </>
                     ) : (
