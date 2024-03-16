@@ -418,6 +418,17 @@ export const LiveCarousels = ({ mediaUrl, handlePurchase, handleOpenPurchase1, s
 // Tagged products cards 
 export const TaggedProductCard = ({ product, theme }) => {
 
+    const convertToDecimal = (amount) => {
+        return Math.floor(amount) / 100
+    }
+
+    const formatPrice = (amount) => {
+        return new Intl.NumberFormat("en-US", {
+            style: "currency",
+            // TODO assuming region is already defined somewhere
+            currency: product?.metadata?.store?.default_currency_code
+        }).format(convertToDecimal(amount))
+    }
     
     return (
         <>
@@ -433,7 +444,7 @@ export const TaggedProductCard = ({ product, theme }) => {
                     <div className='showCard__details'>
                         <div className='info'>
                             <span className='price'>
-                                $150.00
+                            {product && product.variants && product.variants.length ? formatPrice(product.variants[0].prices.filter((curr) => { return curr.currency_code === product?.metadata?.store?.default_currency_code })[0].amount) : 0}
                             </span>
                             <h2 className='body'>
                                 {product.description}

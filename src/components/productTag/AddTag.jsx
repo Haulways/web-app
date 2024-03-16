@@ -8,7 +8,7 @@ import backIcon from "../../assets/postImg-Icons/backIcon.png";
 import tagIcon from "../../assets/editorIcons/tagbtn.png";
 import tagRule from "../../assets/editorIcons/tagRule.png";
 import { SearchBox } from "../search/SearchBox";
-import { AuthContext, CreateButton, FilterButton, FilterForm, InfiniteList, List, ListActions, ListBase, Pagination, SelectInput, TextInput, TopToolbar, WithListContext, useDataProvider, useGetList } from "react-admin";
+import { AuthContext, CreateButton, FilterButton, FilterForm, InfiniteList, List, ListActions, ListBase, Pagination, SelectInput, TextInput, TopToolbar, WithListContext, useDataProvider, useGetIdentity, useGetList } from "react-admin";
 import { AdCard, TagCard, TagCard2, TaggedProductCard, TaggedProductCard2, TaggedVideoCard } from "../card/ShowCard";
 import { useProducts } from "medusa-react";
 import { useState } from "react";
@@ -19,6 +19,8 @@ import AdContainer from "../createAds/AdContainer";
 
 
 export const AddTag = ({ selectedfiles, activeFile, openTagProduct, handleCloseTagProduct, setShowTagProduct, showTagProduct, setTaggedData, taggedData, theme }) => {
+    const { data: contracts } = useGetList("contract");
+    const { data: nw_prods } = useGetList("product");
     const [videoUrl, setVideoUrl] = React.useState('');
     const [tags, setTags] = React.useState(false);
 
@@ -82,6 +84,8 @@ export const AddTag = ({ selectedfiles, activeFile, openTagProduct, handleCloseT
                     taggedData={taggedData}
                     setTaggedData={setTaggedData}
                     theme={theme}
+                    contracts={contracts}
+                    nw_prods={nw_prods}
                 />
 
 
@@ -159,21 +163,39 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 
 
-export const Tags = ({ tags, handleCloseTags, taggedData, setTaggedData, theme }) => {
+export const Tags = ({ tags, handleCloseTags, taggedData, setTaggedData, theme, contracts, nw_prods }) => {
     const { currentUser } = useContext(AuthContext);
-    const { data: contracts } = useGetList("contract");
     const [store_ids, setStore_ids] = useState(null);
-
-    const { products, isLoading } = useProducts({ expand: 'variants,variants.prices,images' });
+    const [prod_ids, setProd_ids] = useState(null);
+    const { data: identity, isLoading: identityLoading } = useGetIdentity();
+    const { products, isLoading } = useProducts({ id: prod_ids, expand: 'variants,variants.prices,images' });
     const [currentPage, setCurrentPage] = useState(1);
     const ITEMS_PER_PAGE = 3;
 
+
     useEffect(() => {
-        console.log(contracts)
-        if (contracts && contracts.length) {
-            Console.log(contracts.find(contrct => { return (currentUser.id === contrct.created_for || currentUser.id === contrct.created_for) }));
+        console.log(contracts, identity)
+        if (contracts && identity && contracts.length) {
+            let ids = contracts.filter(contrct => { return (identity.id === contrct.created_for || identity.id === contrct.created_for) }).map(res => {return res.products[0][0].metadata?.store.id})
+            // console.log(ids);
+            setStore_ids(ids)
         }
-    }, [contracts])
+    }, [contracts, identity])
+
+    useEffect(() => {
+        console.log(store_ids, nw_prods)
+        if (store_ids && nw_prods && nw_prods.length && store_ids.length) {
+            let ids = nw_prods.filter(nw_prod => { return (store_ids.includes(nw_prod.store_id)) }).map(res => {return res.id})
+            // console.log(ids);
+            setProd_ids(ids)
+        }
+    }, [store_ids, nw_prods])
+
+    useEffect(() => {
+        if(products){
+            console.log(products)
+        }
+    },[products])
 
 
 
