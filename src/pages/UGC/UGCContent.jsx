@@ -46,11 +46,12 @@ export const UGCCreateContent = () => {
 
 
     const types = [{ id: 'hauls', name: 'Hauls' }, { id: 'lookbook', name: 'Lookbook' }, { id: 'diy', name: 'DIY' }, { id: 'grwm', name: 'GRWM' }];
+    const currencies = [{ id: 'ngn', name: 'NGN' }, { id: 'usd', name: 'USD' }, { id: 'gbp', name: 'GBP' }];
     const [post, setPost] = useState(null);
     const UGCInput = () => {
         const type = useWatch({ name: 'type' });
-        const { data, total, isLoading, error } = useGetList(type)
-        
+        const { data, total, isLoading, error } = useGetList(type, { pagination: { perPage: 7 } })
+
 
 
         useEffect(() => {
@@ -74,7 +75,7 @@ export const UGCCreateContent = () => {
         return (
             <>
                 {
-                    data && data.length ? (<SmallHorizontalMediaCards post={data} setPost={setPost} />) : (null)
+                    data && data.length ? (<SmallHorizontalMediaCards post={data} setPost={setPost} />) : (isLoading ? (<div className="flex justify-center items-center"><CircularProgress /></div>) : (null))
                 }
 
                 {
@@ -85,11 +86,18 @@ export const UGCCreateContent = () => {
                                 <div className='w-[60.16px] h-[63.16px] rounded-[8px] mr-3 overflow-hidden'>
                                     <video src={post.media[0]} alt={post.id} muted controls={false} playsInline={true} controlsList="nodownload" />
                                 </div>
-                                <NumberInput source="price" />
+                                <NumberInput source="price" className="mr-3" />
+                                <SelectInput
+
+                                    choices={currencies ? currencies : []}
+                                    source="currency"
+                                // defaultValue={}
+                                />
                             </div>
                         </div>
 
-                    ) : (null)
+                    ) : (<div className="flex flex-col items-center justify-start mt-5">
+                        <h5 className="text-bold">Set Your Price</h5></div>)
                 }
 
             </>
