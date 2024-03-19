@@ -1378,7 +1378,7 @@ const Landing = () => {
 
         </div>
         <p className="footer__copy">
-          © 2023 Haulway Global. All right reserved
+          © 2023 Haulway, A registered trademark of Haulscape Technologies Ltd (RC:15245660). All right reserved
         </p>
       </footer>
       {/*========== SCROLL REVEAL ==========*/}
