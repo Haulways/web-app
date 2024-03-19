@@ -1,11 +1,65 @@
+// import {
+//   AdminPostProductsReq,
+//   Currency,
+//   ProductCollection,
+//   ProductTag,
+//   ProductType,
+// } from "@medusajs/medusa";
+// import { AlertCircle, ChevronDown, Minus, Plus, X } from "lucide-react";
+// import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+// import { useForm } from "react-hook-form";
+// import { BiSolidToggleLeft, BiSolidToggleRight } from "react-icons/bi";
+// import { useCountries } from "use-react-countries";
+// import useAlert from "../../../../lib/hooks/use-alert";
+// import useToggleState from "../../../../lib/hooks/use-toggle-state";
+// import { medusaClient } from "../../../../lib/services/medusa";
+// import { Input, TextArea } from "../../../common/Form/Input";
+// import Spinner from "../../../common/assets/spinner";
+// import { Button } from "../../../ui/button";
+// import {
+//   Collapsible,
+//   CollapsibleContent,
+//   CollapsibleTrigger,
+// } from "../../../ui/collapsible";
+// import {
+//   DropdownMenu,
+//   DropdownMenuContent,
+//   DropdownMenuItem,
+//   DropdownMenuTrigger,
+// } from "../../../ui/dropdown-menu";
+// import { ScrollArea } from "../../../ui/scroll-area";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "../../../ui/select";
+// import {
+//   Tooltip,
+//   TooltipContent,
+//   TooltipProvider,
+//   TooltipTrigger,
+// } from "../../../ui/tooltip";
+// import ImageCard from "./ImageCard";
+// import { RiDeleteBinLine } from "react-icons/ri";
+
 import {
   AdminPostProductsReq,
   Currency,
   ProductCollection,
   ProductTag,
   ProductType,
+  ProductVariant,
 } from "@medusajs/medusa";
-import { AlertCircle, ChevronDown, Minus, Plus, X } from "lucide-react";
+import {
+  AlertCircle,
+  CheckCircle,
+  ChevronDown,
+  Minus,
+  Plus,
+  X,
+} from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { BiSolidToggleLeft, BiSolidToggleRight } from "react-icons/bi";
@@ -42,7 +96,14 @@ import {
   TooltipTrigger,
 } from "../../../ui/tooltip";
 import ImageCard from "./ImageCard";
-import { RiDeleteBinLine } from "react-icons/ri";
+import { RiDeleteBin6Line, RiDeleteBinLine } from "react-icons/ri";
+import CreateVariant from "./CreateVariant";
+import { GiCancel } from "react-icons/gi";
+import { BsThreeDots } from "react-icons/bs";
+import { FiEdit } from "react-icons/fi";
+
+
+
 import React from "react";
 
 enum FieldsName {
@@ -59,8 +120,8 @@ enum FieldsName {
   HEIGHT = "height",
   WIDTH = "width",
   HS_CODE = "hs_code",
-  ORIGIN_COUNTRY = "origin_country",
   MID_CODE = "mid_code",
+  ORIGIN_COUNTRY = "origin_country",
   MATERIAL = "material",
   COLLECTION_ID = "collection_id",
   TYPE_ID = "type_id",
@@ -69,7 +130,7 @@ enum FieldsName {
   METADATA = "metadata",
 }
 
-interface InputFields extends AdminPostProductsReq {}
+interface InputFields extends AdminPostProductsReq { }
 
 type ProductOption = {
   title: string;
@@ -89,6 +150,7 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
   const [showModal4, openModal4, closeModal4, toggleModal4] = useToggleState();
   const [showModal5, openModal5, closeModal5, toggleModal5] = useToggleState();
   const [showModal6, openModal6, closeModal6, toggleModal6] = useToggleState();
+  const [showVariantOption, , , toggleVariantOption] = useToggleState();
   const [currencies, setCurrencies] = useState<Currency[]>([]);
   const [productTypes, setProductTypes] = useState<ProductType[]>([]);
   const [selectedProductType, setSelectedProductTypes] =
@@ -98,7 +160,18 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
     useState<ProductCollection>();
   const [tags, setTags] = useState<ProductTag[]>([]);
   const [selectedTags, setSelectedTags] = useState<ProductTag[]>([]);
-  const [productOptions, setProductOptions] = useState<ProductOption[]>([]);
+  const [productOptions, setProductOptions] = useState<ProductOption[]>([
+    {
+      title: "",
+      value: "",
+    },
+  ]);
+  const [productOptionElements, setProductOptionElements] = useState<string[]>([
+    "",
+  ]);
+  const [productVariantIdx, setProductVariantIdx] = useState(
+    productOptionElements.length - 1,
+  );
   const [discountableToggle, setDiscountableToggle] = useState(false);
   const [salesToggle, setSalesToggle] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -108,6 +181,7 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
   const [media, setMedia] = useState<string[]>([]);
   const thumbnailFileInputRef = useRef<HTMLInputElement>(null);
   const mediaFileInputRef = useRef<HTMLInputElement>(null);
+  const [productVariants, setProductVariants] = useState<ProductVariant[]>([]);
 
   const formMethods = useForm<InputFields>();
   const {
@@ -145,6 +219,7 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
 
   const handleAddInput = useCallback(() => {
     setProductOptions([...(productOptions as any), {} as any]);
+    setProductOptionElements([...productOptionElements, ""]);
   }, [productOptions]);
 
   // Function to handle removing an input field
@@ -153,6 +228,10 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
       const newProductOptions = [...productOptions];
       newProductOptions.splice(index, 1);
       setProductOptions(newProductOptions);
+
+      const newProductOptionElements = [...productOptionElements];
+      newProductOptionElements.splice(index, 1);
+      setProductOptionElements(newProductOptionElements);
     },
     [productOptions],
   );
@@ -191,10 +270,8 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
       };
 
       reader.readAsDataURL(file);
-    }7
+    }
   };
-
-  console.log('producOptions', productOptions)
 
   const ProductOption = useCallback(
     (data: ProductOption, idx: number) => (
@@ -207,10 +284,9 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
               id="color"
               placeholder="Color..."
               onChange={(e) => {
-                console.log("idx", idx);
                 data.title = e.target.value;
                 const newProductOptions = [...productOptions];
-                newProductOptions.splice(idx - 1, 1, data);
+                newProductOptions.splice(idx, 1, data);
                 setProductOptions(newProductOptions);
               }}
               defaultValue={data?.title ?? ""}
@@ -225,7 +301,6 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
               id="variation"
               placeholder="Blue, Red, Black..."
               onChange={(e) => {
-                console.log("idx", idx);
                 data.value = e.target.value;
                 const newProductOptions = [...productOptions];
                 newProductOptions.splice(idx, 1, data);
@@ -248,7 +323,8 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
     ),
     [],
   );
-  // console.log("productOptions", productOptions);
+
+  console.log("productOptions", productOptions);
   const createProduct = handleSubmit(async (data: InputFields) => {
     setIsSubmitting(false);
     medusaClient.admin.products
@@ -259,15 +335,18 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
         subtitle: data?.subtitle,
         collection_id: data?.collection_id,
         description: data?.description,
-        handle:
-          data?.handle?.charAt(0) === "/" ? data?.handle : `/${data?.handle}`,
+        handle: !data?.handle
+          ? data.title.toLowerCase().replace(" ", "-")
+          : data?.handle?.charAt(0) === "/"
+            ? data?.handle
+            : `/${data?.handle}`,
         height: data?.height,
         hs_code: data?.hs_code,
         length: data?.length,
         material: data?.material,
         metadata: data.metadata,
         mid_code: data?.mid_code,
-        origin_country: data?.origin_country,
+        origin_country: selectedCountry,
         width: data?.width,
         weight: data?.weight,
         type: {
@@ -275,11 +354,10 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
           value: selectedProductType?.value ?? "",
         },
         tags: selectedTags,
-        options: productOptions,
+        options: productOptions.map((each) => ({ title: each.title })),
         images: media,
         thumbnail: thumbnail,
-        // variants
-        // status: data?.s
+        variants: productVariants as any,
       })
       .then(() => {
         close();
@@ -305,31 +383,9 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
 
   return (
     <div
-      className={`${
-        show ? "fixed" : "hidden"
-      } z-50 top-0 bottom-0 left-0 right-0 bg-white px-3`}
+      className={`${show ? "fixed" : "hidden"
+        } z-50 top-0 bottom-0 left-0 right-0 bg-white px-3`}
     >
-      {/* <section className="w-full border-b border-b-gray-300 py-3">
-        <div className="w-full md:w-[60%] mx-auto flex items-center justify-between">
-          <X className="h-6 w-6 text-black" onClick={close} />
-
-          <div className="flex space-x-2 items-center">
-            <Button variant={"outline"} disabled={isSubmitting}>
-              Save as draft
-            </Button>
-            <Button
-              onClick={createProduct}
-              variant={"secondary"}
-              disabled={isSubmitting}
-            >
-              <div className="flex items-center justify-center space-x-2">
-                <p>Publish product</p>{" "}
-                {isSubmitting && <Spinner color="white" />}
-              </div>
-            </Button>
-          </div>
-        </div>
-      </section> */}
 
       <div className="mx-auto max-h-[85vh] overflow-y-auto pt-16 text-gray-400">
         <Collapsible
@@ -366,10 +422,9 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
                   Title<span className="text-red-500">*</span>
                 </p>
                 <span
-                  className={`bg-gray-100 overflow-hidden rounded ${
-                    formErrors[FieldsName.TITLE]?.message &&
+                  className={`bg-gray-100 overflow-hidden rounded ${formErrors[FieldsName.TITLE]?.message &&
                     "border border-red-500"
-                  }`}
+                    }`}
                 >
                   <Input
                     className="w-full"
@@ -392,10 +447,9 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
                   Subtitle<span className="text-red-500">*</span>
                 </p>
                 <span
-                  className={`bg-gray-100 overflow-hidden rounded ${
-                    formErrors[FieldsName.SUBTITLE]?.message &&
+                  className={`bg-gray-100 overflow-hidden rounded ${formErrors[FieldsName.SUBTITLE]?.message &&
                     "border border-red-500"
-                  }`}
+                    }`}
                 >
                   <Input
                     className="w-full"
@@ -445,10 +499,9 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
                   </span>
                 </p>
                 <span
-                  className={`bg-gray-100 overflow-hidden rounded ${
-                    formErrors[FieldsName.HANDLE]?.message &&
+                  className={`bg-gray-100 overflow-hidden rounded ${formErrors[FieldsName.HANDLE]?.message &&
                     "border border-red-500"
-                  }`}
+                    }`}
                 >
                   <Input
                     className="w-full"
@@ -469,10 +522,9 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
               <div className="flex flex-col space-y-1">
                 <p className="font-medium text-sm">Material</p>
                 <span
-                  className={`bg-gray-100 overflow-hidden rounded ${
-                    formErrors[FieldsName.MATERIAL]?.message &&
+                  className={`bg-gray-100 overflow-hidden rounded ${formErrors[FieldsName.MATERIAL]?.message &&
                     "border border-red-500"
-                  }`}
+                    }`}
                 >
                   <Input
                     className="w-full"
@@ -494,10 +546,9 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
             <div className="flex flex-col space-y-1">
               <p className="font-medium">Description</p>
               <span
-                className={`bg-gray-100 overflow-hidden rounded ${
-                  formErrors[FieldsName.DESCRIPTION]?.message &&
+                className={`bg-gray-100 overflow-hidden rounded ${formErrors[FieldsName.DESCRIPTION]?.message &&
                   "border border-red-500"
-                }`}
+                  }`}
               >
                 <TextArea
                   id={FieldsName.DESCRIPTION}
@@ -654,9 +705,8 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
                   <span className="absolute inset-y-0 right-2 flex items-center justify-end pr-3 hover:cursor-pointer">
                     <DropdownMenuTrigger className="w-full">
                       <ChevronDown
-                        className={`text-shade-medium h-5 w-5 ${
-                          "countryDropdown" ? "rotate-0" : `rotate-180`
-                        }`}
+                        className={`text-shade-medium h-5 w-5 ${"countryDropdown" ? "rotate-0" : `rotate-180`
+                          }`}
                       />
                     </DropdownMenuTrigger>
                   </span>
@@ -763,8 +813,8 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
               </TooltipProvider>
             </div>
 
-            {productOptions.map((option, idx) => (
-              <div>{ProductOption(option, idx)}</div>
+            {productOptionElements.map((_, idx) => (
+              <div>{ProductOption(productOptions[idx], idx)}</div>
             ))}
 
             <Button
@@ -780,7 +830,10 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
           <CollapsibleContent className="w-full space-y-2 flex flex-col">
             <div className="pt-4 flex items-center space-x-2">
               <p className="font-medium text-black">
-                Product variants <span className="text-gray-400">(0)</span>
+                Product variants{" "}
+                <span className="text-gray-400">
+                  ({`${productVariants.length}`})
+                </span>
               </p>
               <TooltipProvider>
                 <Tooltip>
@@ -797,8 +850,109 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
               </TooltipProvider>
             </div>
 
+            {productVariants.length > 0 && (
+              <section className="flex flex-col space-y-1 text-gray-500">
+                <div className="grid grid-cols-8 grid-flow-row">
+                  <p className="col-span-5">Variant</p>
+                  <p className="col-span-1">Inventory</p>
+                  <p className=""></p>
+                  <p className=""></p>
+                </div>
+                {productVariants.map((variant, idx) => (
+                  <div className="grid grid-cols-8 grid-flow-row p-3 hover:bg-gray-50 transition-ease rounded-md">
+                    <div className="flex flex-col col-span-5">
+                      <p className="font-bold">
+                        {variant.title.toUpperCase()}
+                        <span className="font-normal">
+                          ({variant.sku?.toUpperCase()})
+                        </span>
+                      </p>
+                      <p>{variant.ean}</p>
+                    </div>
+
+                    <p className="col-span-1 m-auto">
+                      {variant.inventory_quantity}
+                    </p>
+
+                    <div className="m-auto hover:cursor-pointer col-span-1">
+                      {productOptions.length === variant.options.length ? (
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <CheckCircle className="w-4 h-4 text-green-500" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p className="w-44 text-sm font-medium text-gray-500">
+                                {variant.title.toUpperCase()} is valid
+                              </p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      ) : (
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <GiCancel className="w-4 h-4 text-red-500" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p className="w-44 text-sm font-medium text-gray-500">
+                                {variant.title.toUpperCase()} is missing some
+                                option value
+                              </p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      )}
+                    </div>
+
+                    <div className="col-span-1 m-auto">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            className="border-none p-2 h-fit rounded-sm m-auto bg-white"
+                            variant="outline"
+                          >
+                            <BsThreeDots className="w-5 h-5" />
+                          </Button>
+                        </DropdownMenuTrigger>
+
+                        <DropdownMenuContent className="bg-white border w-38 p-1 space-y-2 text-sm">
+                          <DropdownMenuItem className="flex space-x-2 items-center my-1">
+                            <button
+                              className="w-full text-start px-2 py-1 hover:bg-gray-100 transition-ease flex space-x-2"
+                              onClick={() => {
+                                setProductVariantIdx(idx);
+                                toggleVariantOption();
+                              }}
+                            >
+                              <FiEdit className="w-5 h-5" />
+                              <p>Edit</p>
+                            </button>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="flex space-x-2 items-center my-1.5">
+                            <button
+                              className="w-full text-start px-2 py-1 hover:bg-gray-100 transition-ease text-red-500 flex space-x-2"
+                              onClick={() => { }}
+                            >
+                              <RiDeleteBin6Line className="w-5 h-5" />
+                              <p>Delete</p>
+                            </button>
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                  </div>
+                ))}
+              </section>
+            )}
+
             <Button
               variant={"outline"}
+              onClick={toggleVariantOption}
+              disabled={
+                productOptionElements.length < 1 ||
+                productOptions[0].title === ""
+              }
               className="px-2 py-1 w-full flex items-center space-x-2 text-xs"
             >
               <Plus className="h-5 w-5" />
@@ -806,6 +960,18 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
             </Button>
           </CollapsibleContent>
         </Collapsible>
+
+        {(productOptionElements.length > 1 || productOptions[0].title) &&
+          showVariantOption && (
+            <CreateVariant
+              open={showVariantOption}
+              close={toggleVariantOption}
+              index={productVariantIdx}
+              productOptions={productOptions}
+              productVariants={productVariants}
+              setProductVariants={setProductVariants}
+            />
+          )}
 
         <Collapsible
           open={showModal4}
@@ -884,6 +1050,9 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
             </section>
 
             <p className="font-medium text-black pt-6">Customs</p>
+            <p className="text-gray-500">
+              Configure if you are shipping internationally.
+            </p>
 
             <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="flex flex-col space-y-1">
@@ -1061,13 +1230,12 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
           </CollapsibleContent>
         </Collapsible>
       </div>
-      
 
       <span className="fixed right-3 top-3 z-30">
         <Alert />
       </span>
 
-      <section className=" fixed bottom-14 left-2 w-[95vw] border-b border-b-gray-300 py-3">
+      <section className="w-full border-b border-b-gray-300 py-3">
         <div className="w-full md:w-[60%] mx-auto flex items-center justify-between">
           <X className="h-6 w-6 text-black" onClick={close} />
 

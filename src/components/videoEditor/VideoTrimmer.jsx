@@ -155,6 +155,7 @@ function VideoTrimmer({ selectedfiles, activeFile, collectionName, taggedData, s
     const handleChange = async () => {
         if (activeFile) {
             setInputVideoFile(activeFile);
+            
             setURL(await helpers.readFileAsBase64(activeFile));
         } else if (selectedfiles && selectedfiles.length > 0) {
             setInputVideoFile(selectedfiles[0]);
