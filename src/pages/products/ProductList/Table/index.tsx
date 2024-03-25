@@ -33,6 +33,7 @@ const Table = () => {
   const [listView, setListView] = useState(true);
 
   const fetchProducts = useCallback(async () => {
+    
     const { products, limit, offset, count } =
       await medusaClient.admin.products.list({
         limit: perPage,

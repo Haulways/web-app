@@ -17,10 +17,10 @@ import { useState } from 'react';
 
 
 
-// const medusa = new Medusa({
-// 	maxRetries: 3,
-// 	baseUrl: "https://ecommerce.haulway.co",
-// });
+const medusa = new Medusa({
+	maxRetries: 3,
+	baseUrl: "https://ecommerce.haulway.co",
+});
 
 
 
@@ -43,8 +43,12 @@ const SProduct = () => {
 	const [filteredData, setFilteredData] = useState(null)
 
 	React.useEffect(() => {
-		if (medusa) {
-			medusa.customers.retrieve()
+		if (currentUser) {
+			medusa.auth
+				.authenticate({
+					email: identity.email,
+					password: import.meta.env.VITE_AUTH_PASSWORD,
+				})
 				.then(({ customer }) => {
 					setCustData(customer);
 					if (!cart_id) {
@@ -61,7 +65,7 @@ const SProduct = () => {
 		}
 
 
-	}, [medusa]);
+	}, [medusa, currentUser]);
 
 
 

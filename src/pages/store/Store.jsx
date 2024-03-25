@@ -52,7 +52,7 @@ const Store = () => {
 		"product",
 		{ filter: { store_id: store?.id }, },
 	);
-	
+
 	const { data: identity, isLoading: identityLoading } = useGetIdentity();
 
 	React.useEffect(() => {
@@ -64,6 +64,12 @@ const Store = () => {
 
 		}
 	}, [record, id]);
+
+	React.useEffect(() => {
+		if (store) {
+			console.log(store)
+		}
+	}, [store]);
 
 	React.useEffect(() => {
 		if (identity) {
@@ -335,16 +341,22 @@ const Store = () => {
 				</TabbedShowLayout.Tab>
 				{
 					currentUser && vendor && currentUser.email === vendor.email ? (
-						<>
-							<TabbedShowLayout.Tab label='Orders' >
-								<OrderList />
-							</TabbedShowLayout.Tab>
-							{/* <TabbedShowLayout.Tab label='Stats'>
-								<div className='flex w-[90vw]'>
-									{currentUser && currentUser.role === 'vendor' ? (<VendorsStat />) : (<InfluencerStat />)}
-								</div>
-							</TabbedShowLayout.Tab> */}
-						</>
+						<TabbedShowLayout.Tab label='Stats'>
+							<div className='flex w-[90vw]'>
+								{currentUser && currentUser.role === 'vendor' ? (<VendorsStat />) : (<InfluencerStat />)}
+							</div>
+						</TabbedShowLayout.Tab>
+					) : (
+						null
+					)
+				}
+				{
+					currentUser && vendor && currentUser.email === vendor.email ? (
+						<TabbedShowLayout.Tab label='Stats'>
+							<div className='flex w-[90vw]'>
+								{currentUser && currentUser.role === 'vendor' ? (<VendorsStat />) : (<InfluencerStat />)}
+							</div>
+						</TabbedShowLayout.Tab>
 					) : (
 						null
 					)

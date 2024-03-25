@@ -1,5 +1,5 @@
 import { AdminPostStoreReq } from "@medusajs/medusa";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useRedirect } from "react-admin";
 import { useForm } from "react-hook-form";
 import { BsArrowLeft } from "react-icons/bs";
@@ -11,6 +11,9 @@ import { Button } from "../ui/button";
 import Spinner from "../common/assets/spinner";
 import React from "react";
 // import { useFilePicker } from "use-file-picker";
+import { useGetIdentity } from 'react-admin';
+import { AuthContext } from "../../components/context/AuthContext";
+
 
 enum FieldsName {
   STORE_NAME = "name",
@@ -28,7 +31,10 @@ interface InputFields extends AdminPostStoreReq {
   api_id: string;
 }
 
+
+
 const StoreDetails = (props) => {
+  const { currentUser } = React.useContext(AuthContext)
   const { type } = props;
   const { state, open: openAlert, close: closeAlert, Alert } = useAlert();
   const redirect = useRedirect();
@@ -36,6 +42,20 @@ const StoreDetails = (props) => {
     useState<File | null>(null);
   const [idenficationFile, setIdenficationFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { data: identity, isLoading: identityLoading } = useGetIdentity();
+
+  useEffect(() => {
+    medusaClient.admin.auth.createSession({
+      email: identity?.email,
+      password: import.meta.env.VITE_AUTH_PASSWORD,
+    }).then(({ user }) => {
+      console.log(user);
+      medusaClient.admin.store.retrieve()
+        .then(({ store }) => {
+          console.log(store);
+        })
+    })
+  }, [identity])
 
   const formMethods = useForm<InputFields>();
   const {
@@ -102,38 +122,74 @@ const StoreDetails = (props) => {
   const createStoreDetail = handleSubmit(async (data: InputFields) => {
     setIsSubmitting(true);
     console.log('data', data, businessVerificationFile, idenficationFile)
-    medusaClient.admin.store
-      .update({
-        invite_link_template: data.invite_link_template,
-        payment_link_template: data.payment_link_template,
-        swap_link_template: data.swap_link_template,
-        name: data.name,
-        metadata: {
-          description: data.description,
-          api_key: data.api_key,
-          api_id: data.api_id,
-          business_document: businessVerificationFile,
-          identification_document: idenficationFile,
-        },
+    medusaClient.admin.users.list()
+      .then(({ users }) => {
+        let prev_usr = users.find(usr => { return usr.email === identity?.email });
+        if (!prev_usr) {
+          //user create
+          medusaClient.admin.users.create({
+            email: identity?.email,
+            password: 'supersecret',
+            first_name: identity?.firstname,
+            last_name: identity?.lastname,
+            role: "member",
+          }).then(({ user }) => {
+            //login
+            medusaClient.admin.auth.createSession({
+              email: user.email,
+              password: import.meta.env.VITE_AUTH_PASSWORD,
+            }).then(({ user }) => {
+              //generate api_token
+              medusaClient.admin.publishableApiKeys.create({
+                title: identity?.email
+              })
+                .then(({ publishable_api_key }) => {
+                  //update api_token
+                  medusaClient.admin.users.update(user.id, {
+                    api_token: publishable_api_key.id,
+                  })
+                    .then(({ user }) => {
+                      //update store details
+                      medusaClient.admin.store
+                        .update({
+                          invite_link_template: data.invite_link_template,
+                          payment_link_template: data.payment_link_template,
+                          swap_link_template: data.swap_link_template,
+                          name: data.name,
+                          metadata: {
+                            description: data.description,
+                            api_key: data.api_key,
+                            api_id: data.api_id,
+                            business_document: businessVerificationFile,
+                            identification_document: idenficationFile,
+                          },
+                        })
+                        .then(({ store }) => {
+                          openAlert({
+                            ...state,
+                            title: "Store created",
+                            variant: "success",
+                            active: true,
+                          });
+                          setIsSubmitting(false);
+                          redirect('show', 'store', store?.id)
+                        })
+                        .catch(() => {
+                          openAlert({
+                            ...state,
+                            title: "Failed to create store",
+                            variant: "error",
+                            active: true,
+                          });
+                          setIsSubmitting(false);
+                        });
+                    })
+
+                })
+            })
+          })
+        }
       })
-      .then(() => {
-        openAlert({
-          ...state,
-          title: "Store updated",
-          variant: "success",
-          active: true,
-        });
-        setIsSubmitting(false);
-      })
-      .catch(() => {
-        openAlert({
-          ...state,
-          title: "Failed to update store",
-          variant: "error",
-          active: true,
-        });
-        setIsSubmitting(false);
-      });
   });
 
   return (

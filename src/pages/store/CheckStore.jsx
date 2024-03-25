@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Empty, List, WithListContext, useGetList, useRedirect } from 'react-admin';
+import { Empty, List, WithListContext, useGetIdentity, useGetList, useRedirect } from 'react-admin';
 import { AuthContext } from '../../components/context/AuthContext';
 import { ShopCard } from '../../components/card/ShopCard';
 import InfluencerStore from './influencerStore/InfluencerStore';
@@ -7,14 +7,16 @@ import { CircularProgress } from '@mui/material';
 
 
 
+
 const CheckStore = () => {
     const { currentUser } = React.useContext(AuthContext)
     const [usr, setUsr] = React.useState(null);
     const [str, setStr] = React.useState(null);
+    const { data: identity, isLoading: identityLoading } = useGetIdentity();
     const redirect = useRedirect();
     const { data: user } = useGetList(
         "user",
-        { filter: { email: currentUser?.email }, },
+        { filter: { email: identity?.email }, },
     );
     const { data: store } = useGetList(
         "store",
@@ -22,12 +24,11 @@ const CheckStore = () => {
     );
 
     React.useEffect(() => {
-        console.log(user)
+        console.log(user, identity)
         if (user && user.length) {
-
             setUsr(user[0])
         }
-    }, [user])
+    }, [user, identity])
 
     React.useEffect(() => {
         if (store && store.length) {

@@ -32,9 +32,9 @@ import { useProducts } from "medusa-react"
 
 
 
-// const medusa = new Medusa({
-//   baseUrl: "https://ecommerce.haulway.co",
-// });
+const medusa = new Medusa({
+  baseUrl: "https://ecommerce.haulway.co",
+});
 
 export const CheckSavedPost = (postId) => {
   const record = useRecordContext();
@@ -460,43 +460,43 @@ const Signlepost = () => {
 
   // Attach an event listener after the Splide instance is mounted
 
-  // React.useEffect(() => {
-  //   if (identity) {
-  //     medusa.auth
-  //       .authenticate({
-  //         email: identity.email,
-  //         password: import.meta.env.VITE_AUTH_PASSWORD,
-  //       })
-  //       .then(({ customer }) => {
-  //         setCustData(customer);
-  //         if (!g_cart_id) {
-  //           medusa.carts.create().then(({ cart }) => {
-  //             setGCartID(cart.id);
-  //             setGCart(cart)
-  //           });
-  //         } else {
-  //           medusa.carts.retrieve(g_cart_id).then(({ cart }) => setGCart(cart));
-  //         }
-  //       });
-  //   }
-
-
-
-  // }, [identity]);
-
   React.useEffect(() => {
-    if (!cart_id) {
-      medusa.carts.create().then(({ cart }) => {
-        setCartID(cart.id);
-        setCart(cart)
-      });
-    } else {
-      medusa.carts.retrieve(cart_id).then(({ cart }) => {
-        console.log(cart);
-        setCart(cart)
-      });
+    if (identity) {
+      medusa.auth
+        .authenticate({
+          email: identity.email,
+          password: import.meta.env.VITE_AUTH_PASSWORD,
+        })
+        .then(({ customer }) => {
+          setCustData(customer);
+          if (!g_cart_id) {
+            medusa.carts.create().then(({ cart }) => {
+              setGCartID(cart.id);
+              setGCart(cart)
+            });
+          } else {
+            medusa.carts.retrieve(g_cart_id).then(({ cart }) => setGCart(cart));
+          }
+        });
     }
-  }, [medusa])
+
+
+
+  }, [identity, currentUser]);
+
+  // React.useEffect(() => {
+  //   if (!cart_id) {
+  //     medusa.carts.create().then(({ cart }) => {
+  //       setCartID(cart.id);
+  //       setCart(cart)
+  //     });
+  //   } else {
+  //     medusa.carts.retrieve(cart_id).then(({ cart }) => {
+  //       console.log(cart);
+  //       setCart(cart)
+  //     });
+  //   }
+  // }, [medusa])
 
 
 

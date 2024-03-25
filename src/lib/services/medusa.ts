@@ -11,7 +11,7 @@ if (import.meta.env.VITE_BASE_URL) {
 export const medusaClient = new Medusa({
   maxRetries: 3,
   baseUrl: MEDUSA_BACKEND_URL,
-  apiKey: import.meta.env.VITE_APIKEY,
+  // apiKey: import.meta.env.VITE_APIKEY,
   customHeaders: {
     "x-no-compression": true,
   },
