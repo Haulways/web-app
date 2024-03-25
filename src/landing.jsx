@@ -659,60 +659,60 @@ const Landing = () => {
             </div>
             <div className="about__img__section " style={{ width: 'calc(100%)' }}>
               <Splide
-              options={{ rewind: true, autoplay: false, arrows: false, pagination: false }}
-              aria-label="Haulway"
-            >
-              <SplideSlide>
-                <motion.div
-                  variants={container}
-                  initial="hidden"
-                  animate="visible"
-                >
-                  <Grid
-                    gridTemplateColumns={'max-content max-content'}
-                    // gridTemplateRows={'1fr 1fr'}              
-                    gap={1}
-                    width={'100%'}
-                    // className="home__img"
-                    direction={'row'}
-                    justifyContent={'center'}
-                    alignContent={'center'}
-                    // gridAutoFlow={'column'}
-                    display={'grid'}
-                    margin={0}
-                    my={2}
-                    ref={skc_ref}
-                    style={{
-                      transform: skcisInView ? "none" : "translateX(-200px)",
-                      opacity: skcisInView ? 1 : 0,
-                      transition: "all 0.9s cubic-bezier(0.17, 0.55, 0.55, 1) 0.5s"
-                    }}
-
-
+                options={{ rewind: true, autoplay: false, arrows: false, pagination: false }}
+                aria-label="Haulway"
+              >
+                <SplideSlide>
+                  <motion.div
+                    variants={container}
+                    initial="hidden"
+                    animate="visible"
                   >
-                    <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'Learn'} subtitle={"Elevate your skills with Our Skill Centre for powerful content and engagement."} icon={Lightbulb} />
-                    <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'Earn'} subtitle={"Monetize your expertise by tutoring with us, connecting with a global audience."} icon={MonetizationOn} />
-                    <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'Promote'} subtitle={"Boost your brand: Contribute to Our Skill Centre for massive exposure."} icon={Campaign} />
-                    <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'Grow'} subtitle={"Propel your growth with pro insights for unstoppable progress."} icon={TrendingUp} />
+                    <Grid
+                      gridTemplateColumns={'max-content max-content'}
+                      // gridTemplateRows={'1fr 1fr'}              
+                      gap={1}
+                      width={'100%'}
+                      // className="home__img"
+                      direction={'row'}
+                      justifyContent={'center'}
+                      alignContent={'center'}
+                      // gridAutoFlow={'column'}
+                      display={'grid'}
+                      margin={0}
+                      my={2}
+                      ref={skc_ref}
+                      style={{
+                        transform: skcisInView ? "none" : "translateX(-200px)",
+                        opacity: skcisInView ? 1 : 0,
+                        transition: "all 0.9s cubic-bezier(0.17, 0.55, 0.55, 1) 0.5s"
+                      }}
 
-                  </Grid>
-                </motion.div>
-              </SplideSlide>
-              <SplideSlide>
-                <img
-                  src="assets/mocks5.png"
-                  alt
-                  className="home__img "
-                  style={{ maxWidth: "50%" }}
-                />
-                <img
-                  src="assets/mocks2.png"
-                  alt
-                  className="home__img "
-                  style={{ maxWidth: "50%" }}
-                />
-              </SplideSlide>
-            </Splide></div>
+
+                    >
+                      <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'Learn'} subtitle={"Elevate your skills with Our Skill Centre for powerful content and engagement."} icon={Lightbulb} />
+                      <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'Earn'} subtitle={"Monetize your expertise by tutoring with us, connecting with a global audience."} icon={MonetizationOn} />
+                      <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'Promote'} subtitle={"Boost your brand: Contribute to Our Skill Centre for massive exposure."} icon={Campaign} />
+                      <ImageCard img_width={'170px'} img_height={'140px'} tran_color={'var(--container-color)'} cont_color={'var(--body-color)'} notch={'false'} title={'Grow'} subtitle={"Propel your growth with pro insights for unstoppable progress."} icon={TrendingUp} />
+
+                    </Grid>
+                  </motion.div>
+                </SplideSlide>
+                <SplideSlide>
+                  <img
+                    src="assets/mocks5.png"
+                    alt
+                    className="home__img "
+                    style={{ maxWidth: "50%" }}
+                  />
+                  <img
+                    src="assets/mocks2.png"
+                    alt
+                    className="home__img "
+                    style={{ maxWidth: "50%" }}
+                  />
+                </SplideSlide>
+              </Splide></div>
 
 
           </div>
@@ -1189,7 +1189,7 @@ const Landing = () => {
             ]}
           />
 
-        </section> 
+        </section>
         {/*========== SERVICES ==========*/}
         {/* <TabbedGridSection data={{subtitle: 'Great Ideas. Great Companies', title: 'Our Current Companies'}} /> */}
         {/*========== SERVICES ==========*/}
@@ -1378,7 +1378,7 @@ const Landing = () => {
 
         </div>
         <p className="footer__copy">
-          © 2023 Haulway, A registered trademark of Haulscape Technologies Ltd (RC:15245660). All right reserved
+          © 2023 Haulway, A registered trademark of Haulscape Technologies Ltd - UK (RC:15245660). All rights reserved.
         </p>
       </footer>
       {/*========== SCROLL REVEAL ==========*/}
