@@ -1188,7 +1188,7 @@ const CollectionsDialog = ({ openCompleted, cancelCompleted, theme }) => {
 
 
 
-export const PurchaseDialog = ({ openPurchase, handleClosePurchase, handleClosePurchase1, openPurchase1, post, setOpenPurchase1, mediaUrl, product, theme, poster_data }) => {
+export const PurchaseDialog = ({ openPurchase, handleClosePurchase, handleClosePurchase1, openPurchase1, post, setOpenPurchase1, mediaUrl, product, theme }) => {
     const [openPayment, setOpenPayment] = React.useState(false);
     const [purchase, setPurchase] = React.useState(true);
     const [openProcessing, setOpenProcessing] = React.useState(false);
@@ -1208,6 +1208,7 @@ export const PurchaseDialog = ({ openPurchase, handleClosePurchase, handleCloseP
     const [intCart, setIntCart] = useStore("int_carts");
     const { data: identity, isLoading: identityLoading } = useGetIdentity();
     const record = useRecordContext();
+    const { data: poster_data, isLoading, error } = useGetOne('users', { id: post?.uid });
 
 
 
