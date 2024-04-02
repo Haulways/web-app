@@ -46,7 +46,7 @@ const SProduct = () => {
 		if (currentUser) {
 			medusa.auth
 				.authenticate({
-					email: identity.email,
+					email: identity?.email || currentUser?.email,
 					password: import.meta.env.VITE_AUTH_PASSWORD,
 				})
 				.then(({ customer }) => {

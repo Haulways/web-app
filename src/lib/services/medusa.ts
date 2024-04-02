@@ -1,5 +1,7 @@
 import Medusa from "@medusajs/medusa-js";
 import { QueryClient } from "@tanstack/react-query";
+import { useStore } from "react-admin";
+
 
 // Defaults to standard port for Medusa server
 export let MEDUSA_BACKEND_URL = "http://localhost:9000";
@@ -8,10 +10,12 @@ if (import.meta.env.VITE_BASE_URL) {
   MEDUSA_BACKEND_URL = import.meta.env.VITE_BASE_URL;
 }
 
+
+
 export const medusaClient = new Medusa({
   maxRetries: 3,
   baseUrl: MEDUSA_BACKEND_URL,
-  // apiKey: import.meta.env.VITE_APIKEY,
+  // apiKey: medusaUser?.api_token || null,
   customHeaders: {
     "x-no-compression": true,
   },

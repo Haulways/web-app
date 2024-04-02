@@ -23,11 +23,11 @@ const Contract = () => {
   const refresh = useRefresh();
 
 
-  React.useEffect(() => {
-    if (currentUser) {
-      refresh()
-    }
-  }, [currentUser])
+  // React.useEffect(() => {
+  //   if (currentUser) {
+  //     refresh()
+  //   }
+  // }, [currentUser])
 
 
   const handleTabClick = (tab) => {

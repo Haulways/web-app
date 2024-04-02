@@ -66,7 +66,7 @@ import { BiSolidToggleLeft, BiSolidToggleRight } from "react-icons/bi";
 import { useCountries } from "use-react-countries";
 import useAlert from "../../../../lib/hooks/use-alert";
 import useToggleState from "../../../../lib/hooks/use-toggle-state";
-import { medusaClient } from "../../../../lib/services/medusa";
+// import { medusaClient } from "../../../../lib/services/medusa";
 import { Input, TextArea } from "../../../common/Form/Input";
 import Spinner from "../../../common/assets/spinner";
 import { Button } from "../../../ui/button";
@@ -105,6 +105,10 @@ import { FiEdit } from "react-icons/fi";
 
 
 import React from "react";
+import Medusa from "@medusajs/medusa-js";
+import { useGetIdentity, useGetOne, useRedirect, useRefresh, useStore, useUpdate } from "react-admin";
+import { GetStoreVendor } from "../../../post/Post";
+import { supabase } from "../../../../supabase/SupabaseConfig";
 
 enum FieldsName {
   TITLE = "title",
@@ -141,6 +145,8 @@ type CreateProductProps = {
   show: boolean;
   close: () => void;
 };
+
+
 
 const CreateProduct = ({ show, close }: CreateProductProps) => {
   const { state, open: openAlert, close: closeAlert, Alert } = useAlert();
@@ -182,6 +188,53 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
   const thumbnailFileInputRef = useRef<HTMLInputElement>(null);
   const mediaFileInputRef = useRef<HTMLInputElement>(null);
   const [productVariants, setProductVariants] = useState<ProductVariant[]>([]);
+  const { data: identity, isLoading: identityLoading } = useGetIdentity();
+  const [medusaUser, setMedusaUser] = useStore('medusa_user');
+  const [update, { isLoading: updateLoading, error: updateError }] = useUpdate();
+  const refresh = useRefresh();
+  const { vendor, vendorAcc, loading2, error2 } = GetStoreVendor(medusaUser?.store_id);
+  const { data: nw_store } = useGetOne('store', { id: medusaUser?.store_id });
+  const redirect = useRedirect();
+  const medusaClient = new Medusa({
+    maxRetries: 3,
+    baseUrl: "https://ecommerce.haulway.co",
+    apiKey: medusaUser?.api_token || null,
+  });
+
+  useEffect(() => {
+    if (identity) {
+      medusaClient.admin.auth.createSession({
+        email: identity?.email,
+        password: import.meta.env.VITE_AUTH_PASSWORD,
+      }).then(({ user }) => {
+        setMedusaUser(user);
+        // console.log(user);
+
+      })
+    }
+
+  }, [identity])
+
+  useEffect(() => {
+    if (nw_store) {
+
+      console.log(nw_store);
+    }
+  }, [nw_store])
+
+  useEffect(() => {
+    if (medusaUser) {
+      // console.log(medusaUser?.api_token)
+      medusaClient.admin.auth.getSession()
+        .then(({ user }) => {
+          console.log(user);
+        })
+      // medusaClient.admin.store.retrieve()
+      //   .then(({ store }) => {
+      //     console.log(store);
+      //   })
+    }
+  }, [medusaUser])
 
   const formMethods = useForm<InputFields>();
   const {
@@ -324,9 +377,9 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
     [],
   );
 
-  console.log("productOptions", productOptions);
+  // console.log("productOptions", productOptions);
   const createProduct = handleSubmit(async (data: InputFields) => {
-    setIsSubmitting(false);
+    setIsSubmitting(true);
     medusaClient.admin.products
       .create({
         discountable: discountableToggle,
@@ -344,7 +397,7 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
         hs_code: data?.hs_code,
         length: data?.length,
         material: data?.material,
-        metadata: data.metadata,
+        metadata: data.metadata || {store: nw_store, vendor: vendor, vendorAcc: vendorAcc || identity},
         mid_code: data?.mid_code,
         origin_country: selectedCountry,
         width: data?.width,
@@ -358,21 +411,35 @@ const CreateProduct = ({ show, close }: CreateProductProps) => {
         images: media,
         thumbnail: thumbnail,
         variants: productVariants as any,
+        status: 'published'
       })
-      .then(() => {
-        close();
-        setIsSubmitting(false);
-      })
-      .catch(() => {
-        openAlert({
-          ...state,
-          title: "Failed to create product, please try again.",
-          variant: "error",
-          active: true,
-        });
-        setIsSubmitting(false);
+      .then(async ({ product }) => {
+        console.log(product)
+
+        const { data: nw_prod, error } = await supabase
+          .from('product')
+          .update({ store_id: nw_store?.id })
+          .eq('id', product.id)
+          .select()
+
+        if (nw_prod && !error) {
+          
+          close();
+          setIsSubmitting(false);
+          refresh();
+        }
+        else {
+          openAlert({
+            ...state,
+            title: "Failed to create product, please try again.",
+            variant: "error",
+            active: true,
+          });
+          setIsSubmitting(false);
+        }
+
       });
-  });
+  })
 
   useEffect(() => {
     fetchCurrencies();

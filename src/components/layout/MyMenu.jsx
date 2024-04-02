@@ -178,7 +178,7 @@ export const MyMenu = () => {
 						/>
 				</SubMenu>
 
-				{/* <SubMenu primaryText="Skill center" leftIcon={<ChevronRight />}>
+				<SubMenu primaryText="Skill center" leftIcon={<ChevronRight />}>
 					<Menu.Item
 						to="/skill-center"
 						primaryText="All"
@@ -199,7 +199,7 @@ export const MyMenu = () => {
 						primaryText="Fashion design"
 						leftIcon={<StyleIcon size={24} />}
 					/>
-				</SubMenu> */}
+				</SubMenu>
 
 				{/* <Menu.Item
 						to="/ads"

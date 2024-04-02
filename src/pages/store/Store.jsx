@@ -52,43 +52,66 @@ const Store = () => {
 		"product",
 		{ filter: { store_id: store?.id }, },
 	);
-
 	const { data: identity, isLoading: identityLoading } = useGetIdentity();
+	const [medusaUser, setMedusaUser] = useStore('medusa_user');
+	const medusaClient = new Medusa({
+		maxRetries: 3,
+		baseUrl: "https://ecommerce.haulway.co",
+		apiKey: medusaUser?.api_token || null,
+	});
 
 	React.useEffect(() => {
 		if (record) {
+			// console.log(record)
 			setStore(record)
-		}
-
-		return () => {
-
 		}
 	}, [record, id]);
 
 	React.useEffect(() => {
-		if (store) {
-			console.log(store)
+		if (old_prod) {
+			// console.log(old_prod)
 		}
-	}, [store]);
+	}, [old_prod]);
+
+
 
 	React.useEffect(() => {
 		if (identity) {
-			console.log(identity)
+			medusaClient.admin.auth.createSession({
+				email: identity?.email,
+				password: import.meta.env.VITE_AUTH_PASSWORD,
+			}).then(({ user }) => {
+				setMedusaUser(user);
+				// console.log(user);
+
+			})
 		}
+
 	}, [identity])
 
-
 	React.useEffect(() => {
-		if (nw_store) {
-			console.log(nw_store)
+		if (medusaUser) {
+			// console.log(medusaClient)
+			medusaClient.admin.store.retrieve()
+				.then(({ store: str }) => {
+					// console.log(str.name, store.name);
+					// setStore({ ...store, ...str })
+				})
 		}
-		if (vendor) {
-			console.log(vendor)
-		}
-		if (vendorAcc) {
-			console.log(vendorAcc)
-		}
-	}, [nw_store, vendor, vendorAcc])
+	}, [medusaUser])
+
+
+	// React.useEffect(() => {
+	// 	if (nw_store) {
+	// 		console.log(nw_store)
+	// 	}
+	// 	if (vendor) {
+	// 		console.log(vendor)
+	// 	}
+	// 	if (vendorAcc) {
+	// 		console.log(vendorAcc)
+	// 	}
+	// }, [nw_store, vendor, vendorAcc])
 
 
 
@@ -178,18 +201,18 @@ const Store = () => {
 	// 	}
 	// }, [nw_prods])
 
-	React.useEffect(() => {
-		if (old_prod) {
-			setProducts(old_prod)
-			setProductIDs(old_prod.map(prod => prod.id))
-		}
-	}, [old_prod])
+	// React.useEffect(() => {
+	// 	if (old_prod) {
+	// 		setProducts(old_prod)
+	// 		setProductIDs(old_prod.map(prod => prod.id))
+	// 	}
+	// }, [old_prod])
 
-	React.useEffect(() => {
-		if (products) {
-			console.log(products)
-		}
-	}, [products])
+	// React.useEffect(() => {
+	// 	if (products) {
+	// 		console.log(products)
+	// 	}
+	// }, [products])
 
 
 
@@ -260,7 +283,8 @@ const Store = () => {
 							{store && store.name ? (store.name) : "Store Name"}
 						</h2>
 						<p className="font-[500] text-[14px] ">
-							{vendor && vendor.first_name && vendor.last_name ? (`${vendor.first_name} ${vendor.last_name}`) : "Vendor"}
+							{vendor && vendorAcc ? (vendor.first_name && vendor.last_name ? (`${vendor.first_name} ${vendor.last_name}`) : (`${vendorAcc?.role} store` )) : ('Loading...')}
+							{/* {vendor && vendor.first_name && vendor.last_name ? (`${vendor.first_name} ${vendor.last_name}`) : "Vendor"} */}
 						</p>
 					</div>
 				</div>
@@ -276,10 +300,10 @@ const Store = () => {
 
 			}}>
 
-				{currentUser && vendor && currentUser.email === vendor.email ? (<TabbedShowLayout.Tab label="Info"><StoreDetails /></TabbedShowLayout.Tab>) : (null)}
+				{currentUser && vendor && identity?.email === vendor.email ? (<TabbedShowLayout.Tab label="Info"><StoreDetails /></TabbedShowLayout.Tab>) : (null)}
 
 				<TabbedShowLayout.Tab label='Products' >
-					{currentUser && vendor && currentUser.email === vendor.email ? (<ProductList />) : (
+					{currentUser && vendor && identity?.email === vendor.email ? (<ProductList />) : (
 						<div className="pt-[0rem] pb-[4rem]">
 							<div className="mb-[1.5rem]">
 
@@ -339,7 +363,7 @@ const Store = () => {
 					)}
 
 				</TabbedShowLayout.Tab>
-				{
+				{/* {
 					currentUser && vendor && currentUser.email === vendor.email ? (
 						<TabbedShowLayout.Tab label='Stats'>
 							<div className='flex w-[90vw]'>
@@ -349,8 +373,8 @@ const Store = () => {
 					) : (
 						null
 					)
-				}
-				{
+				} */}
+				{/* {
 					currentUser && vendor && currentUser.email === vendor.email ? (
 						<TabbedShowLayout.Tab label='Stats'>
 							<div className='flex w-[90vw]'>
@@ -360,7 +384,7 @@ const Store = () => {
 					) : (
 						null
 					)
-				}
+				} */}
 
 
 			</TabbedShowLayout>

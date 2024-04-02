@@ -142,6 +142,8 @@ const PaymentDialog = ({ openPayment, cancelPayment, handleCompleted, currentPro
                 email: custData.email,
                 amount: cart.payment_session.amount,
                 publicKey: import.meta.env.VITE_PS_PUB_KEY,
+                split_code: cart.context.split_doc ? (cart.context.split_doc.split_code) : (null),
+                split: cart.context.split_doc ? (cart.context.split_doc) : (null)
             };
 
             console.log(conf);

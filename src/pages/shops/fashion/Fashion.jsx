@@ -47,30 +47,51 @@ const Fashion = () => {
     { filter: { role: 'vendor' }, },
   );
 
-  // React.useEffect(() => {
-  //   console.log(identity)
-  //   if (identity) {
-  //     medusa.auth
-  //       .authenticate({
-  //         email: identity.email,
-  //         password: import.meta.env.VITE_AUTH_PASSWORD,
-  //       })
-  //       .then(({ customer }) => {
-  //         setCustData(customer);
-  //         if (!cart_id) {
-  //           medusa.carts.create().then(({ cart }) => {
-  //             setCartID(cart.id);
-  //             setCart(cart)
-  //           });
-  //         } else {
-  //           medusa.carts.retrieve(cart_id).then(({ cart }) => setCart(cart));
-  //         }
+  React.useEffect(() => {
+    console.log(identity)
+    if (identity) {
+      medusa.auth
+        .authenticate({
+          email: identity.email,
+          password: import.meta.env.VITE_AUTH_PASSWORD,
+        })
+        .then(({ customer }) => {
+          setCustData(customer);
+          if (!cart_id) {
+            medusa.carts.create().then(({ cart }) => {
+              setCartID(cart.id);
+              setCart(cart)
+            });
+          } else {
+            medusa.carts.retrieve(cart_id).then(({ cart }) => setCart(cart));
+          }
 
 
-  //       });
-  //   }
+        });
+    }
+    else if(currentUser){
+      medusa.auth
+        .authenticate({
+          email: currentUser?.email,
+          password: import.meta.env.VITE_AUTH_PASSWORD,
+        })
+        .then(({ customer }) => {
+          setCustData(customer);
+          if (!cart_id) {
+            medusa.carts.create().then(({ cart }) => {
+              setCartID(cart.id);
+              setCart(cart)
+            });
+          } else {
+            medusa.carts.retrieve(cart_id).then(({ cart }) => setCart(cart));
+          }
 
-  // }, [identity]);
+
+        });
+    }
+
+  }, [identity, currentUser]);
+  
   React.useEffect(() => {
     if (!cart_id) {
       medusa.carts.create().then(({ cart }) => {

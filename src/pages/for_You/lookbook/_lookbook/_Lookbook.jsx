@@ -11,11 +11,12 @@ export const LookList = () => {
     return (
 
         <InfiniteList resource='lookbook' title='Lookbook' actions={<LookbookListActions />}
-        sx={{
-            '& .MuiToolbar-root': {
-                minHeight: '0px !important'
-            }
-        }}
+            sx={{
+                '& .MuiToolbar-root': {
+                    minHeight: '0px !important'
+                }
+            }}
+            queryOptions={{ refetchInterval: 5000 }}
         >
             <LookBookListContents />
         </InfiniteList>

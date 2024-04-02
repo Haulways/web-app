@@ -33,9 +33,52 @@ const CreatePost = ({ title, collectionName }) => {
   let navigate = useNavigate();
 
 
+
+
+  function gotFS(fileSystem, file, type) {
+    var flags = { create: true, exclusive: false };
+    fileSystem.root.getFile(file.name, flags, function (fe) { gotFileEntry(fe, file, type); }, fail);
+  }
+
+  function gotFileEntry(fileEntry, file, type) {
+    fileEntry.createWriter(function (w) { gotFileWriter(w, file, type); }, fail);
+  }
+
+  function gotFileWriter(fileWriter, file, type) {
+    fileWriter.onwriteend = function (evt) { setSoundByUri(type, path + file.name); };
+    var reader = new FileReader();
+    reader.onload = function (event) {
+      var rawData = event.target.result;
+      fileWriter.write(rawData);
+    };
+    reader.onerror = function (event) {
+      alert("error, file could not be read" + event.target.error.code);
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
+  function fail(error) {
+    alert("error " + error.code);
+    if (error.code == FileError.PATH_EXISTS_ERR) {
+      alert("The file already exists.");
+    }
+  }
+
   const handleFileChange = event => {
-    const newFiles = Array.from(event.target.files);
+    let newFiles = Array.from(event.target.files);
+    console.log(newFiles);
     if (selectedFiles.length + newFiles.length <= 5) {
+
+      if (window.cordova) {
+        newFiles = newFiles.map(async (file) => {
+          return {
+            file: file,
+            path: await window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
+              gotFS(fs, file, event);
+            }, fail)
+          }
+        })
+      }
       setSelectedFiles([...selectedFiles, ...newFiles]);
     } else {
       toast.warning("You can only upload 5 files");
@@ -43,7 +86,13 @@ const CreatePost = ({ title, collectionName }) => {
   };
 
   const handleFileRemove = fileToRemove => {
-    setSelectedFiles(selectedFiles.filter(file => file !== fileToRemove));
+    if (window.cordova) {
+      setSelectedFiles(selectedFiles.filter(file => file.file !== fileToRemove.file));
+    }
+    else{
+      setSelectedFiles(selectedFiles.filter(file => file !== fileToRemove));
+    }
+    
   };
 
 

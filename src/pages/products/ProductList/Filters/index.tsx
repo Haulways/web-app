@@ -20,7 +20,7 @@ const ProductListFilter = () => {
       <div className="flex items-center p-2 mb-3 md:mb-0 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 space-x-3 w-full md:w-60">
         <CiSearch className="h-5 w-5" />
         <input
-          className="input h-5 text-sm placeholder:text-sm"
+          className="input h-5 text-sm w-full placeholder:text-sm"
           placeholder="Search"
         />
       </div>

@@ -35,8 +35,12 @@ import { Tag2 } from "../productTag/AddTag";
 import { CollectionDialog } from "./CollectionDialog";
 import { useSavedPosts } from "../../pages/profile/Profile";
 import { CheckSavedPost, GetFullProdData } from "../../pages/post/Post";
+import Medusa from '@medusajs/medusa-js';
 
 
+const medusa = new Medusa({
+    baseUrl: "https://ecommerce.haulway.co",
+});
 
 
 
@@ -125,6 +129,7 @@ export const FullScreenDialog = ({ liked, open, handleClose, post, currentUser, 
                     );
 
                     const results = await Promise.all(dataPromises);
+                    // console.log(results)
                     const seenIds = new Set();
                     const combinedData = results.reduce((acc, { data }) => {
                         const uniqueData = data.filter((item) => {
@@ -680,7 +685,7 @@ export const FullScreenDialog = ({ liked, open, handleClose, post, currentUser, 
                                                 currentUser={currentUser}
                                                 recommendedAd={item}
                                                 cart={cart}
-                                                
+
                                             />
                                         </React.Fragment>
                                     ))}
@@ -717,8 +722,11 @@ const Recommended = ({ index, postItem, data, handleClose, currentUser, recommen
     const [savedColName, setSavedColNames] = useState([]);
     const [openColList, setOpenColList] = useState(false);
     const { savedPost } = CheckSavedPost(postItem.id, currentUser);
-    const { prods_final} = GetFullProdData(postItem?.taggedProducts)
+    // const { prods_final } = GetFullProdData(postItem?.taggedProducts)
+    const [post, setPost] = React.useState(postItem);
     const [prods, setProds] = React.useState(postItem?.taggedProducts);
+
+
 
     const convertToDecimal = (amount) => {
         return Math.floor(amount) / 100
@@ -746,13 +754,12 @@ const Recommended = ({ index, postItem, data, handleClose, currentUser, recommen
         }
     }, [savedCols, savedColNames])
 
-    useEffect(()=>{
-        if(prods_final && prods_final.length){
-            console.log(prods_final)
-            setProds(prods_final)
-            // toast.success('Updated')
+    useEffect(() => {
+        if (prods && prods.length) {
+            console.log(prods)
         }
-    },[prods_final])
+    }, [prods])
+
 
 
 
@@ -798,8 +805,24 @@ const Recommended = ({ index, postItem, data, handleClose, currentUser, recommen
 
     React.useEffect(() => {
         if (postItem) {
-            // console.log(postItem);
-            
+            if (postItem && postItem.taggedProducts && postItem.taggedProducts.length) {
+                medusa.products.list({
+                    id: postItem.taggedProducts.map((prd) => prd.id),
+                    // expand: 'store'
+                })
+                    .then(({ products, limit, offset, count }) => {
+                        // console.log(products);
+                        setPost({ ...postItem, taggedProducts: products })
+                        setProds(products)
+    
+    
+                    })
+    
+            }
+            else {
+                setPost({ ...postItem })
+            }
+
         }
 
     }, [postItem])
@@ -854,7 +877,7 @@ const Recommended = ({ index, postItem, data, handleClose, currentUser, recommen
                 let { error } = await supabase
                     .from('saved_post')
                     .insert({
-                        postId: post.postId,
+                        postId: postItem.postId,
                         user_id: currentUser.uid,
                         coll_name: filter && filter === 'general' ? (filter) : (null)
                     })
@@ -1249,7 +1272,7 @@ const Recommended = ({ index, postItem, data, handleClose, currentUser, recommen
                                         <ShowPageCarousels
                                             handlePurchase={handlePurchase}
                                             handleOpenPurchase1={handleOpenPurchase1}
-                                            post={postItem}
+                                            // post={post}
                                             mediaUrl={mediaUrl}
                                             setCurrentMediaUrl={setCurrentMediaUrl}
                                             price={cart && mediaUrl.variants && mediaUrl.variants.length ? formatPrice(mediaUrl.variants[0].prices.filter((curr) => { return curr.currency_code === cart.region.currency_code })[0].amount) : 0}
@@ -1282,7 +1305,7 @@ const Recommended = ({ index, postItem, data, handleClose, currentUser, recommen
                     )}
 
                     {/* Collection Dialog */}
-                    <CollectionDialog open={openColList} setOpen={setOpenColList} col_list={savedCol} col_names={savedColName} theme={theme} savePost={savePost} post={postItem} />
+                    <CollectionDialog open={openColList} setOpen={setOpenColList} col_list={savedCol} col_names={savedColName} theme={theme} savePost={savePost} post={post} />
 
                     {/* Purchase dialog box */}
 
@@ -1293,9 +1316,9 @@ const Recommended = ({ index, postItem, data, handleClose, currentUser, recommen
                         handleClosePurchase1={handleClosePurchase1}
                         openPurchase1={openPurchase1}
                         setOpenPurchase1={setOpenPurchase1}
-                        post={postItem}
+                        post={post}
                         isImage={isImage}
-                        mediaUrl={postItem.media[0]}
+                        mediaUrl={post.media[0]}
                         product={currentMediaUrl}
                     />
                     {recommendedAd?.id === postItem?.id && (

@@ -143,7 +143,7 @@ export const UGCCreateContent = () => {
     };
 
     return <Create>
-        <SimpleForm>
+        {/* <SimpleForm>
             <SelectInput
                 choices={types ? types : []}
                 source="type"
@@ -152,7 +152,8 @@ export const UGCCreateContent = () => {
 
             <UGCInput />
 
-        </SimpleForm>
+        </SimpleForm> */}
+        <CreatePost title='UGC' collectionName="ugc" />
 
     </Create>
 };

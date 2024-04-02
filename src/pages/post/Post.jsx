@@ -163,7 +163,7 @@ export const GetStoreVendor = (store_id) => {
         .from('users')
         .select('*')
         .eq('email', vendor.email)
-        .eq('role', 'vendor')
+        // .eq('role', 'vendor')
 
 
       if (error) throw error;
@@ -501,7 +501,8 @@ const Signlepost = () => {
 
 
   React.useEffect(() => {
-    if (post) {
+    console.log(post);
+    if (post && post.taggedProducts && post.taggedProducts.length) {
       medusa.products.list({
         id: post.taggedProducts.map((prd) => prd.id),
         // expand: 'store'
@@ -654,7 +655,7 @@ const Signlepost = () => {
 
 
 
-  // follow and unfollowe functionality 
+  // follow and unfollow functionality 
 
 
 

@@ -28,7 +28,7 @@ const ProductList = () => {
             // actions={<OrderListActions />}
             className="overflow-auto w-full"
           >
-            <Table />
+            <Table addProduct={addProduct} setAddProduct={setAddProduct}/>
           </List>
         </div>
       </Container>

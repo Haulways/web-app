@@ -1,10 +1,10 @@
 import { AdminPostStoreReq } from "@medusajs/medusa";
 import { Fragment, useEffect, useState } from "react";
-import { useRedirect } from "react-admin";
+import { useGetOne, useRedirect, useStore, useUpdate } from "react-admin";
 import { useForm } from "react-hook-form";
 import { BsArrowLeft } from "react-icons/bs";
 import useAlert from "../../lib/hooks/use-alert";
-import { medusaClient } from "../../lib/services/medusa";
+// import { medusaClient } from "../../lib/services/medusa";
 import { Routes } from "../../routes";
 import { Input } from "../common/Form/Input";
 import { Button } from "../ui/button";
@@ -13,6 +13,7 @@ import React from "react";
 // import { useFilePicker } from "use-file-picker";
 import { useGetIdentity } from 'react-admin';
 import { AuthContext } from "../../components/context/AuthContext";
+import Medusa from "@medusajs/medusa-js";
 
 
 enum FieldsName {
@@ -43,19 +44,38 @@ const StoreDetails = (props) => {
   const [idenficationFile, setIdenficationFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { data: identity, isLoading: identityLoading } = useGetIdentity();
+  const [medusaUser, setMedusaUser] = useStore('medusa_user');
+  const medusaClient = new Medusa({
+    maxRetries: 3,
+    baseUrl: "https://ecommerce.haulway.co",
+    apiKey: medusaUser?.api_token || null,
+  });
+
+  const [update] = useUpdate('store');
 
   useEffect(() => {
-    medusaClient.admin.auth.createSession({
-      email: identity?.email,
-      password: import.meta.env.VITE_AUTH_PASSWORD,
-    }).then(({ user }) => {
-      console.log(user);
-      medusaClient.admin.store.retrieve()
-        .then(({ store }) => {
-          console.log(store);
-        })
-    })
+    if (identity) {
+      medusaClient.admin.auth.createSession({
+        email: identity?.email,
+        password: import.meta.env.VITE_AUTH_PASSWORD,
+      }).then(({ user }) => {
+        setMedusaUser(user);
+        console.log(user);
+
+      })
+    }
+
   }, [identity])
+
+  useEffect(() => {
+    if (medusaUser) {
+      console.log(medusaUser)
+      // medusaClient.admin.store.retrieve()
+      //   .then(({ store }) => {
+      //     console.log(store);
+      //   })
+    }
+  }, [medusaUser])
 
   const formMethods = useForm<InputFields>();
   const {
@@ -85,20 +105,25 @@ const StoreDetails = (props) => {
   const updateStoreDetail = handleSubmit(async (data: InputFields) => {
     setIsSubmitting(true);
     console.log('data', data, businessVerificationFile, idenficationFile)
-    medusaClient.admin.store
-      .update({
-        invite_link_template: data.invite_link_template,
-        payment_link_template: data.payment_link_template,
-        swap_link_template: data.swap_link_template,
-        name: data.name,
-        metadata: {
-          description: data.description,
-          api_key: data.api_key,
-          api_id: data.api_id,
-          business_document: businessVerificationFile,
-          identification_document: idenficationFile,
-        },
-      })
+    update(
+      'store',
+      {
+        id: medusaUser?.store_id,
+        data: {
+          invite_link_template: data.invite_link_template,
+          payment_link_template: data.payment_link_template,
+          swap_link_template: data.swap_link_template,
+          name: data.name,
+          metadata: {
+            description: data.description,
+            api_key: data.api_key,
+            api_id: data.api_id,
+            business_document: businessVerificationFile,
+            identification_document: idenficationFile,
+          },
+        }
+      }
+    )
       .then(() => {
         openAlert({
           ...state,
@@ -149,21 +174,25 @@ const StoreDetails = (props) => {
                     api_token: publishable_api_key.id,
                   })
                     .then(({ user }) => {
-                      //update store details
-                      medusaClient.admin.store
-                        .update({
-                          invite_link_template: data.invite_link_template,
-                          payment_link_template: data.payment_link_template,
-                          swap_link_template: data.swap_link_template,
-                          name: data.name,
-                          metadata: {
-                            description: data.description,
-                            api_key: data.api_key,
-                            api_id: data.api_id,
-                            business_document: businessVerificationFile,
-                            identification_document: idenficationFile,
-                          },
-                        })
+                      update(
+                        'store',
+                        {
+                          id: user?.store_id,
+                          data: {
+                            invite_link_template: data.invite_link_template,
+                            payment_link_template: data.payment_link_template,
+                            swap_link_template: data.swap_link_template,
+                            name: data.name,
+                            metadata: {
+                              description: data.description,
+                              api_key: data.api_key,
+                              api_id: data.api_id,
+                              business_document: businessVerificationFile,
+                              identification_document: idenficationFile,
+                            },
+                          }
+                        }
+                      )
                         .then(({ store }) => {
                           openAlert({
                             ...state,

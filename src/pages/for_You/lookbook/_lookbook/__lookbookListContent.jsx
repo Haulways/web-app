@@ -1,7 +1,7 @@
 import { CircularProgress, Grid } from '@mui/material';
 import { LiveCard } from '../../../../components/card/LiveCard';
 import { SearchBox } from '../../../../components/search/SearchBox';
-import { WithListContext } from 'react-admin';
+import { WithListContext, useRefresh } from 'react-admin';
 import { LookBookDialog } from './_LookbookContent';
 import { DFooter } from '../../../../components';
 import { NormalCard } from '../../../../components/card/NormalCard';
@@ -15,6 +15,7 @@ import { supabase } from '../../../../supabase/SupabaseConfig';
 import NewMeetingForm from '../../../../components/LiveComponents/joinForm/JoinForm';
 import { ThemeContext } from '../../../../components/context/ThemeProvider';
 import { useGetIdentity, useGetOne } from 'react-admin';
+
 
 
 export const LookBookListContents = () => {
@@ -39,6 +40,10 @@ export const LookBookListContents = () => {
     const [result, setResult] = React.useState([]);
     const { theme } = React.useContext(ThemeContext);
     const { data: identity, isLoading: identityLoading } = useGetIdentity();
+    const refresh = useRefresh();
+    
+
+    
 
     React.useEffect(() => {
         if (input.length > 0 && input.trim() !== '') {
@@ -57,6 +62,10 @@ export const LookBookListContents = () => {
             setResult([]);
         }
     }, [input]);
+
+    React.useEffect(() => {
+        refresh();
+    }, [])
 
 
     const peers = (useHMSStore(selectPeers) || []).filter(
@@ -229,25 +238,25 @@ export const LookBookListContents = () => {
     const [rooms, setRooms] = useState([]);
 
 
-    // useEffect(() => {
-    //     const fetchActiveRooms = async () => {
-    //         const response = await fetch('https://api.100ms.live/v2/sessions', {
-    //             method: 'GET',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 'Authorization': `Bearer ${import.meta.env.VITE_AUTH_TOKEN}`
-    //             }
-    //         });
+    useEffect(() => {
+        const fetchActiveRooms = async () => {
+            const response = await fetch('https://api.100ms.live/v2/sessions', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${import.meta.env.VITE_AUTH_TOKEN}`
+                }
+            });
 
-    //         const data = await response.json();
-    //         const activeRooms = data.data.filter(room => room.active === true && room.room_id === room?.id);
-    //         setRooms(activeRooms);
-    //         return data.sessions;
-    //     };
+            const data = await response.json();
+            const activeRooms = data.data.filter(room => room.active === true && room.room_id === room?.id);
+            setRooms(activeRooms);
+            return data.sessions;
+        };
 
 
-    //     fetchActiveRooms();
-    // }, [rooms]);
+        fetchActiveRooms();
+    }, [rooms]);
 
     const createStream = async () => {
         if (!identity) {
@@ -302,60 +311,60 @@ export const LookBookListContents = () => {
         return array.some(existingItem => existingItem.id === item.id);
     }
 
-    useEffect(() => {
-        // Fetch initial data
-        const fetchInitialData = async () => {
-            let { data: initialData, error } = await supabase
-                .from('liveStream')
-                .select('*');
+    // useEffect(() => {
+    //     // Fetch initial data
+    //     const fetchInitialData = async () => {
+    //         let { data: initialData, error } = await supabase
+    //             .from('liveStream')
+    //             .select('*');
 
-            if (error) console.log('Error fetching initial data: ', error);
-            else setLiveData(initialData.filter(item => item.hls === true));
-        };
+    //         if (error) console.log('Error fetching initial data: ', error);
+    //         else setLiveData(initialData.filter(item => item.hls === true));
+    //     };
 
-        fetchInitialData();
+    //     fetchInitialData();
 
-        // Subscribe to changes
-        const allChannels = supabase
-            .channel('room1')
-            .on('postgres_changes', { event: '*', schema: '*', table: 'liveStream' }, payload => {
-                console.log('Change received!', payload);
-                setLiveData(prevData => {
-                    // If hls is true, append the new data to the existing data only if it doesn't already exist
-                    if (payload.new.hls === true && !itemExists(payload.new, prevData)) {
-                        return [...prevData, payload.new];
-                    }
-                    // If hls is false, filter out the data from the existing data
-                    else {
-                        return prevData.filter(item => item.id !== payload.new.id); // assuming each item has a unique id
-                    }
-                });
-            })
-            .subscribe();
+    //     // Subscribe to changes
+    //     const allChannels = supabase
+    //         .channel('room1')
+    //         .on('postgres_changes', { event: '*', schema: '*', table: 'liveStream' }, payload => {
+    //             console.log('Change received!', payload);
+    //             setLiveData(prevData => {
+    //                 // If hls is true, append the new data to the existing data only if it doesn't already exist
+    //                 if (payload.new.hls === true && !itemExists(payload.new, prevData)) {
+    //                     return [...prevData, payload.new];
+    //                 }
+    //                 // If hls is false, filter out the data from the existing data
+    //                 else {
+    //                     return prevData.filter(item => item.id !== payload.new.id); // assuming each item has a unique id
+    //                 }
+    //             });
+    //         })
+    //         .subscribe();
 
-        return () => {
-            supabase.removeChannel(allChannels);
-        };
-    }, [liveData]);
+    //     return () => {
+    //         supabase.removeChannel(allChannels);
+    //     };
+    // }, [liveData]);
 
 
     // console.log(room, broadcasterData);
 
-    useEffect(() => {
-        window.onunload = () => {
-            if (isConnected) {
-                hmsActions.leave();
-            }
-        };
-    }, [hmsActions, isConnected]);
+    // useEffect(() => {
+    //     window.onunload = () => {
+    //         if (isConnected) {
+    //             hmsActions.leave();
+    //         }
+    //     };
+    // }, [hmsActions, isConnected]);
 
-    useEffect(() => {
-        if (isConnected) {
-            setOpenAsce(true);
+    // useEffect(() => {
+    //     if (isConnected) {
+    //         setOpenAsce(true);
 
-        }
+    //     }
 
-    }, [isConnected]);
+    // }, [isConnected]);
 
     const liveIcon = (
         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" fill="none">

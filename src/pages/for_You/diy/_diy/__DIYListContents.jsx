@@ -321,7 +321,7 @@ export const DIYListContents = () => {
     }, [liveData]);
 
 
-    // console.log(room, broadcasterData);
+    console.log(room, broadcasterData);
 
     useEffect(() => {
         window.onunload = () => {

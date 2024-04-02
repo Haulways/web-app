@@ -535,7 +535,7 @@ export const CreatePostDialog = ({ handleCloseFile, showConfirmation, handleCanc
               <span style={{ filter: theme === "light" ? "invert(0)" : "invert(1)", width: '100vw', paddingBlock: '10px', justifyContent: 'space-between', alignItems: 'center', position: 'relative', background: 'transparent', display: 'flex', paddingInline: '10px' }}>
                 <label htmlFor="file">
                   <PermMedia onClick={stopRecord} className='add__icon' sx={{ fontSize: '1.5rem', filter: theme === "light" ? "invert(0)" : "invert(1)", color: theme === "light" ? (cameraOn ? "#fff" : "#222") : "#fff" }} />
-                  <input type="file" id="file" accept="video/*" style={{ display: "none" }} multiple onChange={handleFileChange} />
+                  <input type="file" id="file" accept="video/*" style={{ display: "none" }} multiple onChange={handleFileChange} webkitdirectory mozdirectory msdirectory odirectory directory />
                 </label>
 
                 {isRecording ? (
