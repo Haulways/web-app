@@ -600,6 +600,14 @@ img{
   padding: .625rem .813rem;
   border-radius: .5rem 0 .5rem 0;
 }
+.xui-modal{
+  padding: 0 !important;
+}
+.xui-modal-content{
+  max-width: 100% !important;
+  height: 100% !important;
+  overflow-y: auto;
+}
 
 /*========== APP ==========*/
 .app__data{
