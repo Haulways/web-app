@@ -418,7 +418,7 @@ const TermsandConditions = () => {
               <div>
                   <p className='xui-font-sz-90 bold-font amd-text-green'>Explore</p>
                     <a href="/privacy-policy"  className="xui-opacity-6 xui-font-sz-80 xui-mt-1 xui-cursor-pointer">Privacy Policy</a>
-                    <a href="/terms-and-conditions" className="xui-opacity-6 xui-font-sz-80 xui-mt-1-half xui-cursor-pointer">Terms & Conditions</a>
+                    <a href="/terms-of-service" className="xui-opacity-6 xui-font-sz-80 xui-mt-1-half xui-cursor-pointer">Terms & Conditions</a>
               </div>
           </div>
           {/* xui-modal-open={'privacy-policy-modal'} */}

@@ -18,7 +18,7 @@ export const App = () => (
       <CustomRoutes noLayout={true}>
         <Route path="/" element={<Landing />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-        <Route path="/terms-and-conditions" element={<TermsandConditions />} />
+        <Route path="/terms-of-service" element={<TermsandConditions />} />
       </CustomRoutes>
     </Admin>
   </BrowserRouter>
