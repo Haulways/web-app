@@ -1352,10 +1352,11 @@ const Landing = () => {
               </div>
               <div>
                   <p className='xui-font-sz-90 bold-font amd-text-green'>Explore</p>
-                  <div xui-modal-open={'privacy-policy-modal'} className="xui-opacity-6 xui-font-sz-80 xui-mt-1 xui-cursor-pointer">Privacy Policy</div>
-                  <div xui-modal-open={'terms-modal'} className="xui-opacity-6 xui-font-sz-80 xui-mt-1-half xui-cursor-pointer">Terms & Conditions</div>
+                  <a href="/privacy-policy"  className="xui-opacity-6 xui-font-sz-80 xui-mt-1 xui-cursor-pointer">Privacy Policy</a>
+                  <a href="/terms-and-conditions" className="xui-opacity-6 xui-font-sz-80 xui-mt-1-half xui-cursor-pointer">Terms & Conditions</a>
               </div>
           </div>
+          {/* xui-modal-open={'privacy-policy-modal'} */}
       </section>
       <section className="xui-modal" xui-modal={'terms-modal'} disable-click-on-outside={'true'}>
           <div className="xui-modal-content">
