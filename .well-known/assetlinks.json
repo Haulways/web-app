@@ -1,0 +1,15 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.grascope.haulway.haulway",
+      "sha256_cert_fingerprints": [
+        "9C:EB:E7:58:24:E1:7B:07:1D:C0:C8:7D:D3:03:DC:5E:9B:8C:3F:93:DE:1B:4A:BD:17:DB:89:D2:16:39:23:65",
+        "C2:26:B7:CE:B9:4F:3B:05:06:27:84:03:F9:7A:BA:D8:C8:04:A0:3E:1B:E6:AF:C2:7D:E6:BF:AF:4E:93:A5:7A"
+      ]
+    }
+  }
+]
